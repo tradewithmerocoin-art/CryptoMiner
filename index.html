@@ -12,141 +12,264 @@
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 body {
     min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background:
-        radial-gradient(circle at 50% 20%, #263b63 0%, #101827 45%, #070b12 100%);
-    color: white;
-    display: flex;
-    justify-content: center;
     overflow: hidden;
+    font-family: Arial, sans-serif;
+    color: white;
+    background:
+        radial-gradient(circle at 50% 15%, #29456f 0%, #111c31 38%, #060a12 100%);
 }
 
 .app {
     width: 100%;
     max-width: 480px;
     min-height: 100vh;
-    padding: 35px 22px;
+    margin: auto;
+    padding: 28px 20px;
+    position: relative;
+}
+
+.screen {
+    min-height: calc(100vh - 56px);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.logo {
-    font-size: 42px;
-    margin-top: 25px;
-    filter: drop-shadow(0 0 15px #5ee7ff);
+.hidden {
+    display: none !important;
 }
 
-h1 {
-    margin-top: 8px;
+/* HOME */
+
+.logo {
+    font-size: 45px;
+    filter: drop-shadow(0 0 18px #55e8ff);
+    margin-top: 15px;
+}
+
+.title {
     font-size: 30px;
+    font-weight: 900;
     letter-spacing: 3px;
+    margin-top: 7px;
 }
 
 .subtitle {
+    color: #8ea2c5;
     margin-top: 8px;
-    color: #91a4c5;
     font-size: 14px;
 }
 
-.crystal {
-    width: 190px;
-    height: 190px;
+.bigCrystal {
     margin-top: 65px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 120px;
-    filter: drop-shadow(0 0 25px #5ee7ff);
-    animation: float 3s ease-in-out infinite;
+    font-size: 125px;
+    filter:
+        drop-shadow(0 0 10px #53ddff)
+        drop-shadow(0 0 35px #287eff);
+    animation: floating 3s ease-in-out infinite;
 }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+@keyframes floating {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
 }
 
-.buttons {
+.modeButtons {
     width: 100%;
     margin-top: 55px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 15px;
 }
 
 button {
+    border: 0;
     width: 100%;
     padding: 19px;
-    border: none;
     border-radius: 18px;
     color: white;
     font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    background: linear-gradient(135deg, #2364d2, #6636d9);
-    box-shadow: 0 8px 25px rgba(40, 100, 220, 0.35);
-    transition: transform 0.12s;
+    font-weight: 800;
+    background: linear-gradient(135deg,#2868e8,#7138dc);
+    box-shadow: 0 10px 30px rgba(45,100,230,.35);
+    touch-action: manipulation;
 }
 
 button:active {
-    transform: scale(0.96);
+    transform: scale(.95);
 }
 
-.auto {
-    background: linear-gradient(135deg, #087f70, #16b89a);
-    box-shadow: 0 8px 25px rgba(20, 190, 160, 0.3);
+.autoButton {
+    background: linear-gradient(135deg,#078b77,#16c6a1);
+    box-shadow: 0 10px 30px rgba(20,190,160,.25);
 }
 
-.mining {
-    display: none;
+/* MINING */
+
+.topBar {
     width: 100%;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.counter {
-    margin-top: 25px;
-    font-size: 28px;
+.back {
+    width: auto;
+    padding: 10px 16px;
+    font-size: 15px;
+    background: rgba(255,255,255,.09);
+    box-shadow: none;
+}
+
+.balance {
+    font-size: 19px;
     font-weight: bold;
 }
 
-.status {
-    margin-top: 10px;
-    color: #8da2c5;
+.miningTitle {
+    margin-top: 25px;
+    font-size: 25px;
+    letter-spacing: 2px;
+}
+
+.miningArea {
+    width: 100%;
+    height: 330px;
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mineCrystal {
+    font-size: 130px;
+    filter:
+        drop-shadow(0 0 12px #54eaff)
+        drop-shadow(0 0 35px #267fff);
+    transition: transform .12s;
+    z-index: 2;
 }
 
 .hammer {
-    font-size: 90px;
-    margin-top: 35px;
+    font-size: 85px;
+    position: absolute;
+    right: 30px;
+    bottom: 40px;
+    transform: rotate(-35deg);
+    z-index: 4;
+    transition: transform .12s;
 }
 
-.hit {
-    animation: hit 0.25s ease;
+.hammer.hit {
+    animation: hammerHit .22s ease;
 }
 
-@keyframes hit {
-    0% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(-30deg) scale(1.2); }
-    100% { transform: rotate(0deg) scale(1); }
+@keyframes hammerHit {
+    0% { transform: rotate(-35deg) translate(0,0); }
+    45% { transform: rotate(-70deg) translate(-30px,-25px); }
+    100% { transform: rotate(-35deg) translate(0,0); }
+}
+
+.mineCrystal.hitCrystal {
+    animation: crystalHit .22s ease;
+}
+
+@keyframes crystalHit {
+    0% { transform: scale(1); }
+    40% { transform: scale(.87) rotate(-4deg); }
+    100% { transform: scale(1); }
+}
+
+.plus {
+    position: absolute;
+    color: #6dffff;
+    font-size: 25px;
+    font-weight: 900;
+    pointer-events: none;
+    animation: plusUp .8s ease forwards;
+    z-index: 10;
+}
+
+@keyframes plusUp {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-90px) scale(1.35);
+    }
+}
+
+.particle {
+    position: absolute;
+    font-size: 18px;
+    pointer-events: none;
+    animation: particleFly .65s ease-out forwards;
+    z-index: 8;
+}
+
+@keyframes particleFly {
+    from {
+        opacity: 1;
+        transform: translate(0,0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translate(var(--x),var(--y)) scale(.3);
+    }
+}
+
+.status {
+    color: #8fa5c8;
+    margin-top: 3px;
+    font-size: 14px;
+}
+
+.progressBox {
+    width: 100%;
+    margin-top: 18px;
+}
+
+.progressText {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #9fb0cb;
+    margin-bottom: 7px;
 }
 
 .progress {
     width: 100%;
     height: 12px;
-    background: #172235;
     border-radius: 20px;
-    margin-top: 25px;
+    background: #17243a;
     overflow: hidden;
 }
 
 .bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #42e8ff, #8b5cff);
-    transition: width 0.3s;
+    background: linear-gradient(90deg,#45eaff,#895bff);
+    transition: width .25s;
+}
+
+.mineButton {
+    margin-top: 22px;
+}
+
+.autoStatus {
+    margin-top: 14px;
+    color: #42e6c3;
+    font-weight: bold;
+    display: none;
 }
 </style>
 </head>
@@ -155,68 +278,93 @@ button:active {
 
 <div class="app">
 
-    <div id="home">
-        <div class="logo">💎</div>
+<!-- HOME -->
 
-        <h1>CRYSTAL MINER</h1>
+<div id="home" class="screen">
 
-        <div class="subtitle">
-            Choose your mining method
-        </div>
+    <div class="logo">💎</div>
 
-        <div class="crystal">
-            💎
-        </div>
+    <div class="title">CRYSTAL MINER</div>
 
-        <div class="buttons">
-            <button onclick="startManual()">
-                ⛏️ EL BILEN
-            </button>
-
-            <button class="auto" onclick="startAuto()">
-                🤖 AWTOMAT
-            </button>
-        </div>
+    <div class="subtitle">
+        Choose your mining method
     </div>
 
+    <div class="bigCrystal">💎</div>
 
-    <div class="mining" id="mining">
+    <div class="modeButtons">
 
-        <div class="logo">💎</div>
+        <button id="manualBtn">
+            ⛏️ EL BILEN
+        </button>
 
-        <h1 id="modeTitle">MINING</h1>
+        <button id="autoBtn" class="autoButton">
+            🤖 AWTOMAT
+        </button>
 
-        <div class="crystal" id="crystal">
-            💎
-        </div>
+    </div>
 
-        <div class="hammer" id="hammer">
-            🔨
-        </div>
+</div>
 
-        <div class="counter">
+
+<!-- MINING -->
+
+<div id="mining" class="screen hidden">
+
+    <div class="topBar">
+
+        <button id="backBtn" class="back">
+            ← YZA
+        </button>
+
+        <div class="balance">
             💎 <span id="coins">0</span>
         </div>
 
-        <div class="status" id="status">
-            Ready to mine
+    </div>
+
+    <div id="modeTitle" class="miningTitle">
+        MANUAL MINING
+    </div>
+
+    <div class="miningArea" id="miningArea">
+
+        <div id="crystal" class="mineCrystal">
+            💎
         </div>
 
-        <div class="progress">
-            <div class="bar" id="bar"></div>
-        </div>
-
-        <div class="buttons">
-            <button id="mineButton" onclick="mine()">
-                🔨 MINE
-            </button>
-
-            <button class="auto" onclick="goHome()">
-                ← YZA
-            </button>
+        <div id="hammer" class="hammer">
+            🔨
         </div>
 
     </div>
+
+    <div id="status" class="status">
+        Tap the button to mine
+    </div>
+
+    <div id="autoStatus" class="autoStatus">
+        🤖 MINING AUTOMATICALLY...
+    </div>
+
+    <div class="progressBox">
+
+        <div class="progressText">
+            <span>Mining progress</span>
+            <span id="percent">0%</span>
+        </div>
+
+        <div class="progress">
+            <div id="bar" class="bar"></div>
+        </div>
+
+    </div>
+
+    <button id="mineBtn" class="mineButton">
+        🔨 MINE
+    </button>
+
+</div>
 
 </div>
 
@@ -225,44 +373,62 @@ button:active {
 
 let coins = 0;
 let progress = 0;
-let autoMining = false;
-let autoTimer = null;
+let automatic = false;
+let timer = null;
 
-function startManual() {
+const home = document.getElementById("home");
+const mining = document.getElementById("mining");
+const manualBtn = document.getElementById("manualBtn");
+const autoBtn = document.getElementById("autoBtn");
+const backBtn = document.getElementById("backBtn");
+const mineBtn = document.getElementById("mineBtn");
 
-    document.getElementById("home").style.display = "none";
-    document.getElementById("mining").style.display = "block";
+const crystal = document.getElementById("crystal");
+const hammer = document.getElementById("hammer");
+const miningArea = document.getElementById("miningArea");
 
-    document.getElementById("modeTitle").innerText =
-        "MANUAL MINING";
+const coinsText = document.getElementById("coins");
+const bar = document.getElementById("bar");
+const percent = document.getElementById("percent");
 
-    document.getElementById("status").innerText =
-        "Tap MINE to break the crystal";
+const modeTitle = document.getElementById("modeTitle");
+const status = document.getElementById("status");
+const autoStatus = document.getElementById("autoStatus");
 
-    document.getElementById("mineButton").style.display =
-        "block";
+
+function openMining(mode) {
+
+    home.classList.add("hidden");
+    mining.classList.remove("hidden");
+
+    coins = 0;
+    progress = 0;
+    automatic = mode === "auto";
+
+    coinsText.textContent = coins;
+    bar.style.width = "0%";
+    percent.textContent = "0%";
+
+    if (automatic) {
+
+        modeTitle.textContent = "🤖 AUTOMATIC MINING";
+        status.textContent = "Mining...";
+
+        autoStatus.style.display = "block";
+        mineBtn.style.display = "none";
+
+        timer = setInterval(mine, 850);
+
+    } else {
+
+        modeTitle.textContent = "⛏️ MANUAL MINING";
+        status.textContent = "Tap MINE to break the crystal";
+
+        autoStatus.style.display = "none";
+        mineBtn.style.display = "block";
+    }
 }
 
-function startAuto() {
-
-    document.getElementById("home").style.display = "none";
-    document.getElementById("mining").style.display = "block";
-
-    document.getElementById("modeTitle").innerText =
-        "🤖 AUTOMATIC MINING";
-
-    document.getElementById("status").innerText =
-        "Mining...";
-
-    document.getElementById("mineButton").style.display =
-        "none";
-
-    autoMining = true;
-
-    autoTimer = setInterval(() => {
-        mine();
-    }, 900);
-}
 
 function mine() {
 
@@ -270,56 +436,123 @@ function mine() {
 
     progress += 5;
 
-    if (progress > 100) {
+    if (progress >= 100) {
         progress = 0;
     }
 
-    document.getElementById("coins").innerText =
-        coins;
+    coinsText.textContent = coins;
 
-    document.getElementById("bar").style.width =
-        progress + "%";
-
-    const hammer =
-        document.getElementById("hammer");
+    bar.style.width = progress + "%";
+    percent.textContent = progress + "%";
 
     hammer.classList.remove("hit");
+    crystal.classList.remove("hitCrystal");
 
     void hammer.offsetWidth;
 
     hammer.classList.add("hit");
+    crystal.classList.add("hitCrystal");
 
-    const crystal =
-        document.getElementById("crystal");
+    createPlus();
+    createParticles();
 
-    crystal.style.transform =
-        "scale(0.9)";
-
-    setTimeout(() => {
-        crystal.style.transform =
-            "scale(1)";
-    }, 120);
-
-    if (autoMining) {
-        document.getElementById("status").innerText =
-            "⛏️ Mining automatically...";
-    } else {
-        document.getElementById("status").innerText =
-            "💥 Crystal hit! +1";
+    if (!automatic) {
+        status.textContent = "💥 Crystal hit! +1";
     }
 }
 
-function goHome() {
 
-    clearInterval(autoTimer);
+function createPlus() {
 
-    autoMining = false;
+    const plus = document.createElement("div");
 
-    document.getElementById("mining").style.display =
-        "none";
+    plus.className = "plus";
+    plus.textContent = "+1 💎";
 
-    document.getElementById("home").style.display =
-        "block";
+    plus.style.left =
+        (45 + Math.random() * 15) + "%";
+
+    plus.style.top = "40%";
+
+    miningArea.appendChild(plus);
+
+    setTimeout(() => {
+        plus.remove();
+    }, 800);
+}
+
+
+function createParticles() {
+
+    const symbols = ["💎","✦","◆","•"];
+
+    for (let i = 0; i < 6; i++) {
+
+        const particle = document.createElement("div");
+
+        particle.className = "particle";
+
+        particle.textContent =
+            symbols[Math.floor(Math.random() * symbols.length)];
+
+        particle.style.left = "50%";
+        particle.style.top = "45%";
+
+        particle.style.setProperty(
+            "--x",
+            (Math.random() * 180 - 90) + "px"
+        );
+
+        particle.style.setProperty(
+            "--y",
+            (Math.random() * 150 - 80) + "px"
+        );
+
+        miningArea.appendChild(particle);
+
+        setTimeout(() => {
+            particle.remove();
+        }, 700);
+    }
+}
+
+
+function goBack() {
+
+    clearInterval(timer);
+
+    timer = null;
+    automatic = false;
+
+    mining.classList.add("hidden");
+    home.classList.remove("hidden");
+}
+
+
+manualBtn.addEventListener("click", () => {
+    openMining("manual");
+});
+
+autoBtn.addEventListener("click", () => {
+    openMining("auto");
+});
+
+mineBtn.addEventListener("click", mine);
+
+backBtn.addEventListener("click", goBack);
+
+
+/* Telegram Mini App support */
+
+if (window.Telegram && Telegram.WebApp) {
+
+    Telegram.WebApp.ready();
+
+    Telegram.WebApp.expand();
+
+    Telegram.WebApp.BackButton.show();
+
+    Telegram.WebApp.BackButton.onClick(goBack);
 }
 
 </script>
