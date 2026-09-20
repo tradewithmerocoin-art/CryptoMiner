@@ -1,0 +1,2 @@
+# CryptoMiner
+Telegram mini app
