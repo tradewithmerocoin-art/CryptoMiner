@@ -427,7 +427,6 @@ button{
           <div class="progress-fill" id="minerProgress"></div>
         </div>
 
-
         <div class="countdown" id="countdown">
 
           <div class="countdown-label">
@@ -440,7 +439,6 @@ button{
 
         </div>
 
-
         <div class="mine-buttons">
 
           <button class="mine-btn" onclick="manualMine()">
@@ -452,7 +450,6 @@ button{
           </button>
 
         </div>
-
 
         <div class="notice" id="minerNotice">
           Häzirki test režimi
@@ -595,6 +592,10 @@ let autoTimer = null;
 let countdownTimer = null;
 let autoEndTime = null;
 
+let autoStartTime = null;
+let autoStartCrystals = 0;
+let autoDurationSeconds = 0;
+
 
 /* =========================================================
    PAGE
@@ -668,33 +669,26 @@ async function loadUser(){
       : 'Ýok';
 
 
-  /*
-    Telegram ID boýunça öňki user-i gözleýäris.
-  */
-
   const { data, error } =
     await supabaseClient
       .from('users')
       .select('*')
       .eq('telegram_id', String(telegramUser.id))
+      .limit(1)
       .maybeSingle();
 
 
   if(error){
 
-    console.error(error);
+    console.error('USER LOAD ERROR:', error);
 
     document.getElementById('profileStatus').innerText =
-      'Supabase birikmesi üçin RLS policy gerek bolup biler.';
+      '❌ ' + (error.message || 'Supabase error');
 
     return;
 
   }
 
-
-  /*
-    User öň bar bolsa
-  */
 
   if(data){
 
@@ -714,10 +708,15 @@ async function loadUser(){
 
 
   /*
-    Täze user
+    Täze user.
+    id int8 bolany üçin häzirki wagtda
+    frontend özboluşly san berýär.
   */
 
   const newUser = {
+
+    id:
+      Date.now(),
 
     telegram_id:
       String(telegramUser.id),
@@ -750,10 +749,10 @@ async function loadUser(){
 
   if(result.error){
 
-    console.error(result.error);
+    console.error('USER INSERT ERROR:', result.error);
 
     document.getElementById('profileStatus').innerText =
-      '⚠️ User-i database-e ýazmak başartmady.';
+      '❌ ' + (result.error.message || 'User database-e ýazylmady.');
 
     return;
 
@@ -778,7 +777,7 @@ async function loadUser(){
 
 async function saveCrystals(){
 
-  if(!currentUser) return;
+  if(!currentUser || !telegramUser) return;
 
   const { error } =
     await supabaseClient
@@ -792,7 +791,11 @@ async function saveCrystals(){
 
   if(error){
 
-    console.error('Crystal save error:',error);
+    console.error('CRYSTAL SAVE ERROR:', error);
+
+    document.getElementById('profileStatus').innerText =
+      '⚠️ Crystal save error: ' +
+      (error.message || 'Unknown error');
 
   }
 
@@ -803,7 +806,7 @@ async function saveCrystals(){
    MANUAL MINER
 ========================================================= */
 
-function manualMine(){
+async function manualMine(){
 
   if(crystals >= 100){
 
@@ -821,7 +824,7 @@ function manualMine(){
 
   updateMiner();
 
-  saveCrystals();
+  await saveCrystals();
 
 }
 
@@ -834,11 +837,13 @@ function autoMine(){
 
   if(autoTimer){
 
-    clearInterval(autoTimer);
+    clearTimeout(autoTimer);
     autoTimer = null;
 
     clearInterval(countdownTimer);
     countdownTimer = null;
+
+    autoEndTime = null;
 
     document.getElementById('countdown')
       .classList.remove('active');
@@ -861,67 +866,103 @@ function autoMine(){
   }
 
 
-  /*
-    9 bilen 11 minut aralygynda random wagt.
-    540 - 660 sekunt.
-  */
+  autoDurationSeconds =
+    Math.floor(Math.random() * 121) + 540;
 
-  const randomSeconds =
-    Math.floor(
-      Math.random() * 121
-    ) + 540;
 
+  autoStartTime =
+    Date.now();
 
   autoEndTime =
-    Date.now() +
-    randomSeconds * 1000;
+    autoStartTime +
+    autoDurationSeconds * 1000;
+
+  autoStartCrystals =
+    crystals;
 
 
   document.getElementById('countdown')
     .classList.add('active');
 
-
   document.getElementById('minerNotice').innerText =
     '🤖 Awtomat işleýär...';
 
 
-  updateCountdown();
+  updateAutoProgress();
 
 
   countdownTimer =
     setInterval(
-      updateCountdown,
+      updateAutoProgress,
       1000
     );
 
 
-  /*
-    Auto şol random wagt gutaranda
-    100-e ýetirýär.
-  */
-
   autoTimer =
     setTimeout(
       finishAutoMining,
-      randomSeconds * 1000
+      autoDurationSeconds * 1000
     );
 
 }
 
 
 /* =========================================================
-   COUNTDOWN
+   AUTO PROGRESS
 ========================================================= */
 
-function updateCountdown(){
+async function updateAutoProgress(){
 
   if(!autoEndTime) return;
+
+
+  const now =
+    Date.now();
 
   const remaining =
     Math.max(
       0,
-      autoEndTime - Date.now()
+      autoEndTime - now
     );
+
+
+  const elapsed =
+    Math.min(
+      autoDurationSeconds * 1000,
+      now - autoStartTime
+    );
+
+
+  const totalGain =
+    100 - autoStartCrystals;
+
+
+  const gained =
+    Math.floor(
+      (elapsed / (autoDurationSeconds * 1000))
+      * totalGain
+    );
+
+
+  const newCrystalValue =
+    Math.min(
+      100,
+      autoStartCrystals + gained
+    );
+
+
+  if(newCrystalValue > crystals){
+
+    crystals =
+      newCrystalValue;
+
+    updateMiner();
+
+    playMiningEffect();
+
+    await saveCrystals();
+
+  }
 
 
   const totalSeconds =
@@ -960,6 +1001,8 @@ async function finishAutoMining(){
   countdownTimer = null;
   autoTimer = null;
 
+  autoEndTime = null;
+
   crystals = 100;
 
   updateMiner();
@@ -973,6 +1016,13 @@ async function finishAutoMining(){
     '🎉 Awtomat tamamlandy! 100/100 boldy. Ertir täzeden açylar.';
 
   playCompletionEffect();
+
+  setTimeout(() => {
+
+    document.getElementById('countdown')
+      .classList.remove('active');
+
+  },1500);
 
 }
 
@@ -1077,6 +1127,7 @@ function playCompletionEffect(){
 
   crystal.style.filter =
     'drop-shadow(0 0 35px rgba(96,165,250,.95))';
+
 
   setTimeout(()=>{
 
