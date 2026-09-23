@@ -6,6 +6,7 @@
 <title>Crystal Platform</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{
@@ -21,6 +22,7 @@ body{
     radial-gradient(circle at top,#172554 0,#070b18 45%,#03050b 100%);
   color:white;
   padding-bottom:85px;
+  overflow-x:hidden;
 }
 
 .app{
@@ -39,6 +41,7 @@ body{
 .logo{
   font-size:21px;
   font-weight:800;
+  letter-spacing:.5px;
 }
 
 .lang{
@@ -56,6 +59,7 @@ body{
   padding:22px;
   margin-bottom:16px;
   box-shadow:0 15px 40px rgba(0,0,0,.25);
+  backdrop-filter:blur(12px);
 }
 
 .balance-title{
@@ -101,11 +105,26 @@ button{
 .miner-box{
   text-align:center;
   padding:25px 10px;
+  position:relative;
 }
 
 .crystal{
   font-size:75px;
   margin:10px;
+  display:inline-block;
+  filter:drop-shadow(0 0 18px rgba(96,165,250,.45));
+  transition:.2s;
+}
+
+.crystal.hit{
+  animation:crystalHit .35s ease;
+}
+
+@keyframes crystalHit{
+  0%{transform:scale(1) rotate(0)}
+  40%{transform:scale(1.25) rotate(-8deg)}
+  70%{transform:scale(.9) rotate(8deg)}
+  100%{transform:scale(1) rotate(0)}
 }
 
 .count{
@@ -131,10 +150,17 @@ button{
   font-size:16px;
   font-weight:800;
   background:#2563eb;
+  box-shadow:0 8px 25px rgba(37,99,235,.25);
+  transition:.15s;
+}
+
+.mine-btn:active{
+  transform:scale(.96);
 }
 
 .mine-btn.auto{
   background:#7c3aed;
+  box-shadow:0 8px 25px rgba(124,58,237,.25);
 }
 
 .progress{
@@ -149,7 +175,86 @@ button{
   height:100%;
   width:0%;
   background:#60a5fa;
-  transition:.25s;
+  transition:.35s;
+  box-shadow:0 0 15px rgba(96,165,250,.7);
+}
+
+.notice{
+  padding:14px;
+  background:#172033;
+  border-radius:14px;
+  color:#cbd5e1;
+  font-size:13px;
+  margin-top:15px;
+}
+
+.countdown{
+  display:none;
+  margin-top:18px;
+  padding:15px;
+  border-radius:17px;
+  background:rgba(30,41,59,.8);
+  border:1px solid #334155;
+}
+
+.countdown.active{
+  display:block;
+}
+
+.countdown-label{
+  color:#94a3b8;
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+.countdown-time{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.plus{
+  position:absolute;
+  left:50%;
+  top:35px;
+  transform:translateX(-50%);
+  color:#60a5fa;
+  font-size:25px;
+  font-weight:900;
+  pointer-events:none;
+  animation:plusFloat .7s ease forwards;
+}
+
+@keyframes plusFloat{
+  0%{
+    opacity:1;
+    transform:translate(-50%,0) scale(1);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-70px) scale(1.25);
+  }
+}
+
+.particle{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#60a5fa;
+  pointer-events:none;
+  animation:particleFly .7s ease forwards;
+}
+
+@keyframes particleFly{
+  0%{
+    opacity:1;
+    transform:translate(0,0) scale(1);
+  }
+  100%{
+    opacity:0;
+    transform:translate(var(--x),var(--y)) scale(.2);
+  }
 }
 
 .profile{
@@ -217,13 +322,12 @@ button{
   display:block;
 }
 
-.notice{
-  padding:14px;
-  background:#172033;
-  border-radius:14px;
-  color:#cbd5e1;
-  font-size:13px;
-  margin-top:15px;
+.success{
+  color:#4ade80;
+}
+
+.error{
+  color:#f87171;
 }
 </style>
 </head>
@@ -247,7 +351,8 @@ button{
   <section id="wallet" class="page active">
 
     <div class="card">
-      <div class="balance-title" id="balanceText">
+
+      <div class="balance-title">
         Balance
       </div>
 
@@ -256,20 +361,26 @@ button{
       </div>
 
       <div class="buttons">
+
         <button class="action" onclick="deposit()">
-          💵 <span id="depositText">Pul sal</span>
+          💵 <span>Pul sal</span>
         </button>
 
         <button class="action withdraw" onclick="withdraw()">
-          💸 <span id="withdrawText">Pul çykar</span>
+          💸 <span>Pul çykar</span>
         </button>
+
       </div>
+
     </div>
 
+
     <div class="card">
+
       <div class="section-title">💎 Miner</div>
 
       <div class="miner-box">
+
         <div class="crystal">💎</div>
 
         <div class="count">
@@ -283,7 +394,9 @@ button{
         <div class="progress">
           <div class="progress-fill" id="progress"></div>
         </div>
+
       </div>
+
     </div>
 
   </section>
@@ -296,7 +409,7 @@ button{
 
     <div class="card">
 
-      <div class="miner-box">
+      <div class="miner-box" id="minerBox">
 
         <div class="crystal" id="bigCrystal">
           💎
@@ -314,6 +427,20 @@ button{
           <div class="progress-fill" id="minerProgress"></div>
         </div>
 
+
+        <div class="countdown" id="countdown">
+
+          <div class="countdown-label">
+            🤖 Awtomat işleýär
+          </div>
+
+          <div class="countdown-time" id="countdownTime">
+            10:00
+          </div>
+
+        </div>
+
+
         <div class="mine-buttons">
 
           <button class="mine-btn" onclick="manualMine()">
@@ -325,6 +452,7 @@ button{
           </button>
 
         </div>
+
 
         <div class="notice" id="minerNotice">
           Häzirki test režimi
@@ -346,22 +474,37 @@ button{
 
       <div class="profile">
 
-        <div class="avatar">
+        <div class="avatar" id="avatar">
           👤
         </div>
 
         <div class="info">
-          <div><span>Ady:</span> <b id="userName">Test User</b></div>
-          <div><span>Telegram ID:</span> <b id="telegramId">Test</b></div>
+
+          <div>
+            <span>Ady:</span>
+            <b id="userName">Test User</b>
+          </div>
+
+          <div>
+            <span>Telegram ID:</span>
+            <b id="telegramId">Test</b>
+          </div>
+
+          <div>
+            <span>Username:</span>
+            <b id="username">@test</b>
+          </div>
+
         </div>
 
       </div>
 
-      <div class="notice">
-        Profil maglumatlary indiki tapgyrda doldurylýan we saklanýan görnüşe geçiriler.
+      <div class="notice" id="profileStatus">
+        User maglumatlary ýüklenýär...
       </div>
 
     </div>
+
 
     <div class="card">
 
@@ -384,19 +527,17 @@ button{
 
   <div class="nav">
 
-    <button id="navWallet" class="active" onclick="showPage('wallet',this)">
-      💰<br>
-      Gapjyk
+    <button id="navWallet" class="active"
+      onclick="showPage('wallet',this)">
+      💰<br>Gapjyk
     </button>
 
     <button onclick="showPage('miner',this)">
-      💎<br>
-      Miner
+      💎<br>Miner
     </button>
 
     <button onclick="showPage('profile',this)">
-      👤<br>
-      Profil
+      👤<br>Profil
     </button>
 
   </div>
@@ -406,6 +547,10 @@ button{
 
 <script>
 
+/* =========================================================
+   TELEGRAM
+========================================================= */
+
 const tg = window.Telegram?.WebApp;
 
 if(tg){
@@ -414,14 +559,46 @@ if(tg){
 }
 
 
-/* TEST DATA */
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+  "https://mledptrviyvodbophaph.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_Qn97tJVNRfMAANxyuDVjvw_D-XiAmYA";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =========================================================
+   USER
+========================================================= */
+
+let telegramUser = null;
+let currentUser = null;
+
+
+/* =========================================================
+   TEST DATA
+========================================================= */
 
 let balance = 0;
 let crystals = 0;
+
 let autoTimer = null;
+let countdownTimer = null;
+let autoEndTime = null;
 
 
-/* PAGE */
+/* =========================================================
+   PAGE
+========================================================= */
 
 function showPage(page,button){
 
@@ -438,74 +615,371 @@ function showPage(page,button){
 }
 
 
-/* MANUAL MINER */
+/* =========================================================
+   TELEGRAM USER
+========================================================= */
+
+function loadTelegramUser(){
+
+  if(
+    tg &&
+    tg.initDataUnsafe &&
+    tg.initDataUnsafe.user
+  ){
+
+    telegramUser =
+      tg.initDataUnsafe.user;
+
+  }else{
+
+    telegramUser = {
+      id: "TEST_" + Date.now(),
+      first_name: "Test",
+      last_name: "User",
+      username: "test_user"
+    };
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD / CREATE USER
+========================================================= */
+
+async function loadUser(){
+
+  if(!telegramUser) return;
+
+  document.getElementById('userName').innerText =
+    (
+      (telegramUser.first_name || '') +
+      ' ' +
+      (telegramUser.last_name || '')
+    ).trim();
+
+  document.getElementById('telegramId').innerText =
+    telegramUser.id;
+
+  document.getElementById('username').innerText =
+    telegramUser.username
+      ? '@' + telegramUser.username
+      : 'Ýok';
+
+
+  /*
+    Telegram ID boýunça öňki user-i gözleýäris.
+  */
+
+  const { data, error } =
+    await supabaseClient
+      .from('users')
+      .select('*')
+      .eq('telegram_id', String(telegramUser.id))
+      .maybeSingle();
+
+
+  if(error){
+
+    console.error(error);
+
+    document.getElementById('profileStatus').innerText =
+      'Supabase birikmesi üçin RLS policy gerek bolup biler.';
+
+    return;
+
+  }
+
+
+  /*
+    User öň bar bolsa
+  */
+
+  if(data){
+
+    currentUser = data;
+
+    crystals =
+      Number(data.crystals || 0);
+
+    updateMiner();
+
+    document.getElementById('profileStatus').innerText =
+      '✅ Account maglumatlary ýüklenildi.';
+
+    return;
+
+  }
+
+
+  /*
+    Täze user
+  */
+
+  const newUser = {
+
+    telegram_id:
+      String(telegramUser.id),
+
+    first_name:
+      telegramUser.first_name || '',
+
+    last_name:
+      telegramUser.last_name || '',
+
+    username:
+      telegramUser.username || '',
+
+    language:
+      localStorage.getItem('language') || 'tk',
+
+    crystals:
+      0
+
+  };
+
+
+  const result =
+    await supabaseClient
+      .from('users')
+      .insert(newUser)
+      .select()
+      .single();
+
+
+  if(result.error){
+
+    console.error(result.error);
+
+    document.getElementById('profileStatus').innerText =
+      '⚠️ User-i database-e ýazmak başartmady.';
+
+    return;
+
+  }
+
+
+  currentUser = result.data;
+
+  crystals = 0;
+
+  updateMiner();
+
+  document.getElementById('profileStatus').innerText =
+    '✅ Täze account döredildi.';
+
+}
+
+
+/* =========================================================
+   SAVE CRYSTALS
+========================================================= */
+
+async function saveCrystals(){
+
+  if(!currentUser) return;
+
+  const { error } =
+    await supabaseClient
+      .from('users')
+      .update({
+        crystals: crystals,
+        updated_at: new Date().toISOString()
+      })
+      .eq('telegram_id', String(telegramUser.id));
+
+
+  if(error){
+
+    console.error('Crystal save error:',error);
+
+  }
+
+}
+
+
+/* =========================================================
+   MANUAL MINER
+========================================================= */
 
 function manualMine(){
 
   if(crystals >= 100){
+
     document.getElementById('minerNotice').innerText =
       'Bugünlik 100 limit doldy. Ertir täzeden açylar.';
+
     return;
+
   }
+
 
   crystals++;
 
+  playMiningEffect();
+
   updateMiner();
+
+  saveCrystals();
 
 }
 
 
-/* AUTO MINER */
+/* =========================================================
+   AUTO MINER
+========================================================= */
 
 function autoMine(){
 
   if(autoTimer){
+
     clearInterval(autoTimer);
     autoTimer = null;
 
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+
+    document.getElementById('countdown')
+      .classList.remove('active');
+
     document.getElementById('minerNotice').innerText =
       'Awtomat duruzdy.';
+
     return;
+
   }
 
+
   if(crystals >= 100){
+
     document.getElementById('minerNotice').innerText =
       'Bugünlik limit doldy.';
+
     return;
+
   }
+
+
+  /*
+    9 bilen 11 minut aralygynda random wagt.
+    540 - 660 sekunt.
+  */
+
+  const randomSeconds =
+    Math.floor(
+      Math.random() * 121
+    ) + 540;
+
+
+  autoEndTime =
+    Date.now() +
+    randomSeconds * 1000;
+
+
+  document.getElementById('countdown')
+    .classList.add('active');
+
 
   document.getElementById('minerNotice').innerText =
     '🤖 Awtomat işleýär...';
 
+
+  updateCountdown();
+
+
+  countdownTimer =
+    setInterval(
+      updateCountdown,
+      1000
+    );
+
+
   /*
-    TEST:
-    10 minut = 100 crystal
-    600 sekunt / 100 = 6 sekunt
+    Auto şol random wagt gutaranda
+    100-e ýetirýär.
   */
 
-  autoTimer = setInterval(() => {
-
-    if(crystals >= 100){
-
-      clearInterval(autoTimer);
-      autoTimer = null;
-
-      document.getElementById('minerNotice').innerText =
-        '100/100 boldy. Ertir täzeden açylar.';
-
-      return;
-    }
-
-    crystals++;
-
-    updateMiner();
-
-  },6000);
+  autoTimer =
+    setTimeout(
+      finishAutoMining,
+      randomSeconds * 1000
+    );
 
 }
 
 
-/* UPDATE */
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+function updateCountdown(){
+
+  if(!autoEndTime) return;
+
+  const remaining =
+    Math.max(
+      0,
+      autoEndTime - Date.now()
+    );
+
+
+  const totalSeconds =
+    Math.ceil(
+      remaining / 1000
+    );
+
+
+  const minutes =
+    Math.floor(
+      totalSeconds / 60
+    );
+
+
+  const seconds =
+    totalSeconds % 60;
+
+
+  document.getElementById('countdownTime')
+    .innerText =
+      String(minutes).padStart(2,'0') +
+      ':' +
+      String(seconds).padStart(2,'0');
+
+}
+
+
+/* =========================================================
+   AUTO FINISH
+========================================================= */
+
+async function finishAutoMining(){
+
+  clearInterval(countdownTimer);
+
+  countdownTimer = null;
+  autoTimer = null;
+
+  crystals = 100;
+
+  updateMiner();
+
+  await saveCrystals();
+
+  document.getElementById('countdownTime')
+    .innerText = '00:00';
+
+  document.getElementById('minerNotice').innerText =
+    '🎉 Awtomat tamamlandy! 100/100 boldy. Ertir täzeden açylar.';
+
+  playCompletionEffect();
+
+}
+
+
+/* =========================================================
+   MINER UPDATE
+========================================================= */
 
 function updateMiner(){
 
@@ -524,7 +998,133 @@ function updateMiner(){
 }
 
 
-/* DEPOSIT */
+/* =========================================================
+   MINING EFFECT
+========================================================= */
+
+function playMiningEffect(){
+
+  const crystal =
+    document.getElementById('bigCrystal');
+
+  crystal.classList.remove('hit');
+
+  void crystal.offsetWidth;
+
+  crystal.classList.add('hit');
+
+
+  const plus =
+    document.createElement('div');
+
+  plus.className = 'plus';
+  plus.innerText = '+1 💎';
+
+  document.getElementById('minerBox')
+    .appendChild(plus);
+
+
+  setTimeout(
+    () => plus.remove(),
+    700
+  );
+
+
+  for(let i=0;i<8;i++){
+
+    const particle =
+      document.createElement('div');
+
+    particle.className = 'particle';
+
+    particle.style.left = '50%';
+    particle.style.top = '60px';
+
+    particle.style.setProperty(
+      '--x',
+      ((Math.random()*120)-60)+'px'
+    );
+
+    particle.style.setProperty(
+      '--y',
+      ((Math.random()*100)-50)+'px'
+    );
+
+    document.getElementById('minerBox')
+      .appendChild(particle);
+
+    setTimeout(
+      () => particle.remove(),
+      700
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   COMPLETION EFFECT
+========================================================= */
+
+function playCompletionEffect(){
+
+  const crystal =
+    document.getElementById('bigCrystal');
+
+  crystal.style.transform =
+    'scale(1.35)';
+
+  crystal.style.filter =
+    'drop-shadow(0 0 35px rgba(96,165,250,.95))';
+
+  setTimeout(()=>{
+
+    crystal.style.transform =
+      'scale(1)';
+
+    crystal.style.filter =
+      'drop-shadow(0 0 18px rgba(96,165,250,.45))';
+
+  },700);
+
+
+  for(let i=0;i<20;i++){
+
+    const particle =
+      document.createElement('div');
+
+    particle.className = 'particle';
+
+    particle.style.left = '50%';
+    particle.style.top = '60px';
+
+    particle.style.setProperty(
+      '--x',
+      ((Math.random()*240)-120)+'px'
+    );
+
+    particle.style.setProperty(
+      '--y',
+      ((Math.random()*180)-90)+'px'
+    );
+
+    document.getElementById('minerBox')
+      .appendChild(particle);
+
+    setTimeout(
+      () => particle.remove(),
+      800
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DEPOSIT
+========================================================= */
 
 function deposit(){
 
@@ -535,7 +1135,9 @@ function deposit(){
 }
 
 
-/* WITHDRAW */
+/* =========================================================
+   WITHDRAW
+========================================================= */
 
 function withdraw(){
 
@@ -546,33 +1148,55 @@ function withdraw(){
 }
 
 
-/* LANGUAGE */
+/* =========================================================
+   LANGUAGE
+========================================================= */
 
-document.getElementById('language')
-.addEventListener('change',function(){
-
-  localStorage.setItem(
-    'language',
-    this.value
-  );
-
-});
+const languageSelect =
+  document.getElementById('language');
 
 
-/* TELEGRAM USER */
+const savedLanguage =
+  localStorage.getItem('language');
 
-if(tg && tg.initDataUnsafe && tg.initDataUnsafe.user){
 
-  const user = tg.initDataUnsafe.user;
+if(savedLanguage){
 
-  document.getElementById('userName').innerText =
-    ((user.first_name || '') + ' ' +
-     (user.last_name || '')).trim();
-
-  document.getElementById('telegramId').innerText =
-    user.id;
+  languageSelect.value =
+    savedLanguage;
 
 }
+
+
+languageSelect.addEventListener(
+  'change',
+  function(){
+
+    localStorage.setItem(
+      'language',
+      this.value
+    );
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function startApp(){
+
+  loadTelegramUser();
+
+  await loadUser();
+
+  updateMiner();
+
+}
+
+
+startApp();
 
 </script>
 
