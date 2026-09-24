@@ -346,13 +346,12 @@ button{
     </select>
   </div>
 
-
   <!-- WALLET -->
   <section id="wallet" class="page active">
 
     <div class="card">
 
-      <div class="balance-title">
+      <div class="balance-title" data-i18n="balance">
         Balance
       </div>
 
@@ -363,21 +362,22 @@ button{
       <div class="buttons">
 
         <button class="action" onclick="deposit()">
-          💵 <span>Pul sal</span>
+          💵 <span data-i18n="deposit">Pul sal</span>
         </button>
 
         <button class="action withdraw" onclick="withdraw()">
-          💸 <span>Pul çykar</span>
+          💸 <span data-i18n="withdraw">Pul çykar</span>
         </button>
 
       </div>
 
     </div>
 
-
     <div class="card">
 
-      <div class="section-title">💎 Miner</div>
+      <div class="section-title" data-i18n="minerTitle">
+        💎 Miner
+      </div>
 
       <div class="miner-box">
 
@@ -387,7 +387,7 @@ button{
           <span id="crystals">0</span> / 100
         </div>
 
-        <div class="sub">
+        <div class="sub" data-i18n="dailyLimit">
           Gündelik limit
         </div>
 
@@ -405,7 +405,9 @@ button{
   <!-- MINER -->
   <section id="miner" class="page">
 
-    <div class="section-title">💎 Miner</div>
+    <div class="section-title" data-i18n="minerTitle">
+      💎 Miner
+    </div>
 
     <div class="card">
 
@@ -419,7 +421,7 @@ button{
           <span id="minerCount">0</span> / 100
         </div>
 
-        <div class="sub">
+        <div class="sub" data-i18n="dailyMinerLimit">
           Gündelik miner limiti
         </div>
 
@@ -429,7 +431,7 @@ button{
 
         <div class="countdown" id="countdown">
 
-          <div class="countdown-label">
+          <div class="countdown-label" data-i18n="autoWorking">
             🤖 Awtomat işleýär
           </div>
 
@@ -441,17 +443,17 @@ button{
 
         <div class="mine-buttons">
 
-          <button class="mine-btn" onclick="manualMine()">
+          <button class="mine-btn" onclick="manualMine()" data-i18n="manual">
             ⛏️ EL BILEN
           </button>
 
-          <button class="mine-btn auto" onclick="autoMine()">
+          <button class="mine-btn auto" onclick="autoMine()" data-i18n="automatic">
             🤖 AWTOMAT
           </button>
 
         </div>
 
-        <div class="notice" id="minerNotice">
+        <div class="notice" id="minerNotice" data-i18n="testMode">
           Häzirki test režimi
         </div>
 
@@ -465,7 +467,9 @@ button{
   <!-- PROFILE -->
   <section id="profile" class="page">
 
-    <div class="section-title">👤 Profil</div>
+    <div class="section-title" data-i18n="profileTitle">
+      👤 Profil
+    </div>
 
     <div class="card">
 
@@ -478,18 +482,33 @@ button{
         <div class="info">
 
           <div>
-            <span>Ady:</span>
+            <span data-i18n="name">Ady:</span>
             <b id="userName">Test User</b>
           </div>
 
           <div>
-            <span>Telegram ID:</span>
+            <span data-i18n="telegramId">Telegram ID:</span>
             <b id="telegramId">Test</b>
           </div>
 
           <div>
-            <span>Username:</span>
+            <span data-i18n="username">Username:</span>
             <b id="username">@test</b>
+          </div>
+
+          <div>
+            <span data-i18n="phone">Telefon:</span>
+            <b id="phone">Ýok</b>
+          </div>
+
+          <div>
+            <span data-i18n="country">Ýurt:</span>
+            <b id="country">Ýok</b>
+          </div>
+
+          <div>
+            <span data-i18n="age">Ýaş:</span>
+            <b id="age">Ýok</b>
           </div>
 
         </div>
@@ -505,9 +524,14 @@ button{
 
     <div class="card">
 
-      <div class="section-title">🌐 Dil</div>
+      <div class="section-title" data-i18n="languageTitle">
+        🌐 Dil
+      </div>
 
-      <p style="color:#94a3b8">
+      <p
+        style="color:#94a3b8"
+        data-i18n="languageInfo"
+      >
         Dili ýokardaky menýudan üýtgedip bilersiňiz.
       </p>
 
@@ -526,15 +550,15 @@ button{
 
     <button id="navWallet" class="active"
       onclick="showPage('wallet',this)">
-      💰<br>Gapjyk
+      💰<br><span data-i18n="wallet">Gapjyk</span>
     </button>
 
     <button onclick="showPage('miner',this)">
-      💎<br>Miner
+      💎<br><span data-i18n="minerNav">Miner</span>
     </button>
 
     <button onclick="showPage('profile',this)">
-      👤<br>Profil
+      👤<br><span data-i18n="profileNav">Profil</span>
     </button>
 
   </div>
@@ -563,6 +587,9 @@ if(tg){
 const SUPABASE_URL =
   "https://mledptrviyvodbophaph.supabase.co";
 
+/*
+  ÖZÜŇ HÄZIRKI PUBLISHABLE KEY-IŇI ŞU ÝERE GOÝ.
+*/
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_Qn97tJVNRfMAANxyuDVjvw_D-XiAmYA";
 
@@ -571,6 +598,216 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
+
+
+/* =========================================================
+   TRANSLATIONS
+========================================================= */
+
+const translations = {
+
+  tk: {
+    balance: "Balans",
+    deposit: "Pul sal",
+    withdraw: "Pul çykar",
+    minerTitle: "💎 Miner",
+    dailyLimit: "Gündelik limit",
+    dailyMinerLimit: "Gündelik miner limiti",
+    autoWorking: "🤖 Awtomat işleýär",
+    manual: "⛏️ EL BILEN",
+    automatic: "🤖 AWTOMAT",
+    testMode: "Häzirki test režimi",
+    profileTitle: "👤 Profil",
+    name: "Ady:",
+    telegramId: "Telegram ID:",
+    username: "Username:",
+    phone: "Telefon:",
+    country: "Ýurt:",
+    age: "Ýaş:",
+    languageTitle: "🌐 Dil",
+    languageInfo: "Dili ýokardaky menýudan üýtgedip bilersiňiz.",
+    wallet: "Gapjyk",
+    minerNav: "Miner",
+    profileNav: "Profil",
+    userLoading: "User maglumatlary ýüklenýär...",
+    accountLoaded: "✅ Account maglumatlary ýüklenildi.",
+    accountCreated: "✅ Täze account döredildi.",
+    noValue: "Ýok",
+    dailyLimitReached: "Bugünlik 100 limit doldy. Ertir täzeden açylar.",
+    autoStopped: "Awtomat duruzdy.",
+    automaticRunning: "🤖 Awtomat işleýär...",
+    dailyLimitShort: "Bugünlik limit doldy.",
+    automaticFinished: "🎉 Awtomat tamamlandy! 100/100 boldy. Ertir täzeden açylar.",
+    depositTest: "TEST: Pul salmak bölümi. Crypto payment indiki tapgyrda goşular.",
+    withdrawTest: "TEST: Pul çykarmak bölümi. Minimum $50 we admin tassyklamasy indiki tapgyrda goşular."
+  },
+
+  ru: {
+    balance: "Баланс",
+    deposit: "Пополнить",
+    withdraw: "Вывести",
+    minerTitle: "💎 Майнер",
+    dailyLimit: "Дневной лимит",
+    dailyMinerLimit: "Дневной лимит майнера",
+    autoWorking: "🤖 Автомат работает",
+    manual: "⛏️ ВРУЧНУЮ",
+    automatic: "🤖 АВТОМАТ",
+    testMode: "Текущий тестовый режим",
+    profileTitle: "👤 Профиль",
+    name: "Имя:",
+    telegramId: "Telegram ID:",
+    username: "Username:",
+    phone: "Телефон:",
+    country: "Страна:",
+    age: "Возраст:",
+    languageTitle: "🌐 Язык",
+    languageInfo: "Вы можете изменить язык в меню выше.",
+    wallet: "Кошелёк",
+    minerNav: "Майнер",
+    profileNav: "Профиль",
+    userLoading: "Загрузка данных пользователя...",
+    accountLoaded: "✅ Данные аккаунта загружены.",
+    accountCreated: "✅ Новый аккаунт создан.",
+    noValue: "Нет",
+    dailyLimitReached: "Дневной лимит 100 достигнут. Снова откроется завтра.",
+    autoStopped: "Автомат остановлен.",
+    automaticRunning: "🤖 Автомат работает...",
+    dailyLimitShort: "Дневной лимит достигнут.",
+    automaticFinished: "🎉 Автомат завершён! 100/100. Снова откроется завтра.",
+    depositTest: "ТЕСТ: Раздел пополнения. Crypto payment будет добавлен на следующем этапе.",
+    withdrawTest: "ТЕСТ: Раздел вывода. Минимум $50 и подтверждение администратора будут добавлены позже."
+  },
+
+  en: {
+    balance: "Balance",
+    deposit: "Deposit",
+    withdraw: "Withdraw",
+    minerTitle: "💎 Miner",
+    dailyLimit: "Daily limit",
+    dailyMinerLimit: "Daily mining limit",
+    autoWorking: "🤖 Automatic is working",
+    manual: "⛏️ MANUAL",
+    automatic: "🤖 AUTOMATIC",
+    testMode: "Current test mode",
+    profileTitle: "👤 Profile",
+    name: "Name:",
+    telegramId: "Telegram ID:",
+    username: "Username:",
+    phone: "Phone:",
+    country: "Country:",
+    age: "Age:",
+    languageTitle: "🌐 Language",
+    languageInfo: "You can change the language from the menu above.",
+    wallet: "Wallet",
+    minerNav: "Miner",
+    profileNav: "Profile",
+    userLoading: "Loading user information...",
+    accountLoaded: "✅ Account information loaded.",
+    accountCreated: "✅ New account created.",
+    noValue: "None",
+    dailyLimitReached: "Today's 100 limit has been reached. It will reopen tomorrow.",
+    autoStopped: "Automatic mining stopped.",
+    automaticRunning: "🤖 Automatic is working...",
+    dailyLimitShort: "Daily limit reached.",
+    automaticFinished: "🎉 Automatic mining completed! 100/100. It will reopen tomorrow.",
+    depositTest: "TEST: Deposit section. Crypto payment will be added in the next stage.",
+    withdrawTest: "TEST: Withdrawal section. Minimum $50 and admin approval will be added later."
+  }
+
+};
+
+
+/* =========================================================
+   LANGUAGE SYSTEM
+========================================================= */
+
+const languageSelect =
+  document.getElementById('language');
+
+let currentLanguage =
+  localStorage.getItem('language') || 'tk';
+
+
+function t(key){
+
+  return (
+    translations[currentLanguage] &&
+    translations[currentLanguage][key]
+  ) ||
+  translations.tk[key] ||
+  key;
+
+}
+
+
+function applyLanguage(){
+
+  document.documentElement.lang =
+    currentLanguage;
+
+  languageSelect.value =
+    currentLanguage;
+
+  document.querySelectorAll('[data-i18n]')
+    .forEach(element => {
+
+      const key =
+        element.getAttribute('data-i18n');
+
+      element.innerText =
+        t(key);
+
+    });
+
+}
+
+
+async function saveLanguage(){
+
+  localStorage.setItem(
+    'language',
+    currentLanguage
+  );
+
+  applyLanguage();
+
+  if(!currentUser || !telegramUser){
+    return;
+  }
+
+  const { error } =
+    await supabaseClient
+      .from('users')
+      .update({
+        language: currentLanguage,
+        updated_at: new Date().toISOString()
+      })
+      .eq(
+        'telegram_id',
+        String(telegramUser.id)
+      );
+
+  if(error){
+    console.error(
+      'LANGUAGE SAVE ERROR:',
+      error
+    );
+  }
+
+}
+
+
+languageSelect.addEventListener(
+  'change',
+  async function(){
+
+    currentLanguage =
+      this.value;
+
+    await saveLanguage();
+
+  }
+);
 
 
 /* =========================================================
@@ -604,13 +841,17 @@ let autoDurationSeconds = 0;
 function showPage(page,button){
 
   document.querySelectorAll('.page')
-    .forEach(p => p.classList.remove('active'));
+    .forEach(p =>
+      p.classList.remove('active')
+    );
 
   document.getElementById(page)
     .classList.add('active');
 
   document.querySelectorAll('.nav button')
-    .forEach(b => b.classList.remove('active'));
+    .forEach(b =>
+      b.classList.remove('active')
+    );
 
   button.classList.add('active');
 }
@@ -666,24 +907,31 @@ async function loadUser(){
   document.getElementById('username').innerText =
     telegramUser.username
       ? '@' + telegramUser.username
-      : 'Ýok';
+      : t('noValue');
 
 
   const { data, error } =
     await supabaseClient
       .from('users')
       .select('*')
-      .eq('telegram_id', String(telegramUser.id))
+      .eq(
+        'telegram_id',
+        String(telegramUser.id)
+      )
       .limit(1)
       .maybeSingle();
 
 
   if(error){
 
-    console.error('USER LOAD ERROR:', error);
+    console.error(
+      'USER LOAD ERROR:',
+      error
+    );
 
     document.getElementById('profileStatus').innerText =
-      '❌ ' + (error.message || 'Supabase error');
+      '❌ ' +
+      (error.message || 'Supabase error');
 
     return;
 
@@ -697,21 +945,38 @@ async function loadUser(){
     crystals =
       Number(data.crystals || 0);
 
+    if(data.language){
+
+      currentLanguage =
+        data.language;
+
+      localStorage.setItem(
+        'language',
+        currentLanguage
+      );
+
+    }
+
+    document.getElementById('phone').innerText =
+      data.phone || t('noValue');
+
+    document.getElementById('country').innerText =
+      data.country || t('noValue');
+
+    document.getElementById('age').innerText =
+      data.age || t('noValue');
+
+    applyLanguage();
+
     updateMiner();
 
     document.getElementById('profileStatus').innerText =
-      '✅ Account maglumatlary ýüklenildi.';
+      t('accountLoaded');
 
     return;
 
   }
 
-
-  /*
-    Täze user.
-    id int8 bolany üçin häzirki wagtda
-    frontend özboluşly san berýär.
-  */
 
   const newUser = {
 
@@ -731,7 +996,7 @@ async function loadUser(){
       telegramUser.username || '',
 
     language:
-      localStorage.getItem('language') || 'tk',
+      currentLanguage,
 
     crystals:
       0
@@ -749,24 +1014,34 @@ async function loadUser(){
 
   if(result.error){
 
-    console.error('USER INSERT ERROR:', result.error);
+    console.error(
+      'USER INSERT ERROR:',
+      result.error
+    );
 
     document.getElementById('profileStatus').innerText =
-      '❌ ' + (result.error.message || 'User database-e ýazylmady.');
+      '❌ ' +
+      (
+        result.error.message ||
+        'User database-e ýazylmady.'
+      );
 
     return;
 
   }
 
 
-  currentUser = result.data;
+  currentUser =
+    result.data;
 
   crystals = 0;
+
+  applyLanguage();
 
   updateMiner();
 
   document.getElementById('profileStatus').innerText =
-    '✅ Täze account döredildi.';
+    t('accountCreated');
 
 }
 
@@ -777,25 +1052,37 @@ async function loadUser(){
 
 async function saveCrystals(){
 
-  if(!currentUser || !telegramUser) return;
+  if(!currentUser || !telegramUser){
+    return;
+  }
 
   const { error } =
     await supabaseClient
       .from('users')
       .update({
         crystals: crystals,
-        updated_at: new Date().toISOString()
+        updated_at:
+          new Date().toISOString()
       })
-      .eq('telegram_id', String(telegramUser.id));
+      .eq(
+        'telegram_id',
+        String(telegramUser.id)
+      );
 
 
   if(error){
 
-    console.error('CRYSTAL SAVE ERROR:', error);
+    console.error(
+      'CRYSTAL SAVE ERROR:',
+      error
+    );
 
     document.getElementById('profileStatus').innerText =
       '⚠️ Crystal save error: ' +
-      (error.message || 'Unknown error');
+      (
+        error.message ||
+        'Unknown error'
+      );
 
   }
 
@@ -811,7 +1098,7 @@ async function manualMine(){
   if(crystals >= 100){
 
     document.getElementById('minerNotice').innerText =
-      'Bugünlik 100 limit doldy. Ertir täzeden açylar.';
+      t('dailyLimitReached');
 
     return;
 
@@ -838,9 +1125,11 @@ function autoMine(){
   if(autoTimer){
 
     clearTimeout(autoTimer);
+
     autoTimer = null;
 
     clearInterval(countdownTimer);
+
     countdownTimer = null;
 
     autoEndTime = null;
@@ -849,7 +1138,7 @@ function autoMine(){
       .classList.remove('active');
 
     document.getElementById('minerNotice').innerText =
-      'Awtomat duruzdy.';
+      t('autoStopped');
 
     return;
 
@@ -859,7 +1148,7 @@ function autoMine(){
   if(crystals >= 100){
 
     document.getElementById('minerNotice').innerText =
-      'Bugünlik limit doldy.';
+      t('dailyLimitShort');
 
     return;
 
@@ -867,7 +1156,9 @@ function autoMine(){
 
 
   autoDurationSeconds =
-    Math.floor(Math.random() * 121) + 540;
+    Math.floor(
+      Math.random() * 121
+    ) + 540;
 
 
   autoStartTime =
@@ -885,7 +1176,7 @@ function autoMine(){
     .classList.add('active');
 
   document.getElementById('minerNotice').innerText =
-    '🤖 Awtomat işleýär...';
+    t('automaticRunning');
 
 
   updateAutoProgress();
@@ -939,8 +1230,11 @@ async function updateAutoProgress(){
 
   const gained =
     Math.floor(
-      (elapsed / (autoDurationSeconds * 1000))
-      * totalGain
+      (
+        elapsed /
+        (autoDurationSeconds * 1000)
+      ) *
+      totalGain
     );
 
 
@@ -999,6 +1293,7 @@ async function finishAutoMining(){
   clearInterval(countdownTimer);
 
   countdownTimer = null;
+
   autoTimer = null;
 
   autoEndTime = null;
@@ -1013,7 +1308,7 @@ async function finishAutoMining(){
     .innerText = '00:00';
 
   document.getElementById('minerNotice').innerText =
-    '🎉 Awtomat tamamlandy! 100/100 boldy. Ertir täzeden açylar.';
+    t('automaticFinished');
 
   playCompletionEffect();
 
@@ -1068,7 +1363,9 @@ function playMiningEffect(){
     document.createElement('div');
 
   plus.className = 'plus';
-  plus.innerText = '+1 💎';
+
+  plus.innerText =
+    '+1 💎';
 
   document.getElementById('minerBox')
     .appendChild(plus);
@@ -1085,10 +1382,14 @@ function playMiningEffect(){
     const particle =
       document.createElement('div');
 
-    particle.className = 'particle';
+    particle.className =
+      'particle';
 
-    particle.style.left = '50%';
-    particle.style.top = '60px';
+    particle.style.left =
+      '50%';
+
+    particle.style.top =
+      '60px';
 
     particle.style.setProperty(
       '--x',
@@ -1145,10 +1446,14 @@ function playCompletionEffect(){
     const particle =
       document.createElement('div');
 
-    particle.className = 'particle';
+    particle.className =
+      'particle';
 
-    particle.style.left = '50%';
-    particle.style.top = '60px';
+    particle.style.left =
+      '50%';
+
+    particle.style.top =
+      '60px';
 
     particle.style.setProperty(
       '--x',
@@ -1180,7 +1485,7 @@ function playCompletionEffect(){
 function deposit(){
 
   alert(
-    'TEST: Pul salmak bölümi. Crypto payment indiki tapgyrda goşular.'
+    t('depositTest')
   );
 
 }
@@ -1193,43 +1498,10 @@ function deposit(){
 function withdraw(){
 
   alert(
-    'TEST: Pul çykarmak bölümi. Minimum $50 we admin tassyklamasy indiki tapgyrda goşular.'
+    t('withdrawTest')
   );
 
 }
-
-
-/* =========================================================
-   LANGUAGE
-========================================================= */
-
-const languageSelect =
-  document.getElementById('language');
-
-
-const savedLanguage =
-  localStorage.getItem('language');
-
-
-if(savedLanguage){
-
-  languageSelect.value =
-    savedLanguage;
-
-}
-
-
-languageSelect.addEventListener(
-  'change',
-  function(){
-
-    localStorage.setItem(
-      'language',
-      this.value
-    );
-
-  }
-);
 
 
 /* =========================================================
@@ -1238,9 +1510,20 @@ languageSelect.addEventListener(
 
 async function startApp(){
 
+  /*
+    Ilki lokal dili görkez.
+  */
+  applyLanguage();
+
   loadTelegramUser();
 
   await loadUser();
+
+  /*
+    loadUser database-den başga dil tapyp biler.
+    Şonuň üçin ýene bir gezek apply edýäris.
+  */
+  applyLanguage();
 
   updateMiner();
 
