@@ -25,11 +25,27 @@ body{
   overflow-x:hidden;
 }
 
+button,
+input,
+select{
+  font-family:Arial,sans-serif;
+}
+
+button{
+  border:0;
+  color:white;
+  cursor:pointer;
+}
+
 .app{
   max-width:520px;
   margin:auto;
   padding:22px 16px;
 }
+
+/* =========================================================
+   GLOBAL TOP
+========================================================= */
 
 .top{
   display:flex;
@@ -50,6 +66,274 @@ body{
   border-radius:12px;
   padding:8px 11px;
   color:white;
+  outline:none;
+}
+
+/* =========================================================
+   AUTH SCREEN
+========================================================= */
+
+#authScreen{
+  min-height:100vh;
+  padding:25px 18px 40px;
+  max-width:520px;
+  margin:auto;
+}
+
+.auth-logo{
+  text-align:center;
+  margin-top:35px;
+  margin-bottom:30px;
+}
+
+.auth-crystal{
+  font-size:78px;
+  display:inline-block;
+  filter:drop-shadow(0 0 30px rgba(96,165,250,.7));
+  animation:authCrystal 2.5s ease-in-out infinite;
+}
+
+@keyframes authCrystal{
+  0%,100%{
+    transform:translateY(0) scale(1);
+  }
+  50%{
+    transform:translateY(-8px) scale(1.06);
+  }
+}
+
+.auth-title{
+  font-size:30px;
+  font-weight:900;
+  margin-top:8px;
+}
+
+.auth-subtitle{
+  color:#94a3b8;
+  margin-top:8px;
+  font-size:14px;
+}
+
+.auth-card{
+  background:rgba(15,23,42,.88);
+  border:1px solid #26334e;
+  border-radius:25px;
+  padding:23px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.35),
+    0 0 40px rgba(37,99,235,.06);
+  backdrop-filter:blur(15px);
+  animation:authCardIn .45s ease;
+}
+
+@keyframes authCardIn{
+  from{
+    opacity:0;
+    transform:translateY(18px) scale(.98);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.auth-heading{
+  font-size:23px;
+  font-weight:900;
+  margin-bottom:7px;
+}
+
+.auth-description{
+  color:#94a3b8;
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+.auth-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.auth-main-btn{
+  width:100%;
+  padding:16px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#2563eb,#4f46e5);
+  font-size:16px;
+  font-weight:800;
+  box-shadow:0 10px 30px rgba(37,99,235,.28);
+  transition:.18s;
+}
+
+.auth-main-btn:active{
+  transform:scale(.97);
+}
+
+.auth-secondary-btn{
+  width:100%;
+  padding:16px;
+  border-radius:16px;
+  background:#1e293b;
+  border:1px solid #334155;
+  font-size:16px;
+  font-weight:800;
+  transition:.18s;
+}
+
+.auth-secondary-btn:active{
+  transform:scale(.97);
+}
+
+.auth-back{
+  background:none;
+  color:#94a3b8;
+  padding:10px 0;
+  margin-top:10px;
+  font-size:14px;
+}
+
+.form-group{
+  margin-bottom:15px;
+}
+
+.form-label{
+  display:block;
+  color:#cbd5e1;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+.form-input{
+  width:100%;
+  padding:15px;
+  border-radius:14px;
+  border:1px solid #334155;
+  background:#0b1222;
+  color:white;
+  outline:none;
+  font-size:15px;
+  transition:.2s;
+}
+
+.form-input::placeholder{
+  color:#64748b;
+}
+
+.form-input:focus{
+  border-color:#60a5fa;
+  box-shadow:0 0 0 3px rgba(96,165,250,.10);
+}
+
+.auth-message{
+  display:none;
+  padding:12px;
+  border-radius:13px;
+  margin-bottom:15px;
+  font-size:13px;
+  line-height:1.45;
+}
+
+.auth-message.show{
+  display:block;
+}
+
+.auth-message.error{
+  color:#fecaca;
+  background:rgba(127,29,29,.28);
+  border:1px solid rgba(248,113,113,.25);
+}
+
+.auth-message.success{
+  color:#bbf7d0;
+  background:rgba(20,83,45,.25);
+  border:1px solid rgba(74,222,128,.22);
+}
+
+.password-note{
+  color:#64748b;
+  font-size:11px;
+  margin-top:5px;
+}
+
+.step-dots{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  margin:0 0 20px;
+}
+
+.step-dot{
+  width:28px;
+  height:5px;
+  border-radius:10px;
+  background:#1e293b;
+  transition:.3s;
+}
+
+.step-dot.active{
+  background:#60a5fa;
+  box-shadow:0 0 12px rgba(96,165,250,.5);
+}
+
+.avatar-options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:8px;
+}
+
+.avatar-option{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  background:#111827;
+  border:1px solid #334155;
+  font-size:25px;
+  transition:.15s;
+}
+
+.avatar-option.selected{
+  border-color:#60a5fa;
+  background:#172554;
+  box-shadow:0 0 15px rgba(96,165,250,.3);
+  transform:scale(1.06);
+}
+
+.profile-complete{
+  text-align:center;
+  padding:10px 0 4px;
+}
+
+.complete-icon{
+  font-size:65px;
+  display:block;
+  margin-bottom:12px;
+  animation:completePop .6s ease;
+}
+
+@keyframes completePop{
+  0%{
+    transform:scale(.5);
+    opacity:0;
+  }
+  70%{
+    transform:scale(1.15);
+  }
+  100%{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+#mainApp{
+  display:none;
 }
 
 .card{
@@ -76,12 +360,6 @@ body{
 .buttons{
   display:flex;
   gap:10px;
-}
-
-button{
-  border:0;
-  color:white;
-  cursor:pointer;
 }
 
 .action{
@@ -335,6 +613,20 @@ button{
   display:block;
 }
 
+/* =========================================================
+   PROFILE EDIT
+========================================================= */
+
+.profile-edit-btn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  background:#1e293b;
+  border:1px solid #334155;
+  font-weight:700;
+  margin-top:10px;
+}
+
 .success{
   color:#4ade80;
 }
@@ -347,9 +639,73 @@ button{
 
 <body>
 
+<!-- =======================================================
+     AUTH
+======================================================= -->
+
+<div id="authScreen">
+
+  <div class="top">
+    <div class="logo">💎 CRYSTAL</div>
+
+    <select class="lang" id="authLanguage">
+      <option value="tk">🇹🇲 TM</option>
+      <option value="ru">🇷🇺 RU</option>
+      <option value="en">🇬🇧 EN</option>
+    </select>
+  </div>
+
+  <div class="auth-logo">
+    <div class="auth-crystal">💎</div>
+    <div class="auth-title">CRYSTAL</div>
+    <div class="auth-subtitle" data-i18n="authSubtitle">
+      Your crystal platform
+    </div>
+  </div>
+
+  <div class="auth-card" id="authContent">
+
+    <div class="auth-heading" data-i18n="welcome">
+      Hoş geldiňiz
+    </div>
+
+    <div class="auth-description" data-i18n="chooseAccount">
+      Dowam etmek üçin account görnüşini saýlaň.
+    </div>
+
+    <div class="auth-buttons">
+
+      <button
+        class="auth-main-btn"
+        onclick="showRegister()"
+        data-i18n="newAccount">
+        ✨ Täze account
+      </button>
+
+      <button
+        class="auth-secondary-btn"
+        onclick="showLogin()"
+        data-i18n="existingAccount">
+        👤 Öňki account
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     MAIN APP
+======================================================= -->
+
+<div id="mainApp">
+
 <div class="app">
 
   <div class="top">
+
     <div class="logo">💎 CRYSTAL</div>
 
     <select class="lang" id="language">
@@ -357,10 +713,12 @@ button{
       <option value="ru">🇷🇺 RU</option>
       <option value="en">🇬🇧 EN</option>
     </select>
+
   </div>
 
 
   <!-- WALLET -->
+
   <section id="wallet" class="page active">
 
     <div class="card">
@@ -426,6 +784,7 @@ button{
 
 
   <!-- MINER -->
+
   <section id="miner" class="page">
 
     <div class="section-title" data-i18n="minerTitle">
@@ -474,13 +833,15 @@ button{
 
         <div class="mine-buttons">
 
-          <button class="mine-btn"
+          <button
+            class="mine-btn"
             onclick="manualMine()"
             data-i18n="manual">
             ⛏️ EL BILEN
           </button>
 
-          <button class="mine-btn auto"
+          <button
+            class="mine-btn auto"
             onclick="autoMine()"
             data-i18n="automatic">
             🤖 AWTOMAT
@@ -488,7 +849,8 @@ button{
 
         </div>
 
-        <div class="notice"
+        <div
+          class="notice"
           id="minerNotice"
           data-i18n="testMode">
           Häzirki test režimi
@@ -502,6 +864,7 @@ button{
 
 
   <!-- PROFILE -->
+
   <section id="profile" class="page">
 
     <div class="section-title" data-i18n="profileTitle">
@@ -531,6 +894,11 @@ button{
           <div>
             <span data-i18n="username">Username:</span>
             <b id="username">@test</b>
+          </div>
+
+          <div>
+            <span data-i18n="nicknameLabel">Nickname:</span>
+            <b id="profileNickname">-</b>
           </div>
 
           <div>
@@ -567,8 +935,7 @@ button{
 
       <p
         style="color:#94a3b8"
-        data-i18n="languageInfo"
-      >
+        data-i18n="languageInfo">
         Dili ýokardaky menýudan üýtgedip bilersiňiz.
       </p>
 
@@ -585,21 +952,29 @@ button{
 
   <div class="nav">
 
-    <button id="navWallet"
+    <button
+      id="navWallet"
       class="active"
       onclick="showPage('wallet',this)">
-      💰<br><span data-i18n="wallet">Gapjyk</span>
+      💰<br>
+      <span data-i18n="wallet">Gapjyk</span>
     </button>
 
-    <button onclick="showPage('miner',this)">
-      💎<br><span data-i18n="minerNav">Miner</span>
+    <button
+      onclick="showPage('miner',this)">
+      💎<br>
+      <span data-i18n="minerNav">Miner</span>
     </button>
 
-    <button onclick="showPage('profile',this)">
-      👤<br><span data-i18n="profileNav">Profil</span>
+    <button
+      onclick="showPage('profile',this)">
+      👤<br>
+      <span data-i18n="profileNav">Profil</span>
     </button>
 
   </div>
+
+</div>
 
 </div>
 
@@ -610,11 +985,15 @@ button{
    TELEGRAM
 ========================================================= */
 
-const tg = window.Telegram?.WebApp;
+const tg =
+  window.Telegram?.WebApp;
 
 if(tg){
+
   tg.ready();
+
   tg.expand();
+
 }
 
 
@@ -641,126 +1020,672 @@ const supabaseClient =
 
 const translations = {
 
-  tk: {
-    balance: "Balans",
-    deposit: "Pul sal",
-    withdraw: "Pul çykar",
-    minerTitle: "💎 Miner",
-    totalCrystals: "Ähli crystal",
-    dailyLimit: "Gündelik limit",
-    dailyMinerLimit: "Gündelik miner limiti",
-    autoWorking: "🤖 Awtomat işleýär",
-    manual: "⛏️ EL BILEN",
-    automatic: "🤖 AWTOMAT",
-    testMode: "Häzirki test režimi",
-    profileTitle: "👤 Profil",
-    name: "Ady:",
-    telegramId: "Telegram ID:",
-    username: "Username:",
-    phone: "Telefon:",
-    country: "Ýurt:",
-    age: "Ýaş:",
-    languageTitle: "🌐 Dil",
-    languageInfo: "Dili ýokardaky menýudan üýtgedip bilersiňiz.",
-    wallet: "Gapjyk",
-    minerNav: "Miner",
-    profileNav: "Profil",
-    userLoading: "User maglumatlary ýüklenýär...",
-    accountLoaded: "✅ Account maglumatlary ýüklenildi.",
-    accountCreated: "✅ Täze account döredildi.",
-    noValue: "Ýok",
-    dailyLimitReached: "Bugünlik 100 limit doldy. Ertir täzeden açylar.",
-    autoStopped: "Awtomat duruzdy.",
-    automaticRunning: "🤖 Awtomat işleýär...",
-    dailyLimitShort: "Bugünlik limit doldy.",
-    automaticFinished: "🎉 Awtomat tamamlandy! Gündelik 100/100 boldy.",
-    depositTest: "TEST: Pul salmak bölümi. Crypto payment indiki tapgyrda goşular.",
-    withdrawTest: "TEST: Pul çykarmak bölümi. Minimum $50 we admin tassyklamasy indiki tapgyrda goşular."
-  },
+tk: {
 
-  ru: {
-    balance: "Баланс",
-    deposit: "Пополнить",
-    withdraw: "Вывести",
-    minerTitle: "💎 Майнер",
-    totalCrystals: "Все кристаллы",
-    dailyLimit: "Дневной лимит",
-    dailyMinerLimit: "Дневной лимит майнера",
-    autoWorking: "🤖 Автомат работает",
-    manual: "⛏️ ВРУЧНУЮ",
-    automatic: "🤖 АВТОМАТ",
-    testMode: "Текущий тестовый режим",
-    profileTitle: "👤 Профиль",
-    name: "Имя:",
-    telegramId: "Telegram ID:",
-    username: "Username:",
-    phone: "Телефон:",
-    country: "Страна:",
-    age: "Возраст:",
-    languageTitle: "🌐 Язык",
-    languageInfo: "Вы можете изменить язык в меню выше.",
-    wallet: "Кошелёк",
-    minerNav: "Майнер",
-    profileNav: "Профиль",
-    userLoading: "Загрузка данных пользователя...",
-    accountLoaded: "✅ Данные аккаунта загружены.",
-    accountCreated: "✅ Новый аккаунт создан.",
-    noValue: "Нет",
-    dailyLimitReached: "Дневной лимит 100 достигнут. Снова откроется завтра.",
-    autoStopped: "Автомат остановлен.",
-    automaticRunning: "🤖 Автомат работает...",
-    dailyLimitShort: "Дневной лимит достигнут.",
-    automaticFinished: "🎉 Автомат завершён! Дневной лимит 100/100.",
-    depositTest: "ТЕСТ: Раздел пополнения. Crypto payment будет добавлен на следующем этапе.",
-    withdrawTest: "ТЕСТ: Раздел вывода. Минимум $50 и подтверждение администратора будут добавлены позже."
-  },
+  authSubtitle:
+    "Siziň crystal platformaňyz",
 
-  en: {
-    balance: "Balance",
-    deposit: "Deposit",
-    withdraw: "Withdraw",
-    minerTitle: "💎 Miner",
-    totalCrystals: "Total crystals",
-    dailyLimit: "Daily limit",
-    dailyMinerLimit: "Daily mining limit",
-    autoWorking: "🤖 Automatic is working",
-    manual: "⛏️ MANUAL",
-    automatic: "🤖 AUTOMATIC",
-    testMode: "Current test mode",
-    profileTitle: "👤 Profile",
-    name: "Name:",
-    telegramId: "Telegram ID:",
-    username: "Username:",
-    phone: "Phone:",
-    country: "Country:",
-    age: "Age:",
-    languageTitle: "🌐 Language",
-    languageInfo: "You can change the language from the menu above.",
-    wallet: "Wallet",
-    minerNav: "Miner",
-    profileNav: "Profile",
-    userLoading: "Loading user information...",
-    accountLoaded: "✅ Account information loaded.",
-    accountCreated: "✅ New account created.",
-    noValue: "None",
-    dailyLimitReached: "Today's 100 limit has been reached. It will reopen tomorrow.",
-    autoStopped: "Automatic mining stopped.",
-    automaticRunning: "🤖 Automatic is working...",
-    dailyLimitShort: "Daily limit reached.",
-    automaticFinished: "🎉 Automatic mining completed! Daily limit 100/100.",
-    depositTest: "TEST: Deposit section. Crypto payment will be added in the next stage.",
-    withdrawTest: "TEST: Withdrawal section. Minimum $50 and admin approval will be added later."
-  }
+  welcome:
+    "Hoş geldiňiz",
+
+  chooseAccount:
+    "Dowam etmek üçin account görnüşini saýlaň.",
+
+  newAccount:
+    "✨ Täze account",
+
+  existingAccount:
+    "👤 Öňki account",
+
+  createAccount:
+    "Täze account döret",
+
+  loginAccount:
+    "Öňki account",
+
+  email:
+    "Email",
+
+  nickname:
+    "Nickname",
+
+  password:
+    "Parol",
+
+  confirmPassword:
+    "Paroly gaýtala",
+
+  create:
+    "✨ Account döret",
+
+  login:
+    "🚀 Giriş",
+
+  back:
+    "← Yza",
+
+  forgotPassword:
+    "Paroly unutdyňyzmy?",
+
+  resetPassword:
+    "Paroly dikelt",
+
+  resetDescription:
+    "Email salgyňyzy giriziň. Password dikeltmek üçin link ibereris.",
+
+  sendReset:
+    "📧 Reset link iber",
+
+  completeProfile:
+    "Profili doldur",
+
+  profileDescription:
+    "Account-yňyzy tamamlamak üçin aşakdaky maglumatlary dolduryň.",
+
+  firstName:
+    "Ady",
+
+  lastName:
+    "Familiýasy",
+
+  phone:
+    "Telefon",
+
+  country:
+    "Ýurt",
+
+  age:
+    "Ýaş",
+
+  avatar:
+    "Avatar saýla",
+
+  saveProfile:
+    "✨ Profili tamamla",
+
+  profileComplete:
+    "Profil taýýar!",
+
+  profileCompleteText:
+    "Hemmesi taýýar. Indi Crystal Platform-a girip bilersiňiz.",
+
+  enterApp:
+    "💎 App-a gir",
+
+  balance:
+    "Balans",
+
+  deposit:
+    "Pul sal",
+
+  withdraw:
+    "Pul çykar",
+
+  minerTitle:
+    "💎 Miner",
+
+  totalCrystals:
+    "Ähli crystal",
+
+  dailyLimit:
+    "Gündelik limit",
+
+  dailyMinerLimit:
+    "Gündelik miner limiti",
+
+  autoWorking:
+    "🤖 Awtomat işleýär",
+
+  manual:
+    "⛏️ EL BILEN",
+
+  automatic:
+    "🤖 AWTOMAT",
+
+  testMode:
+    "Häzirki test režimi",
+
+  profileTitle:
+    "👤 Profil",
+
+  name:
+    "Ady:",
+
+  telegramId:
+    "Telegram ID:",
+
+  username:
+    "Username:",
+
+  nicknameLabel:
+    "Nickname:",
+
+  languageTitle:
+    "🌐 Dil",
+
+  languageInfo:
+    "Dili ýokardaky menýudan üýtgedip bilersiňiz.",
+
+  wallet:
+    "Gapjyk",
+
+  minerNav:
+    "Miner",
+
+  profileNav:
+    "Profil",
+
+  userLoading:
+    "User maglumatlary ýüklenýär...",
+
+  accountLoaded:
+    "✅ Account maglumatlary ýüklenildi.",
+
+  accountCreated:
+    "✅ Täze account döredildi.",
+
+  noValue:
+    "Ýok",
+
+  dailyLimitReached:
+    "Bugünlik 100 limit doldy. Ertir täzeden açylar.",
+
+  autoStopped:
+    "Awtomat duruzdy.",
+
+  automaticRunning:
+    "🤖 Awtomat işleýär...",
+
+  dailyLimitShort:
+    "Bugünlik limit doldy.",
+
+  automaticFinished:
+    "🎉 Awtomat tamamlandy! Gündelik 100/100 boldy.",
+
+  depositTest:
+    "TEST: Pul salmak bölümi. Crypto payment indiki tapgyrda goşular.",
+
+  withdrawTest:
+    "TEST: Pul çykarmak bölümi. Minimum $50 we admin tassyklamasy indiki tapgyrda goşular.",
+
+  passwordMismatch:
+    "Parollar birmeňzeş däl.",
+
+  passwordShort:
+    "Parol azyndan 6 simwol bolmaly.",
+
+  fillAll:
+    "Ähli gerekli meýdanlary dolduryň.",
+
+  accountSuccess:
+    "✅ Account döredildi!",
+
+  loginSuccess:
+    "✅ Giriş üstünlikli!",
+
+  emailExists:
+    "Bu email eýýäm ulanylýar. Başga email ulanyň.",
+
+  invalidLogin:
+    "Email ýa-da parol nädogry.",
+
+  resetSent:
+    "📧 Password dikeltmek linki email-e iberildi.",
+
+  authError:
+    "Bir näsazlyk boldy. Täzeden synanyşyň.",
+
+  profileSaved:
+    "✅ Profil maglumatlary saklandy."
+
+},
+
+ru: {
+
+  authSubtitle:
+    "Ваша кристальная платформа",
+
+  welcome:
+    "Добро пожаловать",
+
+  chooseAccount:
+    "Выберите способ продолжения.",
+
+  newAccount:
+    "✨ Новый аккаунт",
+
+  existingAccount:
+    "👤 Существующий аккаунт",
+
+  createAccount:
+    "Создать аккаунт",
+
+  loginAccount:
+    "Существующий аккаунт",
+
+  email:
+    "Email",
+
+  nickname:
+    "Никнейм",
+
+  password:
+    "Пароль",
+
+  confirmPassword:
+    "Повторите пароль",
+
+  create:
+    "✨ Создать аккаунт",
+
+  login:
+    "🚀 Войти",
+
+  back:
+    "← Назад",
+
+  forgotPassword:
+    "Забыли пароль?",
+
+  resetPassword:
+    "Восстановить пароль",
+
+  resetDescription:
+    "Введите email. Мы отправим ссылку для восстановления пароля.",
+
+  sendReset:
+    "📧 Отправить ссылку",
+
+  completeProfile:
+    "Заполните профиль",
+
+  profileDescription:
+    "Заполните информацию ниже, чтобы завершить создание аккаунта.",
+
+  firstName:
+    "Имя",
+
+  lastName:
+    "Фамилия",
+
+  phone:
+    "Телефон",
+
+  country:
+    "Страна",
+
+  age:
+    "Возраст",
+
+  avatar:
+    "Выберите аватар",
+
+  saveProfile:
+    "✨ Завершить профиль",
+
+  profileComplete:
+    "Профиль готов!",
+
+  profileCompleteText:
+    "Всё готово. Теперь вы можете войти в Crystal Platform.",
+
+  enterApp:
+    "💎 Войти в приложение",
+
+  balance:
+    "Баланс",
+
+  deposit:
+    "Пополнить",
+
+  withdraw:
+    "Вывести",
+
+  minerTitle:
+    "💎 Майнер",
+
+  totalCrystals:
+    "Все кристаллы",
+
+  dailyLimit:
+    "Дневной лимит",
+
+  dailyMinerLimit:
+    "Дневной лимит майнера",
+
+  autoWorking:
+    "🤖 Автомат работает",
+
+  manual:
+    "⛏️ ВРУЧНУЮ",
+
+  automatic:
+    "🤖 АВТОМАТ",
+
+  testMode:
+    "Текущий тестовый режим",
+
+  profileTitle:
+    "👤 Профиль",
+
+  name:
+    "Имя:",
+
+  telegramId:
+    "Telegram ID:",
+
+  username:
+    "Username:",
+
+  nicknameLabel:
+    "Никнейм:",
+
+  languageTitle:
+    "🌐 Язык",
+
+  languageInfo:
+    "Вы можете изменить язык в меню выше.",
+
+  wallet:
+    "Кошелёк",
+
+  minerNav:
+    "Майнер",
+
+  profileNav:
+    "Профиль",
+
+  userLoading:
+    "Загрузка данных пользователя...",
+
+  accountLoaded:
+    "✅ Данные аккаунта загружены.",
+
+  accountCreated:
+    "✅ Новый аккаунт создан.",
+
+  noValue:
+    "Нет",
+
+  dailyLimitReached:
+    "Дневной лимит 100 достигнут. Снова откроется завтра.",
+
+  autoStopped:
+    "Автомат остановлен.",
+
+  automaticRunning:
+    "🤖 Автомат работает...",
+
+  dailyLimitShort:
+    "Дневной лимит достигнут.",
+
+  automaticFinished:
+    "🎉 Автомат завершён! Дневной лимит 100/100.",
+
+  depositTest:
+    "ТЕСТ: Раздел пополнения. Crypto payment будет добавлен позже.",
+
+  withdrawTest:
+    "ТЕСТ: Раздел вывода. Минимум $50 и подтверждение администратора будут добавлены позже.",
+
+  passwordMismatch:
+    "Пароли не совпадают.",
+
+  passwordShort:
+    "Пароль должен содержать минимум 6 символов.",
+
+  fillAll:
+    "Заполните все обязательные поля.",
+
+  accountSuccess:
+    "✅ Аккаунт создан!",
+
+  loginSuccess:
+    "✅ Вход выполнен!",
+
+  emailExists:
+    "Этот email уже используется. Используйте другой email.",
+
+  invalidLogin:
+    "Неверный email или пароль.",
+
+  resetSent:
+    "📧 Ссылка для восстановления пароля отправлена на email.",
+
+  authError:
+    "Произошла ошибка. Попробуйте ещё раз.",
+
+  profileSaved:
+    "✅ Данные профиля сохранены."
+
+},
+
+en: {
+
+  authSubtitle:
+    "Your crystal platform",
+
+  welcome:
+    "Welcome",
+
+  chooseAccount:
+    "Choose how you want to continue.",
+
+  newAccount:
+    "✨ New account",
+
+  existingAccount:
+    "👤 Existing account",
+
+  createAccount:
+    "Create account",
+
+  loginAccount:
+    "Existing account",
+
+  email:
+    "Email",
+
+  nickname:
+    "Nickname",
+
+  password:
+    "Password",
+
+  confirmPassword:
+    "Confirm password",
+
+  create:
+    "✨ Create account",
+
+  login:
+    "🚀 Login",
+
+  back:
+    "← Back",
+
+  forgotPassword:
+    "Forgot password?",
+
+  resetPassword:
+    "Reset password",
+
+  resetDescription:
+    "Enter your email. We will send you a password reset link.",
+
+  sendReset:
+    "📧 Send reset link",
+
+  completeProfile:
+    "Complete your profile",
+
+  profileDescription:
+    "Fill in the information below to finish creating your account.",
+
+  firstName:
+    "First name",
+
+  lastName:
+    "Last name",
+
+  phone:
+    "Phone",
+
+  country:
+    "Country",
+
+  age:
+    "Age",
+
+  avatar:
+    "Choose avatar",
+
+  saveProfile:
+    "✨ Complete profile",
+
+  profileComplete:
+    "Profile ready!",
+
+  profileCompleteText:
+    "Everything is ready. You can now enter Crystal Platform.",
+
+  enterApp:
+    "💎 Enter app",
+
+  balance:
+    "Balance",
+
+  deposit:
+    "Deposit",
+
+  withdraw:
+    "Withdraw",
+
+  minerTitle:
+    "💎 Miner",
+
+  totalCrystals:
+    "Total crystals",
+
+  dailyLimit:
+    "Daily limit",
+
+  dailyMinerLimit:
+    "Daily mining limit",
+
+  autoWorking:
+    "🤖 Automatic is working",
+
+  manual:
+    "⛏️ MANUAL",
+
+  automatic:
+    "🤖 AUTOMATIC",
+
+  testMode:
+    "Current test mode",
+
+  profileTitle:
+    "👤 Profile",
+
+  name:
+    "Name:",
+
+  telegramId:
+    "Telegram ID:",
+
+  username:
+    "Username:",
+
+  nicknameLabel:
+    "Nickname:",
+
+  languageTitle:
+    "🌐 Language",
+
+  languageInfo:
+    "You can change the language from the menu above.",
+
+  wallet:
+    "Wallet",
+
+  minerNav:
+    "Miner",
+
+  profileNav:
+    "Profile",
+
+  userLoading:
+    "Loading user information...",
+
+  accountLoaded:
+    "✅ Account information loaded.",
+
+  accountCreated:
+    "✅ New account created.",
+
+  noValue:
+    "None",
+
+  dailyLimitReached:
+    "Today's 100 limit has been reached. It will reopen tomorrow.",
+
+  autoStopped:
+    "Automatic mining stopped.",
+
+  automaticRunning:
+    "🤖 Automatic is working...",
+
+  dailyLimitShort:
+    "Daily limit reached.",
+
+  automaticFinished:
+    "🎉 Automatic mining completed! Daily limit 100/100.",
+
+  depositTest:
+    "TEST: Deposit section. Crypto payment will be added later.",
+
+  withdrawTest:
+    "TEST: Withdrawal section. Minimum $50 and admin approval will be added later.",
+
+  passwordMismatch:
+    "Passwords do not match.",
+
+  passwordShort:
+    "Password must contain at least 6 characters.",
+
+  fillAll:
+    "Please fill in all required fields.",
+
+  accountSuccess:
+    "✅ Account created!",
+
+  loginSuccess:
+    "✅ Login successful!",
+
+  emailExists:
+    "This email is already in use. Please use another email.",
+
+  invalidLogin:
+    "Invalid email or password.",
+
+  resetSent:
+    "📧 Password reset link has been sent to your email.",
+
+  authError:
+    "Something went wrong. Please try again.",
+
+  profileSaved:
+    "✅ Profile information saved."
+
+}
 
 };
 
 
 /* =========================================================
-   LANGUAGE SYSTEM
+   LANGUAGE
 ========================================================= */
-
-const languageSelect =
-  document.getElementById('language');
 
 let currentLanguage =
   localStorage.getItem('language') || 'tk';
@@ -783,8 +1708,19 @@ function applyLanguage(){
   document.documentElement.lang =
     currentLanguage;
 
-  languageSelect.value =
-    currentLanguage;
+  const mainLanguage =
+    document.getElementById('language');
+
+  const authLanguage =
+    document.getElementById('authLanguage');
+
+  if(mainLanguage)
+    mainLanguage.value =
+      currentLanguage;
+
+  if(authLanguage)
+    authLanguage.value =
+      currentLanguage;
 
   document.querySelectorAll('[data-i18n]')
     .forEach(element => {
@@ -800,7 +1736,14 @@ function applyLanguage(){
 }
 
 
-async function saveLanguage(){
+/* =========================================================
+   LANGUAGE SELECTORS
+========================================================= */
+
+async function changeLanguage(value){
+
+  currentLanguage =
+    value;
 
   localStorage.setItem(
     'language',
@@ -809,43 +1752,44 @@ async function saveLanguage(){
 
   applyLanguage();
 
-  if(!currentUser || !telegramUser){
-    return;
-  }
+  if(currentUser){
 
-  const { error } =
     await supabaseClient
       .from('users')
       .update({
-        language: currentLanguage,
-        updated_at: new Date().toISOString()
+        language:currentLanguage,
+        updated_at:new Date().toISOString()
       })
       .eq(
-        'telegram_id',
-        String(telegramUser.id)
+        'auth_id',
+        currentUser.auth_id
       );
 
-  if(error){
-    console.error(
-      'LANGUAGE SAVE ERROR:',
-      error
-    );
   }
 
 }
 
 
-languageSelect.addEventListener(
-  'change',
-  async function(){
+document.getElementById('language')
+  .addEventListener(
+    'change',
+    function(){
 
-    currentLanguage =
-      this.value;
+      changeLanguage(this.value);
 
-    await saveLanguage();
+    }
+  );
 
-  }
-);
+
+document.getElementById('authLanguage')
+  .addEventListener(
+    'change',
+    function(){
+
+      changeLanguage(this.value);
+
+    }
+  );
 
 
 /* =========================================================
@@ -857,114 +1801,7 @@ let currentUser = null;
 
 
 /* =========================================================
-   MINER DATA
-========================================================= */
-
-const DAILY_LIMIT = 100;
-
-let balance = 0;
-
-/*
-  crystals = ähli wagtky umumy crystal
-*/
-let crystals = 0;
-
-/*
-  dailyCrystals = diňe şu günki crystal
-*/
-let dailyCrystals = 0;
-
-/*
-  Database-de saklanýan soňky mining güni
-*/
-let lastMiningDate = null;
-
-
-let autoTimer = null;
-let countdownTimer = null;
-let autoEndTime = null;
-
-let autoStartTime = null;
-let autoStartDailyCrystals = 0;
-let autoDurationSeconds = 0;
-
-
-/* =========================================================
-   TODAY
-========================================================= */
-
-function getToday(){
-
-  const now = new Date();
-
-  const year =
-    now.getFullYear();
-
-  const month =
-    String(now.getMonth() + 1)
-      .padStart(2,'0');
-
-  const day =
-    String(now.getDate())
-      .padStart(2,'0');
-
-  return `${year}-${month}-${day}`;
-
-}
-
-
-/* =========================================================
-   CHECK DAILY DATE
-========================================================= */
-
-async function checkDailyDate(){
-
-  const today =
-    getToday();
-
-  /*
-    Täze gün bolsa diňe daily reset bolýar.
-    Umumy crystals hiç wagt reset bolmaýar.
-  */
-
-  if(lastMiningDate !== today){
-
-    dailyCrystals = 0;
-
-    lastMiningDate = today;
-
-    await saveMiningData();
-
-  }
-
-}
-
-
-/* =========================================================
-   PAGE
-========================================================= */
-
-function showPage(page,button){
-
-  document.querySelectorAll('.page')
-    .forEach(p =>
-      p.classList.remove('active')
-    );
-
-  document.getElementById(page)
-    .classList.add('active');
-
-  document.querySelectorAll('.nav button')
-    .forEach(b =>
-      b.classList.remove('active')
-    );
-
-  button.classList.add('active');
-}
-
-
-/* =========================================================
-   TELEGRAM USER
+   LOAD TELEGRAM USER
 ========================================================= */
 
 function loadTelegramUser(){
@@ -981,10 +1818,19 @@ function loadTelegramUser(){
   }else{
 
     telegramUser = {
-      id: "TEST_" + Date.now(),
-      first_name: "Test",
-      last_name: "User",
-      username: "test_user"
+
+      id:
+        "TEST_" + Date.now(),
+
+      first_name:
+        "Test",
+
+      last_name:
+        "User",
+
+      username:
+        "test_user"
+
     };
 
   }
@@ -993,36 +1839,1280 @@ function loadTelegramUser(){
 
 
 /* =========================================================
-   LOAD / CREATE USER
+   AUTH SCREEN HELPERS
 ========================================================= */
 
-async function loadUser(){
+function authContent(html){
 
-  if(!telegramUser) return;
+  document.getElementById('authContent')
+    .innerHTML = html;
 
-  document.getElementById('userName').innerText =
-    (
-      (telegramUser.first_name || '') +
-      ' ' +
-      (telegramUser.last_name || '')
-    ).trim();
+  applyLanguage();
 
-  document.getElementById('telegramId').innerText =
-    telegramUser.id;
+}
 
-  document.getElementById('username').innerText =
-    telegramUser.username
-      ? '@' + telegramUser.username
-      : t('noValue');
+
+function showRegister(){
+
+  authContent(`
+
+    <div class="step-dots">
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+    </div>
+
+    <div class="auth-heading"
+      data-i18n="createAccount">
+      Täze account döret
+    </div>
+
+    <div class="auth-description">
+      <span data-i18n="chooseAccount">
+        Dowam etmek üçin account maglumatlaryny giriziň.
+      </span>
+    </div>
+
+    <div id="authMessage"
+      class="auth-message"></div>
+
+    <div class="form-group">
+      <label class="form-label"
+        data-i18n="email">
+        Email
+      </label>
+
+      <input
+        id="registerEmail"
+        class="form-input"
+        type="email"
+        placeholder="example@email.com">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label"
+        data-i18n="nickname">
+        Nickname
+      </label>
+
+      <input
+        id="registerNickname"
+        class="form-input"
+        type="text"
+        maxlength="30"
+        placeholder="Your nickname">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label"
+        data-i18n="password">
+        Password
+      </label>
+
+      <input
+        id="registerPassword"
+        class="form-input"
+        type="password"
+        placeholder="••••••••">
+
+      <div class="password-note">
+        Minimum 6 characters
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label"
+        data-i18n="confirmPassword">
+        Confirm password
+      </label>
+
+      <input
+        id="registerConfirmPassword"
+        class="form-input"
+        type="password"
+        placeholder="••••••••">
+    </div>
+
+    <button
+      class="auth-main-btn"
+      onclick="registerAccount()"
+      data-i18n="create">
+      ✨ Account döret
+    </button>
+
+    <button
+      class="auth-back"
+      onclick="showAuthHome()"
+      data-i18n="back">
+      ← Yza
+    </button>
+
+  `);
+
+}
+
+
+function showLogin(){
+
+  authContent(`
+
+    <div class="auth-heading"
+      data-i18n="loginAccount">
+      Öňki account
+    </div>
+
+    <div class="auth-description">
+      Email we password bilen giriň.
+    </div>
+
+    <div id="authMessage"
+      class="auth-message"></div>
+
+    <div class="form-group">
+
+      <label class="form-label"
+        data-i18n="email">
+        Email
+      </label>
+
+      <input
+        id="loginEmail"
+        class="form-input"
+        type="email"
+        placeholder="example@email.com">
+
+    </div>
+
+    <div class="form-group">
+
+      <label class="form-label"
+        data-i18n="password">
+        Password
+      </label>
+
+      <input
+        id="loginPassword"
+        class="form-input"
+        type="password"
+        placeholder="••••••••">
+
+    </div>
+
+    <button
+      class="auth-main-btn"
+      onclick="loginAccount()"
+      data-i18n="login">
+      🚀 Giriş
+    </button>
+
+    <button
+      class="auth-back"
+      onclick="showResetPassword()"
+      data-i18n="forgotPassword">
+      Paroly unutdyňyzmy?
+    </button>
+
+    <button
+      class="auth-back"
+      onclick="showAuthHome()"
+      data-i18n="back">
+      ← Yza
+    </button>
+
+  `);
+
+}
+
+
+function showResetPassword(){
+
+  authContent(`
+
+    <div class="auth-heading"
+      data-i18n="resetPassword">
+      Paroly dikelt
+    </div>
+
+    <div class="auth-description"
+      data-i18n="resetDescription">
+      Email salgyňyzy giriziň.
+    </div>
+
+    <div id="authMessage"
+      class="auth-message"></div>
+
+    <div class="form-group">
+
+      <label class="form-label"
+        data-i18n="email">
+        Email
+      </label>
+
+      <input
+        id="resetEmail"
+        class="form-input"
+        type="email"
+        placeholder="example@email.com">
+
+    </div>
+
+    <button
+      class="auth-main-btn"
+      onclick="sendResetEmail()"
+      data-i18n="sendReset">
+      📧 Reset link iber
+    </button>
+
+    <button
+      class="auth-back"
+      onclick="showLogin()"
+      data-i18n="back">
+      ← Yza
+    </button>
+
+  `);
+
+}
+
+
+function showAuthHome(){
+
+  authContent(`
+
+    <div class="auth-heading"
+      data-i18n="welcome">
+      Hoş geldiňiz
+    </div>
+
+    <div class="auth-description"
+      data-i18n="chooseAccount">
+      Dowam etmek üçin account görnüşini saýlaň.
+    </div>
+
+    <div class="auth-buttons">
+
+      <button
+        class="auth-main-btn"
+        onclick="showRegister()"
+        data-i18n="newAccount">
+        ✨ Täze account
+      </button>
+
+      <button
+        class="auth-secondary-btn"
+        onclick="showLogin()"
+        data-i18n="existingAccount">
+        👤 Öňki account
+      </button>
+
+    </div>
+
+  `);
+
+}
+
+
+/* =========================================================
+   AUTH MESSAGE
+========================================================= */
+
+function showAuthMessage(
+  message,
+  type='error'
+){
+
+  const element =
+    document.getElementById('authMessage');
+
+  if(!element) return;
+
+  element.className =
+    'auth-message show ' + type;
+
+  element.innerText =
+    message;
+
+}
+
+
+/* =========================================================
+   REGISTER
+========================================================= */
+
+async function registerAccount(){
+
+  const email =
+    document.getElementById('registerEmail')
+      .value.trim();
+
+  const nickname =
+    document.getElementById('registerNickname')
+      .value.trim();
+
+  const password =
+    document.getElementById('registerPassword')
+      .value;
+
+  const confirmPassword =
+    document.getElementById('registerConfirmPassword')
+      .value;
+
+
+  if(
+    !email ||
+    !nickname ||
+    !password ||
+    !confirmPassword
+  ){
+
+    showAuthMessage(
+      t('fillAll')
+    );
+
+    return;
+
+  }
+
+
+  if(password.length < 6){
+
+    showAuthMessage(
+      t('passwordShort')
+    );
+
+    return;
+
+  }
+
+
+  if(password !== confirmPassword){
+
+    showAuthMessage(
+      t('passwordMismatch')
+    );
+
+    return;
+
+  }
 
 
   const { data, error } =
+    await supabaseClient.auth.signUp({
+
+      email:
+        email,
+
+      password:
+        password
+
+    });
+
+
+  if(error){
+
+    console.error(
+      'SIGN UP ERROR:',
+      error
+    );
+
+    if(
+      error.message &&
+      error.message.toLowerCase()
+        .includes('already')
+    ){
+
+      showAuthMessage(
+        t('emailExists')
+      );
+
+    }else{
+
+      showAuthMessage(
+        error.message ||
+        t('authError')
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  if(!data.user){
+
+    showAuthMessage(
+      t('authError')
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Auth döredildi.
+
+    Indi public.users-a baglaýarys.
+  */
+
+  const telegramId =
+    String(telegramUser.id);
+
+
+  const { data:oldUser } =
     await supabaseClient
       .from('users')
       .select('*')
       .eq(
         'telegram_id',
-        String(telegramUser.id)
+        telegramId
+      )
+      .limit(1)
+      .maybeSingle();
+
+
+  let profileData;
+
+
+  if(oldUser){
+
+    const { data:updateData, error:updateError } =
+      await supabaseClient
+        .from('users')
+        .update({
+
+          auth_id:
+            data.user.id,
+
+          email:
+            email,
+
+          nickname:
+            nickname,
+
+          updated_at:
+            new Date().toISOString()
+
+        })
+        .eq(
+          'telegram_id',
+          telegramId
+        )
+        .select()
+        .single();
+
+
+    if(updateError){
+
+      console.error(
+        'PROFILE LINK ERROR:',
+        updateError
+      );
+
+      showAuthMessage(
+        updateError.message ||
+        t('authError')
+      );
+
+      return;
+
+    }
+
+    profileData =
+      updateData;
+
+  }else{
+
+    const newUser = {
+
+      id:
+        Date.now(),
+
+      auth_id:
+        data.user.id,
+
+      telegram_id:
+        telegramId,
+
+      first_name:
+        telegramUser.first_name || '',
+
+      last_name:
+        telegramUser.last_name || '',
+
+      username:
+        telegramUser.username || '',
+
+      email:
+        email,
+
+      nickname:
+        nickname,
+
+      phone:
+        '',
+
+      country:
+        '',
+
+      age:
+        null,
+
+      avatar:
+        '👤',
+
+      language:
+        currentLanguage,
+
+      crystals:
+        0,
+
+      daily_crystals:
+        0,
+
+      last_mining_date:
+        getToday()
+
+    };
+
+
+    const result =
+      await supabaseClient
+        .from('users')
+        .insert(newUser)
+        .select()
+        .single();
+
+
+    if(result.error){
+
+      console.error(
+        'PROFILE CREATE ERROR:',
+        result.error
+      );
+
+      showAuthMessage(
+        result.error.message ||
+        t('authError')
+      );
+
+      return;
+
+    }
+
+
+    profileData =
+      result.data;
+
+  }
+
+
+  currentUser =
+    profileData;
+
+
+  showProfileStep();
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+async function loginAccount(){
+
+  const email =
+    document.getElementById('loginEmail')
+      .value.trim();
+
+  const password =
+    document.getElementById('loginPassword')
+      .value;
+
+
+  if(!email || !password){
+
+    showAuthMessage(
+      t('fillAll')
+    );
+
+    return;
+
+  }
+
+
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+
+      email:
+        email,
+
+      password:
+        password
+
+    });
+
+
+  if(error){
+
+    console.error(
+      'LOGIN ERROR:',
+      error
+    );
+
+    showAuthMessage(
+      t('invalidLogin')
+    );
+
+    return;
+
+  }
+
+
+  if(!data.user){
+
+    showAuthMessage(
+      t('invalidLogin')
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Auth user tapyldy.
+    Indi public.users-den profile tapýarys.
+  */
+
+  let { data:profile,error:profileError } =
+    await supabaseClient
+      .from('users')
+      .select('*')
+      .eq(
+        'auth_id',
+        data.user.id
+      )
+      .limit(1)
+      .maybeSingle();
+
+
+  /*
+    Eger auth_id entek baglanmadyk bolsa,
+    Telegram ID bilen köne row-y gözleýäris.
+  */
+
+  if(!profile){
+
+    const { data:telegramProfile } =
+      await supabaseClient
+        .from('users')
+        .select('*')
+        .eq(
+          'telegram_id',
+          String(telegramUser.id)
+        )
+        .limit(1)
+        .maybeSingle();
+
+
+    if(telegramProfile){
+
+      const { data:linkedProfile,error:linkError } =
+        await supabaseClient
+          .from('users')
+          .update({
+
+            auth_id:
+              data.user.id,
+
+            email:
+              email,
+
+            updated_at:
+              new Date().toISOString()
+
+          })
+          .eq(
+            'telegram_id',
+            String(telegramUser.id)
+          )
+          .select()
+          .single();
+
+
+      if(linkError){
+
+        showAuthMessage(
+          linkError.message ||
+          t('authError')
+        );
+
+        return;
+
+      }
+
+      profile =
+        linkedProfile;
+
+    }
+
+  }
+
+
+  if(!profile){
+
+    showAuthMessage(
+      t('authError')
+    );
+
+    return;
+
+  }
+
+
+  currentUser =
+    profile;
+
+
+  currentLanguage =
+    profile.language || currentLanguage;
+
+
+  if(currentLanguage === 'tm')
+    currentLanguage = 'tk';
+
+
+  localStorage.setItem(
+    'language',
+    currentLanguage
+  );
+
+
+  applyLanguage();
+
+
+  if(
+    !profile.phone ||
+    !profile.country ||
+    !profile.age
+  ){
+
+    showProfileStep();
+
+  }else{
+
+    await enterMainApp();
+
+  }
+
+}
+
+
+/* =========================================================
+   RESET PASSWORD
+========================================================= */
+
+async function sendResetEmail(){
+
+  const email =
+    document.getElementById('resetEmail')
+      .value.trim();
+
+
+  if(!email){
+
+    showAuthMessage(
+      t('fillAll')
+    );
+
+    return;
+
+  }
+
+
+  const redirectUrl =
+    window.location.origin +
+    window.location.pathname;
+
+
+  const { error } =
+    await supabaseClient.auth
+      .resetPasswordForEmail(
+        email,
+        {
+          redirectTo:
+            redirectUrl
+        }
+      );
+
+
+  if(error){
+
+    console.error(
+      'RESET ERROR:',
+      error
+    );
+
+    showAuthMessage(
+      error.message ||
+      t('authError')
+    );
+
+    return;
+
+  }
+
+
+  showAuthMessage(
+    t('resetSent'),
+    'success'
+  );
+
+}
+
+
+/* =========================================================
+   PROFILE STEP
+========================================================= */
+
+function showProfileStep(){
+
+  const existing =
+    currentUser || {};
+
+
+  const firstName =
+    existing.first_name ||
+    telegramUser.first_name ||
+    '';
+
+  const lastName =
+    existing.last_name ||
+    telegramUser.last_name ||
+    '';
+
+  const avatar =
+    existing.avatar ||
+    '👤';
+
+
+  authContent(`
+
+    <div class="step-dots">
+      <div class="step-dot"></div>
+      <div class="step-dot active"></div>
+    </div>
+
+    <div class="auth-heading"
+      data-i18n="completeProfile">
+      Profili doldur
+    </div>
+
+    <div class="auth-description"
+      data-i18n="profileDescription">
+      Account-yňyzy tamamlamak üçin maglumatlary dolduryň.
+    </div>
+
+    <div id="profileMessage"
+      class="auth-message"></div>
+
+    <div class="form-group">
+
+      <label class="form-label"
+        data-i18n="firstName">
+        Ady
+      </label>
+
+      <input
+        id="profileFirstName"
+        class="form-input"
+        type="text"
+        value="${escapeHtml(firstName)}">
+
+    </div>
+
+    <div class="form-group">
+
+      <label class="form-label"
+        data-i18n="lastName">
+        Familiýasy
+      </label>
+
+      <input
+        id="profileLastName"
+        class="form-input"
+        type="text"
+        value="${escapeHtml(lastName)}">
+
+    </div>
+
+    <div class="form-group">
+
+      <label class="form-label"
+        data-i18n="phone">
+        Telefon
+      </label>
+
+      <input
+        id="profilePhone"
+        class="form-input"
+        type="tel"
+        placeholder="+40... "
+        value="${escapeHtml(existing.phone || '')}">
+
+    </div>
+
+    <div class="form-group">
+
+      <label class="form-label"
+        data-i18n="country">
+        Ýurt
+      </label>
+
+      <input
+        id="profileCountry"
+        class="form-input"
+        type="text"
+        placeholder="Romania"
+        value="${escapeHtml(existing.country || '')}">
+
+    </div>
+
+    <div class="form-group">
+
+      <label class="form-label"
+        data-i18n="age">
+        Ýaş
+      </label>
+
+      <input
+        id="profileAge"
+        class="form-input"
+        type="number"
+        min="13"
+        max="100"
+        placeholder="21"
+        value="${existing.age || ''}">
+
+    </div>
+
+    <div class="form-group">
+
+      <label class="form-label"
+        data-i18n="avatar">
+        Avatar saýla
+      </label>
+
+      <div class="avatar-options">
+
+        ${[
+          '👤',
+          '😎',
+          '🦊',
+          '🐺',
+          '🐱',
+          '🦁',
+          '🐯',
+          '💎'
+        ].map(item => `
+
+          <button
+            type="button"
+            class="avatar-option ${
+              avatar === item ? 'selected' : ''
+            }"
+            onclick="selectAvatar(this,'${item}')">
+            ${item}
+          </button>
+
+        `).join('')}
+
+      </div>
+
+      <input
+        type="hidden"
+        id="profileAvatar"
+        value="${escapeHtml(avatar)}">
+
+    </div>
+
+    <button
+      class="auth-main-btn"
+      onclick="saveProfile()"
+      data-i18n="saveProfile">
+      ✨ Profili tamamla
+    </button>
+
+  `);
+
+}
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+function selectAvatar(button,value){
+
+  document.querySelectorAll('.avatar-option')
+    .forEach(item =>
+      item.classList.remove('selected')
+    );
+
+  button.classList.add('selected');
+
+  document.getElementById('profileAvatar')
+    .value = value;
+
+}
+
+
+/* =========================================================
+   SAVE PROFILE
+========================================================= */
+
+async function saveProfile(){
+
+  const firstName =
+    document.getElementById('profileFirstName')
+      .value.trim();
+
+  const lastName =
+    document.getElementById('profileLastName')
+      .value.trim();
+
+  const phone =
+    document.getElementById('profilePhone')
+      .value.trim();
+
+  const country =
+    document.getElementById('profileCountry')
+      .value.trim();
+
+  const age =
+    Number(
+      document.getElementById('profileAge')
+        .value
+    );
+
+  const avatar =
+    document.getElementById('profileAvatar')
+      .value;
+
+
+  if(
+    !firstName ||
+    !lastName ||
+    !phone ||
+    !country ||
+    !age
+  ){
+
+    const message =
+      document.getElementById('profileMessage');
+
+    if(message){
+
+      message.className =
+        'auth-message show error';
+
+      message.innerText =
+        t('fillAll');
+
+    }
+
+    return;
+
+  }
+
+
+  if(age < 13 || age > 100){
+
+    const message =
+      document.getElementById('profileMessage');
+
+    if(message){
+
+      message.className =
+        'auth-message show error';
+
+      message.innerText =
+        'Age value is not valid.';
+
+    }
+
+    return;
+
+  }
+
+
+  const { data,error } =
+    await supabaseClient
+      .from('users')
+      .update({
+
+        first_name:
+          firstName,
+
+        last_name:
+          lastName,
+
+        phone:
+          phone,
+
+        country:
+          country,
+
+        age:
+          age,
+
+        avatar:
+          avatar,
+
+        language:
+          currentLanguage,
+
+        updated_at:
+          new Date().toISOString()
+
+      })
+      .eq(
+        'auth_id',
+        currentUser.auth_id
+      )
+      .select()
+      .single();
+
+
+  if(error){
+
+    console.error(
+      'PROFILE SAVE ERROR:',
+      error
+    );
+
+    const message =
+      document.getElementById('profileMessage');
+
+    if(message){
+
+      message.className =
+        'auth-message show error';
+
+      message.innerText =
+        error.message ||
+        t('authError');
+
+    }
+
+    return;
+
+  }
+
+
+  currentUser =
+    data;
+
+
+  showProfileComplete();
+
+}
+
+
+/* =========================================================
+   PROFILE COMPLETE
+========================================================= */
+
+function showProfileComplete(){
+
+  authContent(`
+
+    <div class="profile-complete">
+
+      <span class="complete-icon">
+        🎉
+      </span>
+
+      <div class="auth-heading"
+        data-i18n="profileComplete">
+        Profil taýýar!
+      </div>
+
+      <div class="auth-description"
+        data-i18n="profileCompleteText">
+        Hemmesi taýýar.
+      </div>
+
+      <button
+        class="auth-main-btn"
+        onclick="enterMainApp()"
+        data-i18n="enterApp">
+        💎 App-a gir
+      </button>
+
+    </div>
+
+  `);
+
+}
+
+
+/* =========================================================
+   ENTER MAIN APP
+========================================================= */
+
+async function enterMainApp(){
+
+  document.getElementById('authScreen')
+    .style.display = 'none';
+
+  document.getElementById('mainApp')
+    .style.display = 'block';
+
+  await loadUserDataFromDatabase();
+
+  applyLanguage();
+
+  updateMiner();
+
+}
+
+
+/* =========================================================
+   LOAD USER DATA AFTER AUTH
+========================================================= */
+
+async function loadUserDataFromDatabase(){
+
+  if(!currentUser || !currentUser.auth_id)
+    return;
+
+
+  const { data,error } =
+    await supabaseClient
+      .from('users')
+      .select('*')
+      .eq(
+        'auth_id',
+        currentUser.auth_id
       )
       .limit(1)
       .maybeSingle();
@@ -1031,183 +3121,190 @@ async function loadUser(){
   if(error){
 
     console.error(
-      'USER LOAD ERROR:',
+      'PROFILE LOAD ERROR:',
       error
     );
 
-    document.getElementById('profileStatus').innerText =
-      '❌ ' +
-      (error.message || 'Supabase error');
-
     return;
 
   }
 
 
-  if(data){
-
-    currentUser = data;
-
-    /*
-      Umumy crystal
-    */
-    crystals =
-      Number(data.crystals || 0);
-
-    /*
-      Daily crystal
-    */
-    dailyCrystals =
-      Number(data.daily_crystals || 0);
-
-    /*
-      Soňky mining güni
-    */
-    lastMiningDate =
-      data.last_mining_date || null;
-
-
-    /*
-      Eger öňki account-da daily_crystals 0
-      bolsa we last date köne bolsa,
-      checkDailyDate ony 0 ýagdaýynda saklar.
-    */
-
-    await checkDailyDate();
-
-
-    if(data.language){
-
-      currentLanguage =
-        data.language;
-
-      /*
-        TM bilen TK arasynda compatibility
-      */
-      if(currentLanguage === 'tm'){
-        currentLanguage = 'tk';
-      }
-
-      localStorage.setItem(
-        'language',
-        currentLanguage
-      );
-
-    }
-
-    document.getElementById('phone').innerText =
-      data.phone || t('noValue');
-
-    document.getElementById('country').innerText =
-      data.country || t('noValue');
-
-    document.getElementById('age').innerText =
-      data.age || t('noValue');
-
-    applyLanguage();
-
-    updateMiner();
-
-    document.getElementById('profileStatus').innerText =
-      t('accountLoaded');
-
+  if(!data)
     return;
-
-  }
-
-
-  /*
-    TÄZE USER
-  */
-
-  const newUser = {
-
-    id:
-      Date.now(),
-
-    telegram_id:
-      String(telegramUser.id),
-
-    first_name:
-      telegramUser.first_name || '',
-
-    last_name:
-      telegramUser.last_name || '',
-
-    username:
-      telegramUser.username || '',
-
-    language:
-      currentLanguage,
-
-    crystals:
-      0,
-
-    daily_crystals:
-      0,
-
-    last_mining_date:
-      getToday()
-
-  };
-
-
-  const result =
-    await supabaseClient
-      .from('users')
-      .insert(newUser)
-      .select()
-      .single();
-
-
-  if(result.error){
-
-    console.error(
-      'USER INSERT ERROR:',
-      result.error
-    );
-
-    document.getElementById('profileStatus').innerText =
-      '❌ ' +
-      (
-        result.error.message ||
-        'User database-e ýazylmady.'
-      );
-
-    return;
-
-  }
 
 
   currentUser =
-    result.data;
+    data;
 
-  crystals = 0;
 
-  dailyCrystals = 0;
+  crystals =
+    Number(data.crystals || 0);
+
+  dailyCrystals =
+    Number(data.daily_crystals || 0);
 
   lastMiningDate =
-    getToday();
+    data.last_mining_date || null;
 
-  applyLanguage();
 
-  updateMiner();
+  await checkDailyDate();
 
-  document.getElementById('profileStatus').innerText =
-    t('accountCreated');
+
+  document.getElementById('userName')
+    .innerText =
+      (
+        data.first_name || ''
+      ) +
+      ' ' +
+      (
+        data.last_name || ''
+      );
+
+
+  document.getElementById('telegramId')
+    .innerText =
+      data.telegram_id ||
+      t('noValue');
+
+
+  document.getElementById('username')
+    .innerText =
+      data.username
+        ? '@' + data.username
+        : t('noValue');
+
+
+  document.getElementById('profileNickname')
+    .innerText =
+      data.nickname ||
+      t('noValue');
+
+
+  document.getElementById('phone')
+    .innerText =
+      data.phone ||
+      t('noValue');
+
+
+  document.getElementById('country')
+    .innerText =
+      data.country ||
+      t('noValue');
+
+
+  document.getElementById('age')
+    .innerText =
+      data.age ||
+      t('noValue');
+
+
+  document.getElementById('avatar')
+    .innerText =
+      data.avatar ||
+      '👤';
+
+
+  document.getElementById('profileStatus')
+    .innerText =
+      t('accountLoaded');
 
 }
 
 
 /* =========================================================
-   SAVE MINING DATA
+   DAILY MINER
+========================================================= */
+
+const DAILY_LIMIT = 100;
+
+let balance = 0;
+
+let crystals = 0;
+
+let dailyCrystals = 0;
+
+let lastMiningDate = null;
+
+let autoTimer = null;
+
+let countdownTimer = null;
+
+let autoEndTime = null;
+
+let autoStartTime = null;
+
+let autoStartDailyCrystals = 0;
+
+let autoDurationSeconds = 0;
+
+
+/* =========================================================
+   TODAY
+========================================================= */
+
+function getToday(){
+
+  const now =
+    new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(
+      now.getMonth()+1
+    ).padStart(2,'0');
+
+  const day =
+    String(
+      now.getDate()
+    ).padStart(2,'0');
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================================================
+   CHECK DAILY DATE
+========================================================= */
+
+async function checkDailyDate(){
+
+  const today =
+    getToday();
+
+
+  if(lastMiningDate !== today){
+
+    dailyCrystals = 0;
+
+    lastMiningDate =
+      today;
+
+    await saveMiningData();
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVE MINING
 ========================================================= */
 
 async function saveMiningData(){
 
-  if(!currentUser || !telegramUser){
+  if(
+    !currentUser ||
+    !currentUser.auth_id
+  ){
+
     return false;
+
   }
+
 
   const today =
     getToday();
@@ -1221,21 +3318,12 @@ async function saveMiningData(){
       .from('users')
       .update({
 
-        /*
-          Ähli wagtky umumy crystal
-        */
         crystals:
           crystals,
 
-        /*
-          Şu günki crystal
-        */
         daily_crystals:
           dailyCrystals,
 
-        /*
-          Şu gün mining edildi
-        */
         last_mining_date:
           today,
 
@@ -1244,8 +3332,8 @@ async function saveMiningData(){
 
       })
       .eq(
-        'telegram_id',
-        String(telegramUser.id)
+        'auth_id',
+        currentUser.auth_id
       );
 
 
@@ -1256,21 +3344,15 @@ async function saveMiningData(){
       error
     );
 
-    document.getElementById('profileStatus').innerText =
-      '⚠️ Mining data save error: ' +
-      (
-        error.message ||
-        'Unknown error'
-      );
+    document.getElementById('profileStatus')
+      .innerText =
+      '⚠️ ' +
+      error.message;
 
     return false;
 
   }
 
-
-  /*
-    currentUser-i hem update edýäris
-  */
 
   currentUser.crystals =
     crystals;
@@ -1281,7 +3363,35 @@ async function saveMiningData(){
   currentUser.last_mining_date =
     today;
 
+
   return true;
+
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+function showPage(page,button){
+
+  document.querySelectorAll('.page')
+    .forEach(p =>
+      p.classList.remove('active')
+    );
+
+
+  document.getElementById(page)
+    .classList.add('active');
+
+
+  document.querySelectorAll('.nav button')
+    .forEach(b =>
+      b.classList.remove('active')
+    );
+
+
+  button.classList.add('active');
 
 }
 
@@ -1292,20 +3402,13 @@ async function saveMiningData(){
 
 async function manualMine(){
 
-  /*
-    Ilki täze gün barla
-  */
-
   await checkDailyDate();
 
 
-  /*
-    Daily limit
-  */
-
   if(dailyCrystals >= DAILY_LIMIT){
 
-    document.getElementById('minerNotice').innerText =
+    document.getElementById('minerNotice')
+      .innerText =
       t('dailyLimitReached');
 
     return;
@@ -1313,16 +3416,7 @@ async function manualMine(){
   }
 
 
-  /*
-    Umumy +1
-  */
-
   crystals++;
-
-
-  /*
-    Şu günki +1
-  */
 
   dailyCrystals++;
 
@@ -1330,14 +3424,6 @@ async function manualMine(){
   updateMiner();
 
   playMiningEffect();
-
-
-  /*
-    Üç data database-e ýazylýar:
-    crystals
-    daily_crystals
-    last_mining_date
-  */
 
   await saveMiningData();
 
@@ -1349,10 +3435,6 @@ async function manualMine(){
 ========================================================= */
 
 async function autoMine(){
-
-  /*
-    Eger işleýän bolsa duruz
-  */
 
   if(autoTimer){
 
@@ -1369,7 +3451,8 @@ async function autoMine(){
     document.getElementById('countdown')
       .classList.remove('active');
 
-    document.getElementById('minerNotice').innerText =
+    document.getElementById('minerNotice')
+      .innerText =
       t('autoStopped');
 
     return;
@@ -1380,13 +3463,10 @@ async function autoMine(){
   await checkDailyDate();
 
 
-  /*
-    Daily 100 bolsa auto başlamaz
-  */
-
   if(dailyCrystals >= DAILY_LIMIT){
 
-    document.getElementById('minerNotice').innerText =
+    document.getElementById('minerNotice')
+      .innerText =
       t('dailyLimitShort');
 
     return;
@@ -1394,27 +3474,20 @@ async function autoMine(){
   }
 
 
-  /*
-    9-11 minut
-  */
-
   autoDurationSeconds =
     Math.floor(
-      Math.random() * 121
+      Math.random()*121
     ) + 540;
 
 
   autoStartTime =
     Date.now();
 
+
   autoEndTime =
     autoStartTime +
-    autoDurationSeconds * 1000;
+    autoDurationSeconds*1000;
 
-
-  /*
-    Şu wagtky daily sany ýatda sakla
-  */
 
   autoStartDailyCrystals =
     dailyCrystals;
@@ -1423,7 +3496,9 @@ async function autoMine(){
   document.getElementById('countdown')
     .classList.add('active');
 
-  document.getElementById('minerNotice').innerText =
+
+  document.getElementById('minerNotice')
+    .innerText =
     t('automaticRunning');
 
 
@@ -1440,7 +3515,7 @@ async function autoMine(){
   autoTimer =
     setTimeout(
       finishAutoMining,
-      autoDurationSeconds * 1000
+      autoDurationSeconds*1000
     );
 
 }
@@ -1452,7 +3527,8 @@ async function autoMine(){
 
 async function updateAutoProgress(){
 
-  if(!autoEndTime) return;
+  if(!autoEndTime)
+    return;
 
 
   const now =
@@ -1462,26 +3538,16 @@ async function updateAutoProgress(){
   const remaining =
     Math.max(
       0,
-      autoEndTime - now
+      autoEndTime-now
     );
 
 
   const elapsed =
     Math.min(
-      autoDurationSeconds * 1000,
-      now - autoStartTime
+      autoDurationSeconds*1000,
+      now-autoStartTime
     );
 
-
-  /*
-    Diňe daily galan bölegini hasaplaýarys.
-
-    Mysal:
-    daily = 37
-    galan = 63
-
-    Auto 63-e çenli gider.
-  */
 
   const remainingDaily =
     DAILY_LIMIT -
@@ -1492,7 +3558,7 @@ async function updateAutoProgress(){
     Math.floor(
       (
         elapsed /
-        (autoDurationSeconds * 1000)
+        (autoDurationSeconds*1000)
       ) *
       remainingDaily
     );
@@ -1505,22 +3571,20 @@ async function updateAutoProgress(){
     );
 
 
-  /*
-    Daily üýtgän bolsa,
-    şol mukdary umumy crystala-da goşýarys.
-  */
-
   if(newDailyValue > dailyCrystals){
 
     const difference =
       newDailyValue -
       dailyCrystals;
 
+
     dailyCrystals =
       newDailyValue;
 
+
     crystals +=
       difference;
+
 
     updateMiner();
 
@@ -1533,18 +3597,18 @@ async function updateAutoProgress(){
 
   const totalSeconds =
     Math.ceil(
-      remaining / 1000
+      remaining/1000
     );
 
 
   const minutes =
     Math.floor(
-      totalSeconds / 60
+      totalSeconds/60
     );
 
 
   const seconds =
-    totalSeconds % 60;
+    totalSeconds%60;
 
 
   document.getElementById('countdownTime')
@@ -1562,20 +3626,19 @@ async function updateAutoProgress(){
 
 async function finishAutoMining(){
 
-  clearInterval(countdownTimer);
+  clearInterval(
+    countdownTimer
+  );
 
-  countdownTimer = null;
+  countdownTimer =
+    null;
 
-  autoTimer = null;
+  autoTimer =
+    null;
 
-  autoEndTime = null;
+  autoEndTime =
+    null;
 
-
-  /*
-    Auto gutaranda daily 100 bolmaly.
-
-    Näçe galan bolsa şonça goşulýar.
-  */
 
   const remaining =
     DAILY_LIMIT -
@@ -1603,14 +3666,15 @@ async function finishAutoMining(){
       '00:00';
 
 
-  document.getElementById('minerNotice').innerText =
-    t('automaticFinished');
+  document.getElementById('minerNotice')
+    .innerText =
+      t('automaticFinished');
 
 
   playCompletionEffect();
 
 
-  setTimeout(() => {
+  setTimeout(()=>{
 
     document.getElementById('countdown')
       .classList.remove('active');
@@ -1626,36 +3690,34 @@ async function finishAutoMining(){
 
 function updateMiner(){
 
-  /*
-    Ýokardaky umumy crystal
-  */
+  const total =
+    document.getElementById('totalCrystals');
 
-  document.getElementById('totalCrystals').innerText =
-    crystals;
+  const minerTotal =
+    document.getElementById('minerTotalCrystals');
 
+  const daily =
+    document.getElementById('crystals');
 
-  /*
-    Miner sahypasyndaky umumy crystal
-  */
+  const minerCount =
+    document.getElementById('minerCount');
 
-  document.getElementById('minerTotalCrystals').innerText =
-    crystals;
+  if(total)
+    total.innerText =
+      crystals;
 
+  if(minerTotal)
+    minerTotal.innerText =
+      crystals;
 
-  /*
-    Daily crystal
-  */
+  if(daily)
+    daily.innerText =
+      dailyCrystals;
 
-  document.getElementById('crystals').innerText =
-    dailyCrystals;
+  if(minerCount)
+    minerCount.innerText =
+      dailyCrystals;
 
-  document.getElementById('minerCount').innerText =
-    dailyCrystals;
-
-
-  /*
-    Progress hem daily boýunça
-  */
 
   const percentage =
     Math.min(
@@ -1664,11 +3726,20 @@ function updateMiner(){
     );
 
 
-  document.getElementById('progress').style.width =
-    percentage + '%';
+  const progress =
+    document.getElementById('progress');
 
-  document.getElementById('minerProgress').style.width =
-    percentage + '%';
+  const minerProgress =
+    document.getElementById('minerProgress');
+
+
+  if(progress)
+    progress.style.width =
+      percentage+'%';
+
+  if(minerProgress)
+    minerProgress.style.width =
+      percentage+'%';
 
 }
 
@@ -1682,6 +3753,10 @@ function playMiningEffect(){
   const crystal =
     document.getElementById('bigCrystal');
 
+  if(!crystal)
+    return;
+
+
   crystal.classList.remove('hit');
 
   void crystal.offsetWidth;
@@ -1692,17 +3767,19 @@ function playMiningEffect(){
   const plus =
     document.createElement('div');
 
-  plus.className = 'plus';
+  plus.className =
+    'plus';
 
   plus.innerText =
     '+1 💎';
+
 
   document.getElementById('minerBox')
     .appendChild(plus);
 
 
   setTimeout(
-    () => plus.remove(),
+    ()=>plus.remove(),
     700
   );
 
@@ -1731,11 +3808,13 @@ function playMiningEffect(){
       ((Math.random()*100)-50)+'px'
     );
 
+
     document.getElementById('minerBox')
       .appendChild(particle);
 
+
     setTimeout(
-      () => particle.remove(),
+      ()=>particle.remove(),
       700
     );
 
@@ -1752,6 +3831,10 @@ function playCompletionEffect(){
 
   const crystal =
     document.getElementById('bigCrystal');
+
+  if(!crystal)
+    return;
+
 
   crystal.style.transform =
     'scale(1.35)';
@@ -1795,11 +3878,13 @@ function playCompletionEffect(){
       ((Math.random()*180)-90)+'px'
     );
 
+
     document.getElementById('minerBox')
       .appendChild(particle);
 
+
     setTimeout(
-      () => particle.remove(),
+      ()=>particle.remove(),
       800
     );
 
@@ -1844,11 +3929,103 @@ async function startApp(){
 
   loadTelegramUser();
 
-  await loadUser();
+
+  /*
+    Supabase Auth session barla.
+
+    Session ýok bolsa login/register görkezilýär.
+  */
+
+  const {
+    data
+  } =
+    await supabaseClient.auth.getSession();
+
+
+  if(
+    data &&
+    data.session &&
+    data.session.user
+  ){
+
+    /*
+      Auth bar.
+      Profile-i tap.
+    */
+
+    const { data:profile } =
+      await supabaseClient
+        .from('users')
+        .select('*')
+        .eq(
+          'auth_id',
+          data.session.user.id
+        )
+        .limit(1)
+        .maybeSingle();
+
+
+    if(profile){
+
+      currentUser =
+        profile;
+
+
+      currentLanguage =
+        profile.language ||
+        currentLanguage;
+
+
+      if(currentLanguage === 'tm')
+        currentLanguage = 'tk';
+
+
+      localStorage.setItem(
+        'language',
+        currentLanguage
+      );
+
+
+      applyLanguage();
+
+
+      if(
+        profile.phone &&
+        profile.country &&
+        profile.age
+      ){
+
+        await enterMainApp();
+
+      }else{
+
+        showProfileStep();
+
+      }
+
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+    Session ýok.
+    Login/Register sahypasy açyk galýar.
+  */
+
+  document.getElementById('authScreen')
+    .style.display =
+      'block';
+
+  document.getElementById('mainApp')
+    .style.display =
+      'none';
+
 
   applyLanguage();
-
-  updateMiner();
 
 }
 
@@ -1858,4 +4035,4 @@ startApp();
 </script>
 
 </body>
-</html>
+  </html>
