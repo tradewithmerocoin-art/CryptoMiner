@@ -2462,7 +2462,6 @@ async function loginAccount(){
     );
 
     showAuthMessage(
-      error.message ||
       t('invalidLogin')
     );
 
@@ -2556,7 +2555,6 @@ async function loginAccount(){
         );
 
         showAuthMessage(
-          linkError.message ||
           t('authError')
         );
 
@@ -2651,7 +2649,6 @@ async function loginAccount(){
       );
 
       showAuthMessage(
-        result.error.message ||
         t('authError')
       );
 
@@ -2713,6 +2710,7 @@ async function loginAccount(){
 
 }
 
+  
 /* =========================================================
    RESET PASSWORD
 ========================================================= */
