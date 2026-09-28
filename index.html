@@ -127,9 +127,22 @@ button{
   100%{transform:scale(1) rotate(0)}
 }
 
+.total-crystal{
+  font-size:34px;
+  font-weight:900;
+  margin-top:5px;
+}
+
+.total-label{
+  color:#94a3b8;
+  font-size:12px;
+  margin-top:3px;
+}
+
 .count{
   font-size:27px;
   font-weight:800;
+  margin-top:12px;
 }
 
 .sub{
@@ -346,6 +359,7 @@ button{
     </select>
   </div>
 
+
   <!-- WALLET -->
   <section id="wallet" class="page active">
 
@@ -373,6 +387,7 @@ button{
 
     </div>
 
+
     <div class="card">
 
       <div class="section-title" data-i18n="minerTitle">
@@ -382,6 +397,14 @@ button{
       <div class="miner-box">
 
         <div class="crystal">💎</div>
+
+        <div class="total-crystal">
+          💎 <span id="totalCrystals">0</span>
+        </div>
+
+        <div class="total-label" data-i18n="totalCrystals">
+          Ähli crystal
+        </div>
 
         <div class="count">
           <span id="crystals">0</span> / 100
@@ -417,6 +440,14 @@ button{
           💎
         </div>
 
+        <div class="total-crystal">
+          💎 <span id="minerTotalCrystals">0</span>
+        </div>
+
+        <div class="total-label" data-i18n="totalCrystals">
+          Ähli crystal
+        </div>
+
         <div class="count">
           <span id="minerCount">0</span> / 100
         </div>
@@ -443,17 +474,23 @@ button{
 
         <div class="mine-buttons">
 
-          <button class="mine-btn" onclick="manualMine()" data-i18n="manual">
+          <button class="mine-btn"
+            onclick="manualMine()"
+            data-i18n="manual">
             ⛏️ EL BILEN
           </button>
 
-          <button class="mine-btn auto" onclick="autoMine()" data-i18n="automatic">
+          <button class="mine-btn auto"
+            onclick="autoMine()"
+            data-i18n="automatic">
             🤖 AWTOMAT
           </button>
 
         </div>
 
-        <div class="notice" id="minerNotice" data-i18n="testMode">
+        <div class="notice"
+          id="minerNotice"
+          data-i18n="testMode">
           Häzirki test režimi
         </div>
 
@@ -548,7 +585,8 @@ button{
 
   <div class="nav">
 
-    <button id="navWallet" class="active"
+    <button id="navWallet"
+      class="active"
       onclick="showPage('wallet',this)">
       💰<br><span data-i18n="wallet">Gapjyk</span>
     </button>
@@ -587,9 +625,6 @@ if(tg){
 const SUPABASE_URL =
   "https://mledptrviyvodbophaph.supabase.co";
 
-/*
-  ÖZÜŇ HÄZIRKI PUBLISHABLE KEY-IŇI ŞU ÝERE GOÝ.
-*/
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_Qn97tJVNRfMAANxyuDVjvw_D-XiAmYA";
 
@@ -611,6 +646,7 @@ const translations = {
     deposit: "Pul sal",
     withdraw: "Pul çykar",
     minerTitle: "💎 Miner",
+    totalCrystals: "Ähli crystal",
     dailyLimit: "Gündelik limit",
     dailyMinerLimit: "Gündelik miner limiti",
     autoWorking: "🤖 Awtomat işleýär",
@@ -637,7 +673,7 @@ const translations = {
     autoStopped: "Awtomat duruzdy.",
     automaticRunning: "🤖 Awtomat işleýär...",
     dailyLimitShort: "Bugünlik limit doldy.",
-    automaticFinished: "🎉 Awtomat tamamlandy! 100/100 boldy. Ertir täzeden açylar.",
+    automaticFinished: "🎉 Awtomat tamamlandy! Gündelik 100/100 boldy.",
     depositTest: "TEST: Pul salmak bölümi. Crypto payment indiki tapgyrda goşular.",
     withdrawTest: "TEST: Pul çykarmak bölümi. Minimum $50 we admin tassyklamasy indiki tapgyrda goşular."
   },
@@ -647,6 +683,7 @@ const translations = {
     deposit: "Пополнить",
     withdraw: "Вывести",
     minerTitle: "💎 Майнер",
+    totalCrystals: "Все кристаллы",
     dailyLimit: "Дневной лимит",
     dailyMinerLimit: "Дневной лимит майнера",
     autoWorking: "🤖 Автомат работает",
@@ -673,7 +710,7 @@ const translations = {
     autoStopped: "Автомат остановлен.",
     automaticRunning: "🤖 Автомат работает...",
     dailyLimitShort: "Дневной лимит достигнут.",
-    automaticFinished: "🎉 Автомат завершён! 100/100. Снова откроется завтра.",
+    automaticFinished: "🎉 Автомат завершён! Дневной лимит 100/100.",
     depositTest: "ТЕСТ: Раздел пополнения. Crypto payment будет добавлен на следующем этапе.",
     withdrawTest: "ТЕСТ: Раздел вывода. Минимум $50 и подтверждение администратора будут добавлены позже."
   },
@@ -683,6 +720,7 @@ const translations = {
     deposit: "Deposit",
     withdraw: "Withdraw",
     minerTitle: "💎 Miner",
+    totalCrystals: "Total crystals",
     dailyLimit: "Daily limit",
     dailyMinerLimit: "Daily mining limit",
     autoWorking: "🤖 Automatic is working",
@@ -709,7 +747,7 @@ const translations = {
     autoStopped: "Automatic mining stopped.",
     automaticRunning: "🤖 Automatic is working...",
     dailyLimitShort: "Daily limit reached.",
-    automaticFinished: "🎉 Automatic mining completed! 100/100. It will reopen tomorrow.",
+    automaticFinished: "🎉 Automatic mining completed! Daily limit 100/100.",
     depositTest: "TEST: Deposit section. Crypto payment will be added in the next stage.",
     withdrawTest: "TEST: Withdrawal section. Minimum $50 and admin approval will be added later."
   }
@@ -819,19 +857,87 @@ let currentUser = null;
 
 
 /* =========================================================
-   TEST DATA
+   MINER DATA
 ========================================================= */
 
+const DAILY_LIMIT = 100;
+
 let balance = 0;
+
+/*
+  crystals = ähli wagtky umumy crystal
+*/
 let crystals = 0;
+
+/*
+  dailyCrystals = diňe şu günki crystal
+*/
+let dailyCrystals = 0;
+
+/*
+  Database-de saklanýan soňky mining güni
+*/
+let lastMiningDate = null;
+
 
 let autoTimer = null;
 let countdownTimer = null;
 let autoEndTime = null;
 
 let autoStartTime = null;
-let autoStartCrystals = 0;
+let autoStartDailyCrystals = 0;
 let autoDurationSeconds = 0;
+
+
+/* =========================================================
+   TODAY
+========================================================= */
+
+function getToday(){
+
+  const now = new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(now.getMonth() + 1)
+      .padStart(2,'0');
+
+  const day =
+    String(now.getDate())
+      .padStart(2,'0');
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================================================
+   CHECK DAILY DATE
+========================================================= */
+
+async function checkDailyDate(){
+
+  const today =
+    getToday();
+
+  /*
+    Täze gün bolsa diňe daily reset bolýar.
+    Umumy crystals hiç wagt reset bolmaýar.
+  */
+
+  if(lastMiningDate !== today){
+
+    dailyCrystals = 0;
+
+    lastMiningDate = today;
+
+    await saveMiningData();
+
+  }
+
+}
 
 
 /* =========================================================
@@ -942,13 +1048,45 @@ async function loadUser(){
 
     currentUser = data;
 
+    /*
+      Umumy crystal
+    */
     crystals =
       Number(data.crystals || 0);
+
+    /*
+      Daily crystal
+    */
+    dailyCrystals =
+      Number(data.daily_crystals || 0);
+
+    /*
+      Soňky mining güni
+    */
+    lastMiningDate =
+      data.last_mining_date || null;
+
+
+    /*
+      Eger öňki account-da daily_crystals 0
+      bolsa we last date köne bolsa,
+      checkDailyDate ony 0 ýagdaýynda saklar.
+    */
+
+    await checkDailyDate();
+
 
     if(data.language){
 
       currentLanguage =
         data.language;
+
+      /*
+        TM bilen TK arasynda compatibility
+      */
+      if(currentLanguage === 'tm'){
+        currentLanguage = 'tk';
+      }
 
       localStorage.setItem(
         'language',
@@ -978,6 +1116,10 @@ async function loadUser(){
   }
 
 
+  /*
+    TÄZE USER
+  */
+
   const newUser = {
 
     id:
@@ -999,7 +1141,13 @@ async function loadUser(){
       currentLanguage,
 
     crystals:
-      0
+      0,
+
+    daily_crystals:
+      0,
+
+    last_mining_date:
+      getToday()
 
   };
 
@@ -1036,6 +1184,11 @@ async function loadUser(){
 
   crystals = 0;
 
+  dailyCrystals = 0;
+
+  lastMiningDate =
+    getToday();
+
   applyLanguage();
 
   updateMiner();
@@ -1047,22 +1200,48 @@ async function loadUser(){
 
 
 /* =========================================================
-   SAVE CRYSTALS
+   SAVE MINING DATA
 ========================================================= */
 
-async function saveCrystals(){
+async function saveMiningData(){
 
   if(!currentUser || !telegramUser){
-    return;
+    return false;
   }
+
+  const today =
+    getToday();
+
+  lastMiningDate =
+    today;
+
 
   const { error } =
     await supabaseClient
       .from('users')
       .update({
-        crystals: crystals,
+
+        /*
+          Ähli wagtky umumy crystal
+        */
+        crystals:
+          crystals,
+
+        /*
+          Şu günki crystal
+        */
+        daily_crystals:
+          dailyCrystals,
+
+        /*
+          Şu gün mining edildi
+        */
+        last_mining_date:
+          today,
+
         updated_at:
           new Date().toISOString()
+
       })
       .eq(
         'telegram_id',
@@ -1073,18 +1252,36 @@ async function saveCrystals(){
   if(error){
 
     console.error(
-      'CRYSTAL SAVE ERROR:',
+      'MINING DATA SAVE ERROR:',
       error
     );
 
     document.getElementById('profileStatus').innerText =
-      '⚠️ Crystal save error: ' +
+      '⚠️ Mining data save error: ' +
       (
         error.message ||
         'Unknown error'
       );
 
+    return false;
+
   }
+
+
+  /*
+    currentUser-i hem update edýäris
+  */
+
+  currentUser.crystals =
+    crystals;
+
+  currentUser.daily_crystals =
+    dailyCrystals;
+
+  currentUser.last_mining_date =
+    today;
+
+  return true;
 
 }
 
@@ -1095,7 +1292,18 @@ async function saveCrystals(){
 
 async function manualMine(){
 
-  if(crystals >= 100){
+  /*
+    Ilki täze gün barla
+  */
+
+  await checkDailyDate();
+
+
+  /*
+    Daily limit
+  */
+
+  if(dailyCrystals >= DAILY_LIMIT){
 
     document.getElementById('minerNotice').innerText =
       t('dailyLimitReached');
@@ -1105,13 +1313,33 @@ async function manualMine(){
   }
 
 
+  /*
+    Umumy +1
+  */
+
   crystals++;
 
-  playMiningEffect();
+
+  /*
+    Şu günki +1
+  */
+
+  dailyCrystals++;
+
 
   updateMiner();
 
-  await saveCrystals();
+  playMiningEffect();
+
+
+  /*
+    Üç data database-e ýazylýar:
+    crystals
+    daily_crystals
+    last_mining_date
+  */
+
+  await saveMiningData();
 
 }
 
@@ -1120,7 +1348,11 @@ async function manualMine(){
    AUTO MINER
 ========================================================= */
 
-function autoMine(){
+async function autoMine(){
+
+  /*
+    Eger işleýän bolsa duruz
+  */
 
   if(autoTimer){
 
@@ -1145,7 +1377,14 @@ function autoMine(){
   }
 
 
-  if(crystals >= 100){
+  await checkDailyDate();
+
+
+  /*
+    Daily 100 bolsa auto başlamaz
+  */
+
+  if(dailyCrystals >= DAILY_LIMIT){
 
     document.getElementById('minerNotice').innerText =
       t('dailyLimitShort');
@@ -1154,6 +1393,10 @@ function autoMine(){
 
   }
 
+
+  /*
+    9-11 minut
+  */
 
   autoDurationSeconds =
     Math.floor(
@@ -1168,8 +1411,13 @@ function autoMine(){
     autoStartTime +
     autoDurationSeconds * 1000;
 
-  autoStartCrystals =
-    crystals;
+
+  /*
+    Şu wagtky daily sany ýatda sakla
+  */
+
+  autoStartDailyCrystals =
+    dailyCrystals;
 
 
   document.getElementById('countdown')
@@ -1210,6 +1458,7 @@ async function updateAutoProgress(){
   const now =
     Date.now();
 
+
   const remaining =
     Math.max(
       0,
@@ -1224,8 +1473,19 @@ async function updateAutoProgress(){
     );
 
 
-  const totalGain =
-    100 - autoStartCrystals;
+  /*
+    Diňe daily galan bölegini hasaplaýarys.
+
+    Mysal:
+    daily = 37
+    galan = 63
+
+    Auto 63-e çenli gider.
+  */
+
+  const remainingDaily =
+    DAILY_LIMIT -
+    autoStartDailyCrystals;
 
 
   const gained =
@@ -1234,27 +1494,39 @@ async function updateAutoProgress(){
         elapsed /
         (autoDurationSeconds * 1000)
       ) *
-      totalGain
+      remainingDaily
     );
 
 
-  const newCrystalValue =
+  const newDailyValue =
     Math.min(
-      100,
-      autoStartCrystals + gained
+      DAILY_LIMIT,
+      autoStartDailyCrystals + gained
     );
 
 
-  if(newCrystalValue > crystals){
+  /*
+    Daily üýtgän bolsa,
+    şol mukdary umumy crystala-da goşýarys.
+  */
 
-    crystals =
-      newCrystalValue;
+  if(newDailyValue > dailyCrystals){
+
+    const difference =
+      newDailyValue -
+      dailyCrystals;
+
+    dailyCrystals =
+      newDailyValue;
+
+    crystals +=
+      difference;
 
     updateMiner();
 
     playMiningEffect();
 
-    await saveCrystals();
+    await saveMiningData();
 
   }
 
@@ -1298,19 +1570,45 @@ async function finishAutoMining(){
 
   autoEndTime = null;
 
-  crystals = 100;
+
+  /*
+    Auto gutaranda daily 100 bolmaly.
+
+    Näçe galan bolsa şonça goşulýar.
+  */
+
+  const remaining =
+    DAILY_LIMIT -
+    dailyCrystals;
+
+
+  if(remaining > 0){
+
+    dailyCrystals =
+      DAILY_LIMIT;
+
+    crystals +=
+      remaining;
+
+  }
+
 
   updateMiner();
 
-  await saveCrystals();
+  await saveMiningData();
+
 
   document.getElementById('countdownTime')
-    .innerText = '00:00';
+    .innerText =
+      '00:00';
+
 
   document.getElementById('minerNotice').innerText =
     t('automaticFinished');
 
+
   playCompletionEffect();
+
 
   setTimeout(() => {
 
@@ -1328,17 +1626,49 @@ async function finishAutoMining(){
 
 function updateMiner(){
 
-  document.getElementById('crystals').innerText =
+  /*
+    Ýokardaky umumy crystal
+  */
+
+  document.getElementById('totalCrystals').innerText =
     crystals;
+
+
+  /*
+    Miner sahypasyndaky umumy crystal
+  */
+
+  document.getElementById('minerTotalCrystals').innerText =
+    crystals;
+
+
+  /*
+    Daily crystal
+  */
+
+  document.getElementById('crystals').innerText =
+    dailyCrystals;
 
   document.getElementById('minerCount').innerText =
-    crystals;
+    dailyCrystals;
+
+
+  /*
+    Progress hem daily boýunça
+  */
+
+  const percentage =
+    Math.min(
+      100,
+      dailyCrystals
+    );
+
 
   document.getElementById('progress').style.width =
-    crystals + '%';
+    percentage + '%';
 
   document.getElementById('minerProgress').style.width =
-    crystals + '%';
+    percentage + '%';
 
 }
 
@@ -1510,19 +1840,12 @@ function withdraw(){
 
 async function startApp(){
 
-  /*
-    Ilki lokal dili görkez.
-  */
   applyLanguage();
 
   loadTelegramUser();
 
   await loadUser();
 
-  /*
-    loadUser database-den başga dil tapyp biler.
-    Şonuň üçin ýene bir gezek apply edýäris.
-  */
   applyLanguage();
 
   updateMiner();
