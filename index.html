@@ -2462,6 +2462,7 @@ async function loginAccount(){
     );
 
     showAuthMessage(
+      error.message ||
       t('invalidLogin')
     );
 
@@ -2482,8 +2483,8 @@ async function loginAccount(){
 
 
   /*
-    Auth user tapyldy.
-    Indi public.users-den profile tapýarys.
+    Auth üstünlikli boldy.
+    Indi public.users-den auth_id boýunça profil gözleýäris.
   */
 
   let { data:profile,error:profileError } =
@@ -2499,13 +2500,13 @@ async function loginAccount(){
 
 
   /*
-    Eger auth_id entek baglanmadyk bolsa,
-    Telegram ID bilen köne row-y gözleýäris.
+    Profil tapylmasa, Telegram ID boýunça köne
+    profile gözleýäris.
   */
 
   if(!profile){
 
-    const { data:telegramProfile } =
+    const { data:telegramProfile,error:telegramError } =
       await supabaseClient
         .from('users')
         .select('*')
@@ -2516,6 +2517,11 @@ async function loginAccount(){
         .limit(1)
         .maybeSingle();
 
+
+    /*
+      Köne profile tapylsa, ony täze Auth account-a
+      baglamaga synanyşýarys.
+    */
 
     if(telegramProfile){
 
@@ -2544,6 +2550,11 @@ async function loginAccount(){
 
       if(linkError){
 
+        console.error(
+          'PROFILE LINK ERROR:',
+          linkError
+        );
+
         showAuthMessage(
           linkError.message ||
           t('authError')
@@ -2553,6 +2564,7 @@ async function loginAccount(){
 
       }
 
+
       profile =
         linkedProfile;
 
@@ -2561,23 +2573,110 @@ async function loginAccount(){
   }
 
 
+  /*
+    Hiç profil tapylmadyk bolsa, täze profile döredýäris.
+    Bu diňe Auth login üstünlikli bolandan soň işleýär.
+  */
+
   if(!profile){
 
-    showAuthMessage(
-      t('authError')
-    );
+    const newUser = {
 
-    return;
+      id:
+        Date.now(),
+
+      auth_id:
+        data.user.id,
+
+      telegram_id:
+        String(telegramUser.id),
+
+      first_name:
+        telegramUser.first_name || '',
+
+      last_name:
+        telegramUser.last_name || '',
+
+      username:
+        telegramUser.username || '',
+
+      email:
+        email,
+
+      nickname:
+        telegramUser.username ||
+        telegramUser.first_name ||
+        'User',
+
+      phone:
+        '',
+
+      country:
+        '',
+
+      age:
+        null,
+
+      avatar:
+        '👤',
+
+      language:
+        currentLanguage,
+
+      crystals:
+        0,
+
+      daily_crystals:
+        0,
+
+      last_mining_date:
+        getToday()
+
+    };
+
+
+    const result =
+      await supabaseClient
+        .from('users')
+        .insert(newUser)
+        .select()
+        .single();
+
+
+    if(result.error){
+
+      console.error(
+        'PROFILE CREATE AFTER LOGIN ERROR:',
+        result.error
+      );
+
+      showAuthMessage(
+        result.error.message ||
+        t('authError')
+      );
+
+      return;
+
+    }
+
+
+    profile =
+      result.data;
 
   }
 
+
+  /*
+    Profile taýýar.
+  */
 
   currentUser =
     profile;
 
 
   currentLanguage =
-    profile.language || currentLanguage;
+    profile.language ||
+    currentLanguage;
 
 
   if(currentLanguage === 'tm')
@@ -2592,6 +2691,11 @@ async function loginAccount(){
 
   applyLanguage();
 
+
+  /*
+    Profil maglumatlary doly bolsa göni app-a gir.
+    Doly däl bolsa profile form görkez.
+  */
 
   if(
     !profile.phone ||
@@ -2608,7 +2712,6 @@ async function loginAccount(){
   }
 
 }
-
 
 /* =========================================================
    RESET PASSWORD
