@@ -1,10 +1,21 @@
 (function(){
 
-  function createLogoutButton(){
+  function addLogoutButton(){
 
-    if(document.getElementById('logoutAccountButton')){
+    const profile =
+      document.getElementById('profile');
+
+    if(!profile)
+      return;
+
+    if(
+      document.getElementById(
+        'logoutAccountButton'
+      )
+    ){
       return;
     }
+
 
     const button =
       document.createElement('button');
@@ -12,68 +23,36 @@
     button.id =
       'logoutAccountButton';
 
-    button.textContent =
-      '🚪 Accountdan çyk';
+    button.className =
+      'profile-edit-btn';
 
-    button.style.cssText = `
-      width: 100%;
-      margin-top: 15px;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      background: #222;
-      color: white;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    `;
+    button.style.marginTop =
+      '12px';
+
+    button.style.background =
+      '#7f1d1d';
+
+    button.style.borderColor =
+      '#991b1b';
+
+    button.innerText =
+      getLogoutText();
+
 
     button.onclick =
       async function(){
 
         button.disabled = true;
-        button.textContent =
-          '⏳ Çykylýar...';
 
-        try{
+        button.innerText =
+          getLogoutLoadingText();
 
-          const { error } =
-            await supabaseClient.auth.signOut();
 
-          if(error){
+        const { error } =
+          await supabaseClient.auth.signOut();
 
-            console.error(
-              'LOGOUT ERROR:',
-              error
-            );
 
-            button.disabled = false;
-            button.textContent =
-              '🚪 Accountdan çyk';
-
-            return;
-          }
-
-          /*
-            Current account maglumatlaryny
-            arassalaýarys.
-          */
-
-          currentUser = null;
-
-          localStorage.removeItem(
-            'currentUser'
-          );
-
-          /*
-            App-y täzeden açýarys.
-            startApp() Auth session-y görüp,
-            login sahypasyna geçirer.
-          */
-
-          location.reload();
-
-        }catch(error){
+        if(error){
 
           console.error(
             'LOGOUT ERROR:',
@@ -81,70 +60,145 @@
           );
 
           button.disabled = false;
-          button.textContent =
-            '🚪 Accountdan çyk';
+
+          button.innerText =
+            getLogoutText();
+
+          return;
 
         }
+
+
+        /*
+          Current account maglumatlaryny
+          arassalaýarys.
+        */
+
+        currentUser = null;
+
+
+        /*
+          Miner state hem arassalanýar.
+        */
+
+        crystals = 0;
+
+        dailyCrystals = 0;
+
+        lastMiningDate = null;
+
+
+        /*
+          Eger auto miner işleýän bolsa,
+          ony hem duruzýarys.
+        */
+
+        if(autoTimer){
+
+          clearTimeout(autoTimer);
+
+          autoTimer = null;
+
+        }
+
+
+        if(countdownTimer){
+
+          clearInterval(
+            countdownTimer
+          );
+
+          countdownTimer = null;
+
+        }
+
+
+        autoEndTime = null;
+
+
+        /*
+          Sahypany täzeden açýarys.
+          Supabase session indi ýok.
+        */
+
+        location.reload();
 
       };
 
 
-    /*
-      Profile sahypasynda düwmäni ýerleşdirmäge
-      ýer gözleýäris.
-    */
+    profile.appendChild(button);
 
-    const profile =
-      document.getElementById('profileScreen') ||
-      document.getElementById('profilePage') ||
-      document.querySelector('.profile-screen') ||
-      document.querySelector('.profile-page');
 
-    if(profile){
+  }
 
-      profile.appendChild(button);
+
+  function getLogoutText(){
+
+    if(
+      typeof currentLanguage !==
+      'undefined'
+    ){
+
+      if(currentLanguage === 'ru')
+        return '🚪 Выйти из аккаунта';
+
+      if(currentLanguage === 'en')
+        return '🚪 Log out';
 
     }
 
-  }
-
-
-  /*
-    Sahypa doly açylandan soň synanyşýar.
-  */
-
-  if(document.readyState === 'loading'){
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      createLogoutButton
-    );
-
-  }else{
-
-    createLogoutButton();
+    return '🚪 Accountdan çyk';
 
   }
 
 
-  /*
-    Profile soňrak açylýan bolsa,
-    birnäçe wagtlap barlap dur.
-  */
+  function getLogoutLoadingText(){
 
-  let attempts = 0;
+    if(
+      typeof currentLanguage !==
+      'undefined'
+    ){
+
+      if(currentLanguage === 'ru')
+        return '⏳ Выход...';
+
+      if(currentLanguage === 'en')
+        return '⏳ Logging out...';
+
+    }
+
+    return '⏳ Çykylýar...';
+
+  }
+
+
+  /*
+    App ýüklenenden soň barlaýarys.
+  */
 
   const timer =
     setInterval(function(){
 
-      createLogoutButton();
+      addLogoutButton();
 
-      attempts++;
+    },500);
 
-      if(attempts >= 30){
-        clearInterval(timer);
-      }
 
-    }, 1000);
+  /*
+    30 sekuntdan soň barlamagy bes edýär.
+  */
+
+  setTimeout(function(){
+
+    clearInterval(timer);
+
+  },30000);
+
+
+  /*
+    Ilkinji gezek hem synanyş.
+  */
+
+  addLogoutButton();
 
 })();
