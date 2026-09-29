@@ -1,82 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>CryptoMiner Admin</title>
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>CryptoMiner Owner</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
-  <h1>CryptoMiner Admin</h1>
+  <h1>👑 CryptoMiner Owner</h1>
 
-  <p id="adminStatus">Checking access...</p>
+  <div id="status">
+    Checking Telegram...
+  </div>
 
-  <div id="adminPanel" style="display:none;">
+  <div id="panel" style="display:none;">
 
-    <h2>Dashboard</h2>
+    <h2>Admin Panel</h2>
 
-    <p>Users: <span id="usersCount">0</span></p>
+    <p>
+      Role:
+      <strong id="role"></strong>
+    </p>
 
-    <p>Admin system is ready.</p>
+    <p>
+      Telegram ID:
+      <strong id="telegramId"></strong>
+    </p>
 
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script>
-    const SUPABASE_URL =
-      "https://mledptrviyvodbophaph.supabase.co";
+<script>
 
-    const SUPABASE_KEY =
-      "sb_publishable_Qn97tJVNRfMAANxyuDVjvw_D-XiAmYA";
+const tg = window.Telegram.WebApp;
 
-    const supabaseClient =
-      supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
+tg.ready();
+tg.expand();
 
-    async function checkAdmin(){
 
-      const {
-        data: { user },
-        error
-      } = await supabaseClient.auth.getUser();
+const SUPABASE_URL =
+  "https://mledptrviyvodbophaph.supabase.co";
 
-      if(error || !user){
+const SUPABASE_KEY =
+  "sb_publishable_Qn97tJVNRfMAANxyuDVjvw_D-XiAmYA";
 
-        document.getElementById("adminStatus").textContent =
-          "Please login first.";
 
-        return;
-      }
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
-      const { data, error: adminError } =
-        await supabaseClient
-          .from("admin_users")
-          .select("role")
-          .eq("auth_id", user.id)
-          .single();
 
-      if(adminError || !data){
+async function checkOwner(){
 
-        document.getElementById("adminStatus").textContent =
-          "Access denied.";
+  const status =
+    document.getElementById("status");
 
-        return;
-      }
+  const panel =
+    document.getElementById("panel");
 
-      document.getElementById("adminStatus").textContent =
-        "Access granted: " + data.role;
 
-      document.getElementById("adminPanel").style.display =
-        "block";
-    }
+  if(!tg.initDataUnsafe.user){
 
-    checkAdmin();
-  </script>
+    status.textContent =
+      "❌ Telegram user not found.";
+
+    return;
+  }
+
+
+  const telegramId =
+    String(tg.initDataUnsafe.user.id);
+
+
+  const { data, error } =
+    await supabaseClient
+      .from("admin_users")
+      .select("role")
+      .eq("telegram_id", telegramId)
+      .maybeSingle();
+
+
+  if(error){
+
+    console.error(error);
+
+    status.textContent =
+      "❌ Database error.";
+
+    return;
+  }
+
+
+  if(!data){
+
+    status.textContent =
+      "❌ Access denied.";
+
+    return;
+  }
+
+
+  status.textContent =
+    "✅ Access granted";
+
+  document.getElementById("role").textContent =
+    data.role;
+
+  document.getElementById("telegramId").textContent =
+    telegramId;
+
+  panel.style.display =
+    "block";
+
+}
+
+
+checkOwner();
+
+</script>
 
 </body>
+
 </html>
