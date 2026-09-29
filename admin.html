@@ -67,12 +67,8 @@ const supabaseClient =
 
 async function checkOwner(){
 
-  const status =
-    document.getElementById("status");
-
-  const panel =
-    document.getElementById("panel");
-
+  const status = document.getElementById("status");
+  const panel = document.getElementById("panel");
 
   if(!tg.initDataUnsafe.user){
 
@@ -82,38 +78,36 @@ async function checkOwner(){
     return;
   }
 
-
   const telegramId =
     String(tg.initDataUnsafe.user.id);
 
+  console.log("TELEGRAM ID:", telegramId);
 
   const { data, error } =
     await supabaseClient
       .from("admin_users")
-      .select("role")
+      .select("telegram_id, role")
       .eq("telegram_id", telegramId)
       .maybeSingle();
 
+  console.log("ADMIN DATA:", data);
+  console.log("ADMIN ERROR:", error);
 
   if(error){
 
-  console.error("ADMIN DATABASE ERROR:", error);
-
-  status.textContent =
-    "❌ " + error.message;
-
-  return;
-  }
-
-
-  if(!data){
-
     status.textContent =
-      "❌ Access denied.";
+      "❌ " + error.message;
 
     return;
   }
 
+  if(!data){
+
+    status.textContent =
+      "❌ Access denied. Telegram ID: " + telegramId;
+
+    return;
+  }
 
   status.textContent =
     "✅ Access granted";
@@ -122,11 +116,9 @@ async function checkOwner(){
     data.role;
 
   document.getElementById("telegramId").textContent =
-    telegramId;
+    data.telegram_id;
 
-  panel.style.display =
-    "block";
-
+  panel.style.display = "block";
 }
 
 
