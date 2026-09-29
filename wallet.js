@@ -1,6 +1,6 @@
 /* =========================================================
-   CRYSTAL PLATFORM - TEST WALLET
-   TEST MODE ONLY
+   CRYSTAL PLATFORM - SUPABASE WALLET
+   TEST MODE
    Minimum Deposit: $50
    Minimum Withdraw: $50
    ========================================================= */
@@ -13,6 +13,7 @@
   };
 
   let walletInitialized = false;
+  let walletLoading = false;
 
 
   /* =========================
@@ -33,6 +34,7 @@
     } catch (e) {}
 
     return "tk";
+
   }
 
 
@@ -51,7 +53,6 @@
         depositTitle: "Pul goş",
         withdrawTitle: "Pul çykar",
 
-        amount: "Mukdar",
         cancel: "Ýatyr",
         confirm: "Tassykla",
 
@@ -73,17 +74,11 @@
         insufficient:
           "Balans ýeterlik däl.",
 
-        deposit:
-          "Deposit",
+        loading:
+          "Ýüklenýär...",
 
-        withdraw:
-          "Withdraw",
-
-        completed:
-          "Completed",
-
-        pending:
-          "Pending"
+        error:
+          "Ýalňyşlyk ýüze çykdy. Täzeden synanyşyň."
 
       },
 
@@ -96,7 +91,6 @@
         depositTitle: "Пополнить",
         withdrawTitle: "Вывести",
 
-        amount: "Сумма",
         cancel: "Отмена",
         confirm: "Подтвердить",
 
@@ -118,17 +112,11 @@
         insufficient:
           "Недостаточно средств.",
 
-        deposit:
-          "Deposit",
+        loading:
+          "Загрузка...",
 
-        withdraw:
-          "Withdraw",
-
-        completed:
-          "Completed",
-
-        pending:
-          "Pending"
+        error:
+          "Произошла ошибка. Попробуйте снова."
 
       },
 
@@ -141,7 +129,6 @@
         depositTitle: "Deposit",
         withdrawTitle: "Withdraw",
 
-        amount: "Amount",
         cancel: "Cancel",
         confirm: "Confirm",
 
@@ -163,17 +150,11 @@
         insufficient:
           "Insufficient balance.",
 
-        deposit:
-          "Deposit",
+        loading:
+          "Loading...",
 
-        withdraw:
-          "Withdraw",
-
-        completed:
-          "Completed",
-
-        pending:
-          "Pending"
+        error:
+          "Something went wrong. Please try again."
 
       }
 
@@ -188,10 +169,10 @@
 
 
   /* =========================
-     ACCOUNT KEY
+     GET AUTH ID
      ========================= */
 
-  function getWalletKey() {
+  function getAuthId() {
 
     try {
 
@@ -201,7 +182,7 @@
         currentUser.auth_id
       ) {
 
-        return "crypto_wallet_" + currentUser.auth_id;
+        return currentUser.auth_id;
 
       }
 
@@ -213,64 +194,110 @@
 
 
   /* =========================
-     LOAD WALLET
+     LOAD WALLET FROM SUPABASE
      ========================= */
 
-  function loadWallet() {
+  async function loadWallet() {
 
-    const key = getWalletKey();
+    const authId =
+      getAuthId();
 
-    if (!key) return;
+    if (!authId) return false;
+
 
     try {
 
-      const saved =
-        localStorage.getItem(key);
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("wallets")
+        .select(
+          "balance,currency"
+        )
+        .eq(
+          "auth_id",
+          authId
+        )
+        .maybeSingle();
 
-      if (saved) {
 
-        const parsed =
-          JSON.parse(saved);
+      if (error) {
 
-        if (
-          parsed &&
-          typeof parsed === "object"
-        ) {
+        console.error(
+          "Wallet load error:",
+          error
+        );
 
-          walletData = {
+        return false;
+
+      }
+
+
+      if (!data) {
+
+        const {
+          data: newWallet,
+          error: createError
+        } = await supabaseClient
+          .from("wallets")
+          .insert({
+
+            auth_id:
+              authId,
 
             balance:
-              Number(parsed.balance) || 0,
+              0,
 
-            transactions:
-              Array.isArray(parsed.transactions)
-                ? parsed.transactions
-                : []
+            currency:
+              "USD"
 
-          };
+          })
+          .select(
+            "balance,currency"
+          )
+          .single();
+
+
+        if (createError) {
+
+          console.error(
+            "Wallet create error:",
+            createError
+          );
+
+          return false;
 
         }
 
+
+        walletData.balance =
+          Number(
+            newWallet.balance
+          ) || 0;
+
       } else {
 
-        walletData = {
-
-          balance: 0,
-
-          transactions: []
-
-        };
-
-        saveWallet();
+        walletData.balance =
+          Number(
+            data.balance
+          ) || 0;
 
       }
+
+
+      await loadTransactions();
+
+      return true;
 
     } catch (error) {
 
       console.error(
-        "Wallet load error:",
+        "Wallet error:",
         error
       );
+
+      return false;
 
     }
 
@@ -278,29 +305,68 @@
 
 
   /* =========================
-     SAVE WALLET
+     LOAD TRANSACTIONS
      ========================= */
 
-  function saveWallet() {
+  async function loadTransactions() {
 
-    const key = getWalletKey();
+    const authId =
+      getAuthId();
 
-    if (!key) return;
+    if (!authId) return;
+
 
     try {
 
-      localStorage.setItem(
+      const {
+        data,
+        error
+      } = await supabaseClient
 
-        key,
+        .from(
+          "wallet_transactions"
+        )
 
-        JSON.stringify(walletData)
+        .select(
+          "id,type,amount,status,created_at"
+        )
 
-      );
+        .eq(
+          "auth_id",
+          authId
+        )
+
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        )
+
+        .limit(50);
+
+
+      if (error) {
+
+        console.error(
+          "Transactions error:",
+          error
+        );
+
+        return;
+
+      }
+
+
+      walletData.transactions =
+        Array.isArray(data)
+          ? data
+          : [];
 
     } catch (error) {
 
       console.error(
-        "Wallet save error:",
+        "Transaction load error:",
         error
       );
 
@@ -315,52 +381,28 @@
 
   function formatMoney(amount) {
 
-    return Number(amount || 0)
-      .toFixed(2);
+    return Number(
+      amount || 0
+    ).toFixed(2);
 
   }
 
 
   /* =========================
-     ADD WALLET HISTORY
+     FORMAT DATE
      ========================= */
 
-  function addTransaction(
-    type,
-    amount,
-    status
-  ) {
+  function formatDate(date) {
 
-    walletData.transactions.unshift({
+    try {
 
-      id:
-        Date.now() +
-        "_" +
-        Math.random()
-          .toString(36)
-          .substring(2, 8),
+      return new Date(
+        date
+      ).toLocaleString();
 
-      date:
-        new Date().toLocaleString(),
+    } catch (e) {
 
-      type: type,
-
-      amount:
-        Number(amount),
-
-      status: status
-
-    });
-
-    if (
-      walletData.transactions.length > 50
-    ) {
-
-      walletData.transactions =
-        walletData.transactions.slice(
-          0,
-          50
-        );
+      return "";
 
     }
 
@@ -374,9 +416,12 @@
   function renderBalance() {
 
     const balanceElement =
-      document.getElementById("balance");
+      document.getElementById(
+        "balance"
+      );
 
-    if (!balanceElement) return;
+    if (!balanceElement)
+      return;
 
     balanceElement.textContent =
       formatMoney(
@@ -387,31 +432,41 @@
 
 
   /* =========================
-     WALLET HISTORY UI
+     CREATE HISTORY BOX
      ========================= */
 
   function createHistoryBox() {
 
     const walletSection =
-      document.getElementById("wallet");
+      document.getElementById(
+        "wallet"
+      );
 
-    if (!walletSection) return;
+    if (!walletSection)
+      return;
+
 
     let historyBox =
       document.getElementById(
         "walletHistory"
       );
 
-    if (historyBox) return;
+
+    if (historyBox)
+      return;
+
 
     historyBox =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     historyBox.id =
       "walletHistory";
 
     historyBox.className =
       "card wallet-history-card";
+
 
     historyBox.innerHTML = `
 
@@ -437,14 +492,18 @@
         ${walletText("testMode")}
       </div>
 
-      <div id="walletTransactions"></div>
+      <div
+        id="walletTransactions"
+      ></div>
 
     `;
+
 
     const cards =
       walletSection.querySelectorAll(
         ".card"
       );
+
 
     if (cards.length > 0) {
 
@@ -476,7 +535,9 @@
         "walletTransactions"
       );
 
-    if (!container) return;
+    if (!container)
+      return;
+
 
     if (
       !walletData.transactions.length
@@ -492,7 +553,9 @@
             font-size:13px;
           "
         >
-          ${walletText("noTransactions")}
+          ${walletText(
+            "noTransactions"
+          )}
         </div>
 
       `;
@@ -504,102 +567,139 @@
 
     container.innerHTML =
       walletData.transactions
-        .map(function (tx) {
+        .map(
+          function (tx) {
 
-          const amount =
-            Number(tx.amount);
-
-          const isDeposit =
-            tx.type === "Deposit";
-
-          const sign =
-            isDeposit ? "+" : "-";
-
-          const amountClass =
-            isDeposit
-              ? "wallet-positive"
-              : "wallet-negative";
-
-          const statusClass =
-            tx.status === "Completed"
-              ? "wallet-completed"
-              : "wallet-pending";
+            const amount =
+              Number(
+                tx.amount
+              );
 
 
-          return `
+            const isDeposit =
+              tx.type ===
+              "Deposit";
 
-            <div
-              style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                gap:10px;
-                padding:12px 0;
-                border-bottom:1px solid rgba(255,255,255,.08);
-              "
-            >
 
-              <div>
+            const sign =
+              isDeposit
+                ? "+"
+                : "-";
 
-                <div
-                  style="
-                    font-weight:600;
-                    font-size:14px;
-                  "
-                >
-                  ${
-                    isDeposit
-                      ? "💵 "
-                      : "💸 "
-                  }${tx.type}
-                </div>
 
-                <div
-                  style="
-                    font-size:11px;
-                    opacity:.5;
-                    margin-top:4px;
-                  "
-                >
-                  ${tx.date}
-                </div>
+            const statusClass =
+              tx.status ===
+              "Completed"
 
-                <div
-                  class="${statusClass}"
-                  style="
-                    font-size:10px;
-                    margin-top:4px;
-                    font-weight:600;
-                  "
-                >
-                  ${tx.status}
-                </div>
+                ? "wallet-completed"
 
-              </div>
+                : tx.status ===
+                  "Rejected"
 
+                  ? "wallet-rejected"
+
+                  : "wallet-pending";
+
+
+            return `
 
               <div
-                class="${amountClass}"
                 style="
-                  font-weight:700;
-                  white-space:nowrap;
+                  display:flex;
+                  justify-content:space-between;
+                  align-items:center;
+                  gap:10px;
+                  padding:12px 0;
+                  border-bottom:
+                    1px solid
+                    rgba(255,255,255,.08);
                 "
               >
-                ${sign}$${formatMoney(amount)}
+
+                <div>
+
+                  <div
+                    style="
+                      font-weight:600;
+                      font-size:14px;
+                    "
+                  >
+                    ${
+                      isDeposit
+                        ? "💵"
+                        : "💸"
+                    }
+                    ${tx.type}
+                  </div>
+
+
+                  <div
+                    style="
+                      font-size:11px;
+                      opacity:.5;
+                      margin-top:4px;
+                    "
+                  >
+                    ${formatDate(
+                      tx.created_at
+                    )}
+                  </div>
+
+
+                  <div
+                    class="${statusClass}"
+                    style="
+                      font-size:10px;
+                      margin-top:4px;
+                      font-weight:600;
+                    "
+                  >
+                    ${tx.status}
+                  </div>
+
+                </div>
+
+
+                <div
+                  style="
+                    font-weight:700;
+                    white-space:nowrap;
+                  "
+                >
+                  ${sign}$
+                  ${formatMoney(
+                    amount
+                  )}
+                </div>
+
               </div>
 
-            </div>
+            `;
 
-          `;
-
-        })
+          }
+        )
         .join("");
 
   }
 
 
   /* =========================
-     MODAL STYLE
+     RENDER EVERYTHING
+     ========================= */
+
+  function renderWallet() {
+
+    createHistoryBox();
+
+    renderBalance();
+
+    renderHistory();
+
+  }
+
+
+  /* =========================
+     CREATE MODAL STYLE
      ========================= */
 
   function createModalStyle() {
@@ -610,11 +710,16 @@
       )
     ) return;
 
+
     const style =
-      document.createElement("style");
+      document.createElement(
+        "style"
+      );
+
 
     style.id =
       "walletModalStyle";
+
 
     style.textContent = `
 
@@ -774,13 +879,16 @@
 
     `;
 
-    document.head.appendChild(style);
+
+    document.head.appendChild(
+      style
+    );
 
   }
 
 
   /* =========================
-     SHOW MODAL
+     SHOW AMOUNT MODAL
      ========================= */
 
   function showAmountModal(
@@ -789,14 +897,20 @@
 
     createModalStyle();
 
+
     const isDeposit =
       mode === "deposit";
 
+
     const overlay =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     overlay.className =
       "wallet-modal-overlay";
+
 
     overlay.innerHTML = `
 
@@ -835,6 +949,7 @@
         <div
           class="wallet-modal-hint"
         >
+
           ${
             isDeposit
               ? walletText(
@@ -899,10 +1014,12 @@
         "walletAmountInput"
       );
 
+
     const cancel =
       document.getElementById(
         "walletCancelButton"
       );
+
 
     const confirm =
       document.getElementById(
@@ -925,7 +1042,8 @@
       function (event) {
 
         if (
-          event.target === overlay
+          event.target ===
+          overlay
         ) {
 
           close();
@@ -936,7 +1054,7 @@
 
 
     confirm.onclick =
-      function () {
+      async function () {
 
         const amount =
           Number(
@@ -945,7 +1063,9 @@
 
 
         if (
-          !Number.isFinite(amount) ||
+          !Number.isFinite(
+            amount
+          ) ||
           amount <= 0
         ) {
 
@@ -967,9 +1087,11 @@
           alert(
 
             isDeposit
+
               ? walletText(
                   "minimumDeposit"
                 )
+
               : walletText(
                   "minimumWithdraw"
                 )
@@ -998,52 +1120,145 @@
         }
 
 
-        if (isDeposit) {
+        confirm.disabled =
+          true;
 
-          walletData.balance +=
-            amount;
-
-          addTransaction(
-            "Deposit",
-            amount,
-            "Completed"
+        confirm.textContent =
+          walletText(
+            "loading"
           );
 
-          saveWallet();
+
+        try {
+
+          const functionName =
+            isDeposit
+              ? "test_deposit"
+              : "test_withdraw";
+
+
+          const {
+            data,
+            error
+          } =
+            await supabaseClient
+              .rpc(
+                functionName,
+                {
+                  p_amount:
+                    amount
+                }
+              );
+
+
+          if (error) {
+
+            console.error(
+              "Wallet RPC error:",
+              error
+            );
+
+            const message =
+              String(
+                error.message ||
+                ""
+              );
+
+
+            if (
+              message
+                .toLowerCase()
+                .includes(
+                  "insufficient"
+                )
+            ) {
+
+              alert(
+                walletText(
+                  "insufficient"
+                )
+              );
+
+            } else {
+
+              alert(
+                walletText(
+                  "error"
+                )
+              );
+
+            }
+
+
+            confirm.disabled =
+              false;
+
+            confirm.textContent =
+              walletText(
+                "confirm"
+              );
+
+            return;
+
+          }
+
+
+          if (
+            data &&
+            data.balance !==
+              undefined
+          ) {
+
+            walletData.balance =
+              Number(
+                data.balance
+              ) || 0;
+
+          }
+
+
+          await loadTransactions();
 
           renderWallet();
 
           alert(
-            walletText(
-              "depositSuccess"
-            )
+            isDeposit
+
+              ? walletText(
+                  "depositSuccess"
+                )
+
+              : walletText(
+                  "withdrawSuccess"
+                )
           );
 
-        } else {
 
-          walletData.balance -=
-            amount;
+          close();
 
-          addTransaction(
-            "Withdraw",
-            amount,
-            "Pending"
+        } catch (error) {
+
+          console.error(
+            "Wallet transaction error:",
+            error
           );
-
-          saveWallet();
-
-          renderWallet();
 
           alert(
             walletText(
-              "withdrawSuccess"
+              "error"
             )
           );
+
+
+          confirm.disabled =
+            false;
+
+          confirm.textContent =
+            walletText(
+              "confirm"
+            );
 
         }
-
-
-        close();
 
       };
 
@@ -1061,17 +1276,20 @@
 
 
   /* =========================
-     GLOBAL BUTTON FUNCTIONS
+     GLOBAL DEPOSIT
      ========================= */
 
   window.deposit =
     function () {
 
-      if (!walletInitialized) {
+      if (
+        !walletInitialized
+      ) {
 
         initWallet();
 
       }
+
 
       showAmountModal(
         "deposit"
@@ -1080,14 +1298,21 @@
     };
 
 
+  /* =========================
+     GLOBAL WITHDRAW
+     ========================= */
+
   window.withdraw =
     function () {
 
-      if (!walletInitialized) {
+      if (
+        !walletInitialized
+      ) {
 
         initWallet();
 
       }
+
 
       showAmountModal(
         "withdraw"
@@ -1097,50 +1322,57 @@
 
 
   /* =========================
-     RENDER WALLET
-     ========================= */
-
-  function renderWallet() {
-
-    createHistoryBox();
-
-    renderBalance();
-
-    renderHistory();
-
-  }
-
-
-  /* =========================
      INIT WALLET
      ========================= */
 
-  function initWallet() {
+  async function initWallet() {
 
     if (
-      typeof currentUser ===
-      "undefined" ||
-      !currentUser ||
-      !currentUser.auth_id
+      walletInitialized ||
+      walletLoading
     ) {
 
-      return false;
+      return;
 
     }
 
 
-    loadWallet();
+    const authId =
+      getAuthId();
 
-    renderWallet();
 
-    walletInitialized = true;
+    if (!authId) {
 
-    console.log(
-      "TEST WALLET READY:",
-      getWalletKey()
-    );
+      return;
 
-    return true;
+    }
+
+
+    walletLoading =
+      true;
+
+
+    const success =
+      await loadWallet();
+
+
+    if (success) {
+
+      renderWallet();
+
+      walletInitialized =
+        true;
+
+      console.log(
+        "SUPABASE WALLET READY:",
+        authId
+      );
+
+    }
+
+
+    walletLoading =
+      false;
 
   }
 
@@ -1155,8 +1387,10 @@
       function () {
 
         if (
-          initWallet()
+          getAuthId()
         ) {
+
+          initWallet();
 
           clearInterval(
             walletTimer
