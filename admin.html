@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CryptoMiner Admin</title>
+</head>
+
+<body>
+
+  <h1>CryptoMiner Admin</h1>
+
+  <p id="adminStatus">Checking access...</p>
+
+  <div id="adminPanel" style="display:none;">
+
+    <h2>Dashboard</h2>
+
+    <p>Users: <span id="usersCount">0</span></p>
+
+    <p>Admin system is ready.</p>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL =
+      "https://mledptrviyvodbophaph.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_Qn97tJVNRfMAANxyuDVjvw_D-XiAmYA";
+
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+    async function checkAdmin(){
+
+      const {
+        data: { user },
+        error
+      } = await supabaseClient.auth.getUser();
+
+      if(error || !user){
+
+        document.getElementById("adminStatus").textContent =
+          "Please login first.";
+
+        return;
+      }
+
+      const { data, error: adminError } =
+        await supabaseClient
+          .from("admin_users")
+          .select("role")
+          .eq("auth_id", user.id)
+          .single();
+
+      if(adminError || !data){
+
+        document.getElementById("adminStatus").textContent =
+          "Access denied.";
+
+        return;
+      }
+
+      document.getElementById("adminStatus").textContent =
+        "Access granted: " + data.role;
+
+      document.getElementById("adminPanel").style.display =
+        "block";
+    }
+
+    checkAdmin();
+  </script>
+
+</body>
+</html>
