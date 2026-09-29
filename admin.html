@@ -97,12 +97,12 @@ async function checkOwner(){
 
   if(error){
 
-    console.error(error);
+  console.error("ADMIN DATABASE ERROR:", error);
 
-    status.textContent =
-      "❌ Database error.";
+  status.textContent =
+    "❌ " + error.message;
 
-    return;
+  return;
   }
 
 
