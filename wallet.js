@@ -1,5 +1,5 @@
 /* =========================================================
-   CRYSTAL PLATFORM - REAL USDT WALLET
+   CRYSTAL PLATFORM - SIMPLE USDT WALLET
    =========================================================
 
    Networks:
@@ -11,12 +11,16 @@
    - Deposit: $50
    - Withdraw: $50
 
-   IMPORTANT:
-   - Deposit creates Pending transaction.
-   - Deposit does NOT automatically increase balance.
-   - Withdraw creates Pending transaction.
-   - Withdraw does NOT automatically send crypto.
-   - Balance is changed only after manual verification.
+   FLOW:
+   Deposit:
+   Network -> Amount -> Confirm -> Pending
+
+   Deposit does NOT automatically increase balance.
+
+   Owner manually:
+   1. Checks payment
+   2. Changes transaction status to Completed
+   3. Adds amount to wallets.balance
 
 ========================================================= */
 
@@ -102,12 +106,6 @@
         address:
           "USDT salgysy",
 
-        transactionHash:
-          "Transaction Hash / TxID",
-
-        transactionHashHint:
-          "Tölegi geçireniňizden soň Transaction Hash / TxID giriziň.",
-
         selectNetwork:
           "Tor saýlaň",
 
@@ -135,9 +133,6 @@
         insufficient:
           "Balans ýeterlik däl.",
 
-        pendingWithdraw:
-          "Garaşylýan Withdraw bar.",
-
         depositCreated:
           "Deposit haýyşy döredildi. Töleg barlanandan soň balansyňyz artdyrylar.",
 
@@ -146,15 +141,6 @@
 
         invalidAddress:
           "USDT wallet salgysyny giriziň.",
-
-        invalidHash:
-          "Transaction Hash / TxID giriziň.",
-
-        depositInstruction:
-          "Aşakdaky salgy diňe saýlanan tor üçin USDT kabul edýär.",
-
-        withdrawInstruction:
-          "USDT haýsy wallet salgyňyza iberilmelidigini giriziň.",
 
         completed:
           "Completed",
@@ -209,12 +195,6 @@
         address:
           "USDT адрес",
 
-        transactionHash:
-          "Transaction Hash / TxID",
-
-        transactionHashHint:
-          "После оплаты введите Transaction Hash / TxID.",
-
         selectNetwork:
           "Выберите сеть",
 
@@ -242,9 +222,6 @@
         insufficient:
           "Недостаточно средств.",
 
-        pendingWithdraw:
-          "Есть ожидающий Withdraw.",
-
         depositCreated:
           "Запрос на Deposit создан. Баланс будет увеличен после проверки платежа.",
 
@@ -253,15 +230,6 @@
 
         invalidAddress:
           "Введите USDT адрес.",
-
-        invalidHash:
-          "Введите Transaction Hash / TxID.",
-
-        depositInstruction:
-          "Этот адрес принимает USDT только через выбранную сеть.",
-
-        withdrawInstruction:
-          "Введите адрес, на который нужно отправить USDT.",
 
         completed:
           "Completed",
@@ -316,12 +284,6 @@
         address:
           "USDT Address",
 
-        transactionHash:
-          "Transaction Hash / TxID",
-
-        transactionHashHint:
-          "Enter the Transaction Hash / TxID after making the payment.",
-
         selectNetwork:
           "Select network",
 
@@ -349,9 +311,6 @@
         insufficient:
           "Insufficient balance.",
 
-        pendingWithdraw:
-          "You already have a pending withdrawal.",
-
         depositCreated:
           "Deposit request created. Your balance will increase after payment verification.",
 
@@ -360,15 +319,6 @@
 
         invalidAddress:
           "Enter a USDT wallet address.",
-
-        invalidHash:
-          "Enter the Transaction Hash / TxID.",
-
-        depositInstruction:
-          "This address accepts USDT only through the selected network.",
-
-        withdrawInstruction:
-          "Enter the address where you want to receive USDT.",
 
         completed:
           "Completed",
@@ -412,7 +362,7 @@
 
 
   /* =========================================================
-     SUPABASE AUTH USER
+     AUTH USER
   ========================================================= */
 
   async function getAuthId() {
@@ -422,7 +372,8 @@
       const {
         data,
         error
-      } = await supabaseClient.auth.getUser();
+      } =
+        await supabaseClient.auth.getUser();
 
       if (error) {
 
@@ -627,7 +578,7 @@
 
 
   /* =========================================================
-     PENDING WITHDRAW
+     PENDING WITHDRAW TOTAL
   ========================================================= */
 
   function getPendingWithdrawTotal() {
@@ -693,7 +644,7 @@
 
 
   /* =========================================================
-     HISTORY BOX
+     CREATE HISTORY BOX
   ========================================================= */
 
   function createHistoryBox() {
@@ -1168,20 +1119,6 @@
       }
 
 
-      .wallet-hint{
-
-        font-size:11px;
-
-        color:#94a3b8;
-
-        line-height:1.5;
-
-        margin:
-          -4px 0 13px;
-
-      }
-
-
       .wallet-available{
 
         padding:11px 13px;
@@ -1430,25 +1367,6 @@
         />
 
 
-        <label class="wallet-label">
-          ${walletText("transactionHash")}
-        </label>
-
-
-        <input
-          id="walletDepositHash"
-          class="wallet-input"
-          type="text"
-          placeholder="TxID / Transaction Hash"
-          autocomplete="off"
-        />
-
-
-        <div class="wallet-hint">
-          ${walletText("transactionHashHint")}
-        </div>
-
-
         <div class="wallet-buttons">
 
           <button
@@ -1575,12 +1493,6 @@
           );
 
 
-        const txHash =
-          document.getElementById(
-            "walletDepositHash"
-          ).value.trim();
-
-
         if (!network) {
 
           alert(
@@ -1602,19 +1514,6 @@
           alert(
             walletText(
               "minimumDeposit"
-            )
-          );
-
-          return;
-
-        }
-
-
-        if (!txHash) {
-
-          alert(
-            walletText(
-              "invalidHash"
             )
           );
 
@@ -1670,10 +1569,7 @@
               wallet_address:
                 USDT_NETWORKS[
                   network
-                ].address,
-
-              tx_hash:
-                txHash
+                ].address
 
             });
 
@@ -1816,11 +1712,6 @@
           placeholder="USDT wallet address"
           autocomplete="off"
         />
-
-
-        <div class="wallet-hint">
-          ${walletText("withdrawInstruction")}
-        </div>
 
 
         <label class="wallet-label">
@@ -2175,7 +2066,7 @@
 
 
     console.log(
-      "REAL USDT WALLET READY"
+      "SIMPLE USDT WALLET READY"
     );
 
 
