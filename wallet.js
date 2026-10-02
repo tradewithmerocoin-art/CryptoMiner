@@ -1,23 +1,58 @@
 /* =========================================================
-   CRYSTAL PLATFORM - TEST WALLET
-   TEST MODE ONLY
+   CRYSTAL PLATFORM - REAL USDT WALLET
+   Networks:
+   TRC20
+   BEP20
+   ERC20
+
    Minimum Deposit: $50
    Minimum Withdraw: $50
-   ========================================================= */
+
+   IMPORTANT:
+   - Deposit does NOT automatically increase balance.
+   - Withdraw does NOT automatically send crypto.
+   - Both create Pending transactions in Supabase.
+   - Balance is changed only after manual verification.
+========================================================= */
 
 (function () {
 
-  let walletData = {
-    balance: 0,
-    transactions: []
+  const MIN_AMOUNT = 50;
+
+  const USDT_NETWORKS = {
+
+    TRC20: {
+      name: "TRC20",
+      chain: "TRON",
+      address:
+        "TC3M9Eq18snE7HRnayyyyfYJ5nLcCx7ceQ"
+    },
+
+    BEP20: {
+      name: "BEP20",
+      chain: "BNB Smart Chain",
+      address:
+        "0x506996BE51a2B1d0e61390221366320151bF80b5"
+    },
+
+    ERC20: {
+      name: "ERC20",
+      chain: "Ethereum",
+      address:
+        "0x506996BE51a2B1d0e61390221366320151bF80b5"
+    }
+
   };
 
+
   let walletInitialized = false;
+  let walletBalance = 0;
+  let walletTransactions = [];
 
 
-  /* =========================
+  /* =========================================================
      LANGUAGE
-     ========================= */
+  ========================================================= */
 
   function walletLang() {
 
@@ -27,12 +62,15 @@
         typeof currentLanguage !== "undefined" &&
         currentLanguage
       ) {
+
         return currentLanguage;
+
       }
 
     } catch (e) {}
 
     return "tk";
+
   }
 
 
@@ -44,34 +82,89 @@
 
       tk: {
 
-        history: "💳 Töleg taryhy",
-        testMode: "TEST MODE • Hakyky pul hereketi ýok",
-        noTransactions: "Häzirlikçe hereket ýok",
+        history:
+          "💳 Töleg taryhy",
 
-        depositTitle: "Pul goş",
-        withdrawTitle: "Pul çykar",
+        noTransactions:
+          "Häzirlikçe hereket ýok",
 
-        amount: "Mukdar",
-        cancel: "Ýatyr",
-        confirm: "Tassykla",
+        depositTitle:
+          "💵 USDT Deposit",
+
+        withdrawTitle:
+          "💸 USDT Withdraw",
+
+        amount:
+          "Mukdar",
+
+        network:
+          "Tor",
+
+        address:
+          "USDT salgysy",
+
+        transactionHash:
+          "Transaction Hash",
+
+        transactionHashHint:
+          "Töleg edeniňizden soň transaction hash-i giriziň.",
+
+        selectNetwork:
+          "Tor saýlaň",
+
+        cancel:
+          "Ýatyr",
+
+        confirm:
+          "Tassykla",
+
+        copy:
+          "Göçür",
+
+        copied:
+          "Göçürildi ✓",
 
         minimumDeposit:
-          "Iň az pul goşmak: $50",
+          "Iň az Deposit: $50",
 
         minimumWithdraw:
-          "Iň az pul çykarmak: $50",
+          "Iň az Withdraw: $50",
 
         invalidAmount:
           "Dogry mukdar giriziň.",
 
-        depositSuccess:
-          "Pul üstünlikli goşuldy.",
-
-        withdrawSuccess:
-          "Pul çykarmak haýyşy kabul edildi.",
-
         insufficient:
           "Balans ýeterlik däl.",
+
+        pendingWithdraw:
+          "Garaşylýan Withdraw bar. Balansyňyzdan artyk çykaryp bilmersiňiz.",
+
+        depositCreated:
+          "Deposit haýyşy döredildi. Töleg barlanandan soň balansyňyz artdyrylar.",
+
+        withdrawCreated:
+          "Withdraw haýyşy döredildi. Tassyklanandan soň töleg iberiler.",
+
+        invalidAddress:
+          "USDT wallet salgysyny giriziň.",
+
+        invalidHash:
+          "Transaction Hash giriziň.",
+
+        depositInstruction:
+          "Aşakdaky salgy diňe saýlanan tor üçin USDT kabul edýär.",
+
+        withdrawInstruction:
+          "USDT haýsy salgyňyza iberilmelidigini giriziň.",
+
+        completed:
+          "Completed",
+
+        pending:
+          "Pending",
+
+        rejected:
+          "Rejected",
 
         deposit:
           "Deposit",
@@ -79,44 +172,99 @@
         withdraw:
           "Withdraw",
 
-        completed:
-          "Completed",
+        available:
+          "Elýeterli balans",
 
-        pending:
-          "Pending"
+        warning:
+          "⚠️ Diňe saýlanan tor arkaly USDT iberiň. Nädogry tor ulanylsa, pul ýitip biler."
 
       },
 
       ru: {
 
-        history: "💳 История операций",
-        testMode: "TEST MODE • Реальных денег нет",
-        noTransactions: "Операций пока нет",
+        history:
+          "💳 История операций",
 
-        depositTitle: "Пополнить",
-        withdrawTitle: "Вывести",
+        noTransactions:
+          "Операций пока нет",
 
-        amount: "Сумма",
-        cancel: "Отмена",
-        confirm: "Подтвердить",
+        depositTitle:
+          "💵 USDT Deposit",
+
+        withdrawTitle:
+          "💸 USDT Withdraw",
+
+        amount:
+          "Сумма",
+
+        network:
+          "Сеть",
+
+        address:
+          "USDT адрес",
+
+        transactionHash:
+          "Transaction Hash",
+
+        transactionHashHint:
+          "После оплаты введите transaction hash.",
+
+        selectNetwork:
+          "Выберите сеть",
+
+        cancel:
+          "Отмена",
+
+        confirm:
+          "Подтвердить",
+
+        copy:
+          "Копировать",
+
+        copied:
+          "Скопировано ✓",
 
         minimumDeposit:
-          "Минимальное пополнение: $50",
+          "Минимальный Deposit: $50",
 
         minimumWithdraw:
-          "Минимальный вывод: $50",
+          "Минимальный Withdraw: $50",
 
         invalidAmount:
           "Введите правильную сумму.",
 
-        depositSuccess:
-          "Баланс успешно пополнен.",
-
-        withdrawSuccess:
-          "Запрос на вывод принят.",
-
         insufficient:
           "Недостаточно средств.",
+
+        pendingWithdraw:
+          "Есть ожидающий Withdraw. Нельзя вывести больше доступного баланса.",
+
+        depositCreated:
+          "Запрос на Deposit создан. Баланс будет увеличен после проверки платежа.",
+
+        withdrawCreated:
+          "Запрос на Withdraw создан. После подтверждения платёж будет отправлен.",
+
+        invalidAddress:
+          "Введите USDT адрес.",
+
+        invalidHash:
+          "Введите Transaction Hash.",
+
+        depositInstruction:
+          "Этот адрес принимает USDT только через выбранную сеть.",
+
+        withdrawInstruction:
+          "Введите адрес, на который нужно отправить USDT.",
+
+        completed:
+          "Completed",
+
+        pending:
+          "Pending",
+
+        rejected:
+          "Rejected",
 
         deposit:
           "Deposit",
@@ -124,44 +272,99 @@
         withdraw:
           "Withdraw",
 
-        completed:
-          "Completed",
+        available:
+          "Доступный баланс",
 
-        pending:
-          "Pending"
+        warning:
+          "⚠️ Отправляйте USDT только через выбранную сеть. Неправильная сеть может привести к потере средств."
 
       },
 
       en: {
 
-        history: "💳 Transaction History",
-        testMode: "TEST MODE • No real money involved",
-        noTransactions: "No transactions yet",
+        history:
+          "💳 Transaction History",
 
-        depositTitle: "Deposit",
-        withdrawTitle: "Withdraw",
+        noTransactions:
+          "No transactions yet",
 
-        amount: "Amount",
-        cancel: "Cancel",
-        confirm: "Confirm",
+        depositTitle:
+          "💵 USDT Deposit",
+
+        withdrawTitle:
+          "💸 USDT Withdraw",
+
+        amount:
+          "Amount",
+
+        network:
+          "Network",
+
+        address:
+          "USDT Address",
+
+        transactionHash:
+          "Transaction Hash",
+
+        transactionHashHint:
+          "Enter the transaction hash after making the payment.",
+
+        selectNetwork:
+          "Select network",
+
+        cancel:
+          "Cancel",
+
+        confirm:
+          "Confirm",
+
+        copy:
+          "Copy",
+
+        copied:
+          "Copied ✓",
 
         minimumDeposit:
-          "Minimum deposit: $50",
+          "Minimum Deposit: $50",
 
         minimumWithdraw:
-          "Minimum withdrawal: $50",
+          "Minimum Withdraw: $50",
 
         invalidAmount:
           "Enter a valid amount.",
 
-        depositSuccess:
-          "Deposit successful.",
-
-        withdrawSuccess:
-          "Withdrawal request accepted.",
-
         insufficient:
           "Insufficient balance.",
+
+        pendingWithdraw:
+          "You already have a pending withdrawal. You cannot request more than your available balance.",
+
+        depositCreated:
+          "Deposit request created. Your balance will increase after payment verification.",
+
+        withdrawCreated:
+          "Withdrawal request created. The payment will be sent after approval.",
+
+        invalidAddress:
+          "Enter a USDT wallet address.",
+
+        invalidHash:
+          "Enter the transaction hash.",
+
+        depositInstruction:
+          "This address accepts USDT only through the selected network.",
+
+        withdrawInstruction:
+          "Enter the address where you want to receive USDT.",
+
+        completed:
+          "Completed",
+
+        pending:
+          "Pending",
+
+        rejected:
+          "Rejected",
 
         deposit:
           "Deposit",
@@ -169,11 +372,11 @@
         withdraw:
           "Withdraw",
 
-        completed:
-          "Completed",
+        available:
+          "Available balance",
 
-        pending:
-          "Pending"
+        warning:
+          "⚠️ Send USDT only through the selected network. Using the wrong network may result in loss of funds."
 
       }
 
@@ -182,16 +385,18 @@
     return (
       texts[lang] &&
       texts[lang][key]
-    ) || texts.en[key] || key;
+    ) ||
+    texts.en[key] ||
+    key;
 
   }
 
 
-  /* =========================
-     ACCOUNT KEY
-     ========================= */
+  /* =========================================================
+     CURRENT USER
+  ========================================================= */
 
-  function getWalletKey() {
+  function getAuthId() {
 
     try {
 
@@ -201,7 +406,7 @@
         currentUser.auth_id
       ) {
 
-        return "crypto_wallet_" + currentUser.auth_id;
+        return currentUser.auth_id;
 
       }
 
@@ -212,106 +417,9 @@
   }
 
 
-  /* =========================
-     LOAD WALLET
-     ========================= */
-
-  function loadWallet() {
-
-    const key = getWalletKey();
-
-    if (!key) return;
-
-    try {
-
-      const saved =
-        localStorage.getItem(key);
-
-      if (saved) {
-
-        const parsed =
-          JSON.parse(saved);
-
-        if (
-          parsed &&
-          typeof parsed === "object"
-        ) {
-
-          walletData = {
-
-            balance:
-              Number(parsed.balance) || 0,
-
-            transactions:
-              Array.isArray(parsed.transactions)
-                ? parsed.transactions
-                : []
-
-          };
-
-        }
-
-      } else {
-
-        walletData = {
-
-          balance: 0,
-
-          transactions: []
-
-        };
-
-        saveWallet();
-
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Wallet load error:",
-        error
-      );
-
-    }
-
-  }
-
-
-  /* =========================
-     SAVE WALLET
-     ========================= */
-
-  function saveWallet() {
-
-    const key = getWalletKey();
-
-    if (!key) return;
-
-    try {
-
-      localStorage.setItem(
-
-        key,
-
-        JSON.stringify(walletData)
-
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Wallet save error:",
-        error
-      );
-
-    }
-
-  }
-
-
-  /* =========================
-     FORMAT MONEY
-     ========================= */
+  /* =========================================================
+     FORMAT
+  ========================================================= */
 
   function formatMoney(amount) {
 
@@ -321,153 +429,258 @@
   }
 
 
-  /* =========================
-     ADD WALLET HISTORY
-     ========================= */
+  /* =========================================================
+     WALLET ROW
+  ========================================================= */
 
-  function addTransaction(
-    type,
-    amount,
-    status
-  ) {
+  async function ensureWallet() {
 
-    walletData.transactions.unshift({
+    const authId =
+      getAuthId();
 
-      id:
-        Date.now() +
-        "_" +
-        Math.random()
-          .toString(36)
-          .substring(2, 8),
+    if (!authId)
+      return false;
 
-      date:
-        new Date().toLocaleString(),
 
-      type: type,
+    const { data, error } =
+      await supabaseClient
+        .from("wallets")
+        .select("*")
+        .eq(
+          "auth_id",
+          authId
+        )
+        .maybeSingle();
 
-      amount:
-        Number(amount),
 
-      status: status
+    if (error) {
 
-    });
+      console.error(
+        "WALLET LOAD ERROR:",
+        error
+      );
 
-    if (
-      walletData.transactions.length > 50
-    ) {
-
-      walletData.transactions =
-        walletData.transactions.slice(
-          0,
-          50
-        );
+      return false;
 
     }
+
+
+    if (data) {
+
+      walletBalance =
+        Number(data.balance || 0);
+
+      return true;
+
+    }
+
+
+    const { data:newWallet, error:createError } =
+      await supabaseClient
+        .from("wallets")
+        .insert({
+
+          auth_id:
+            authId,
+
+          balance:
+            0,
+
+          currency:
+            "USD"
+
+        })
+        .select()
+        .single();
+
+
+    if (createError) {
+
+      console.error(
+        "WALLET CREATE ERROR:",
+        createError
+      );
+
+      return false;
+
+    }
+
+
+    walletBalance =
+      Number(
+        newWallet.balance || 0
+      );
+
+    return true;
 
   }
 
 
-  /* =========================
+  /* =========================================================
+     LOAD TRANSACTIONS
+  ========================================================= */
+
+  async function loadTransactions() {
+
+    const authId =
+      getAuthId();
+
+    if (!authId)
+      return;
+
+
+    const { data, error } =
+      await supabaseClient
+        .from("wallet_transactions")
+        .select("*")
+        .eq(
+          "auth_id",
+          authId
+        )
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(50);
+
+
+    if (error) {
+
+      console.error(
+        "TRANSACTION LOAD ERROR:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    walletTransactions =
+      data || [];
+
+  }
+
+
+  /* =========================================================
+     PENDING WITHDRAW TOTAL
+  ========================================================= */
+
+  function getPendingWithdrawTotal() {
+
+    return walletTransactions
+      .filter(function (tx) {
+
+        return (
+          tx.type === "Withdraw" &&
+          tx.status === "Pending"
+        );
+
+      })
+      .reduce(function (total, tx) {
+
+        return total +
+          Number(tx.amount || 0);
+
+      }, 0);
+
+  }
+
+
+  function getAvailableBalance() {
+
+    return Math.max(
+      0,
+      walletBalance -
+      getPendingWithdrawTotal()
+    );
+
+  }
+
+
+  /* =========================================================
      RENDER BALANCE
-     ========================= */
+  ========================================================= */
 
   function renderBalance() {
 
-    const balanceElement =
-      document.getElementById("balance");
+    const element =
+      document.getElementById(
+        "balance"
+      );
 
-    if (!balanceElement) return;
+    if (!element)
+      return;
 
-    balanceElement.textContent =
+    element.innerText =
       formatMoney(
-        walletData.balance
+        walletBalance
       );
 
   }
 
 
-  /* =========================
-     WALLET HISTORY UI
-     ========================= */
+  /* =========================================================
+     HISTORY BOX
+  ========================================================= */
 
   function createHistoryBox() {
 
     const walletSection =
-      document.getElementById("wallet");
-
-    if (!walletSection) return;
-
-    let historyBox =
       document.getElementById(
-        "walletHistory"
+        "wallet"
       );
 
-    if (historyBox) return;
+    if (!walletSection)
+      return;
 
-    historyBox =
+
+    if (
+      document.getElementById(
+        "walletHistory"
+      )
+    )
+      return;
+
+
+    const box =
       document.createElement("div");
 
-    historyBox.id =
+    box.id =
       "walletHistory";
 
-    historyBox.className =
+    box.className =
       "card wallet-history-card";
 
-    historyBox.innerHTML = `
+
+    box.innerHTML = `
 
       <div
         class="section-title"
-        style="
-          margin-bottom:10px;
-          font-size:18px;
-          font-weight:700;
-        "
+        style="font-size:20px;margin-bottom:12px;"
       >
         ${walletText("history")}
       </div>
 
       <div
-        id="walletTestNotice"
-        style="
-          font-size:12px;
-          opacity:.65;
-          margin-bottom:14px;
-        "
-      >
-        ${walletText("testMode")}
-      </div>
-
-      <div id="walletTransactions"></div>
+        id="walletTransactions"
+      ></div>
 
     `;
 
-    const cards =
-      walletSection.querySelectorAll(
-        ".card"
-      );
 
-    if (cards.length > 0) {
-
-      cards[0]
-        .insertAdjacentElement(
-          "afterend",
-          historyBox
-        );
-
-    } else {
-
-      walletSection.appendChild(
-        historyBox
-      );
-
-    }
+    walletSection.appendChild(
+      box
+    );
 
   }
 
 
-  /* =========================
+  /* =========================================================
      RENDER HISTORY
-     ========================= */
+  ========================================================= */
 
   function renderHistory() {
 
@@ -476,18 +689,18 @@
         "walletTransactions"
       );
 
-    if (!container) return;
+    if (!container)
+      return;
 
-    if (
-      !walletData.transactions.length
-    ) {
+
+    if (!walletTransactions.length) {
 
       container.innerHTML = `
 
         <div
           style="
-            opacity:.55;
             text-align:center;
+            opacity:.5;
             padding:18px 5px;
             font-size:13px;
           "
@@ -503,89 +716,114 @@
 
 
     container.innerHTML =
-      walletData.transactions
+      walletTransactions
         .map(function (tx) {
-
-          const amount =
-            Number(tx.amount);
 
           const isDeposit =
             tx.type === "Deposit";
 
           const sign =
-            isDeposit ? "+" : "-";
+            isDeposit
+              ? "+"
+              : "-";
 
           const amountClass =
             isDeposit
               ? "wallet-positive"
               : "wallet-negative";
 
+
           const statusClass =
             tx.status === "Completed"
               ? "wallet-completed"
-              : "wallet-pending";
+              : tx.status === "Rejected"
+                ? "wallet-rejected"
+                : "wallet-pending";
+
+
+          const network =
+            tx.network
+              ? " • " + tx.network
+              : "";
+
+
+          const date =
+            tx.created_at
+              ? new Date(
+                  tx.created_at
+                ).toLocaleString()
+              : "";
 
 
           return `
 
             <div
               style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                gap:10px;
-                padding:12px 0;
-                border-bottom:1px solid rgba(255,255,255,.08);
+                padding:13px 0;
+                border-bottom:
+                  1px solid
+                  rgba(255,255,255,.08);
               "
             >
 
-              <div>
-
-                <div
-                  style="
-                    font-weight:600;
-                    font-size:14px;
-                  "
-                >
-                  ${
-                    isDeposit
-                      ? "💵 "
-                      : "💸 "
-                  }${tx.type}
-                </div>
-
-                <div
-                  style="
-                    font-size:11px;
-                    opacity:.5;
-                    margin-top:4px;
-                  "
-                >
-                  ${tx.date}
-                </div>
-
-                <div
-                  class="${statusClass}"
-                  style="
-                    font-size:10px;
-                    margin-top:4px;
-                    font-weight:600;
-                  "
-                >
-                  ${tx.status}
-                </div>
-
-              </div>
-
-
               <div
-                class="${amountClass}"
                 style="
-                  font-weight:700;
-                  white-space:nowrap;
+                  display:flex;
+                  justify-content:space-between;
+                  gap:10px;
                 "
               >
-                ${sign}$${formatMoney(amount)}
+
+                <div>
+
+                  <div
+                    style="
+                      font-weight:700;
+                      font-size:14px;
+                    "
+                  >
+                    ${
+                      isDeposit
+                        ? "💵"
+                        : "💸"
+                    }
+                    ${tx.type}${network}
+                  </div>
+
+                  <div
+                    style="
+                      font-size:11px;
+                      opacity:.5;
+                      margin-top:4px;
+                    "
+                  >
+                    ${date}
+                  </div>
+
+                  <div
+                    class="${statusClass}"
+                    style="
+                      font-size:10px;
+                      font-weight:700;
+                      margin-top:5px;
+                    "
+                  >
+                    ${tx.status}
+                  </div>
+
+                </div>
+
+
+                <div
+                  class="${amountClass}"
+                  style="
+                    font-weight:800;
+                    white-space:nowrap;
+                  "
+                >
+                  ${sign}$${formatMoney(tx.amount)}
+                </div>
+
               </div>
 
             </div>
@@ -598,174 +836,311 @@
   }
 
 
-  /* =========================
-     MODAL STYLE
-     ========================= */
+  /* =========================================================
+     STYLES
+  ========================================================= */
 
-  function createModalStyle() {
+  function createStyles() {
 
     if (
       document.getElementById(
-        "walletModalStyle"
+        "realWalletStyle"
       )
-    ) return;
+    )
+      return;
+
 
     const style =
       document.createElement("style");
 
     style.id =
-      "walletModalStyle";
+      "realWalletStyle";
+
 
     style.textContent = `
 
-      .wallet-modal-overlay {
+      .wallet-modal-overlay{
 
         position:fixed;
-
         inset:0;
 
         background:
-          rgba(0,0,0,.72);
+          rgba(0,0,0,.78);
 
         backdrop-filter:
-          blur(8px);
+          blur(10px);
 
         display:flex;
 
         align-items:center;
-
         justify-content:center;
 
-        z-index:99999;
+        padding:18px;
 
-        padding:20px;
+        z-index:999999;
 
       }
 
 
-      .wallet-modal {
+      .wallet-modal{
 
         width:100%;
+        max-width:410px;
 
-        max-width:380px;
+        max-height:
+          calc(100vh - 36px);
+
+        overflow-y:auto;
 
         background:
           linear-gradient(
             145deg,
-            #17171d,
-            #0d0d12
+            #151925,
+            #090c14
           );
 
         border:
           1px solid
           rgba(255,255,255,.12);
 
-        border-radius:22px;
+        border-radius:24px;
 
-        padding:22px;
+        padding:21px;
 
         box-shadow:
-          0 20px 70px
-          rgba(0,0,0,.55);
+          0 25px 80px
+          rgba(0,0,0,.65);
 
       }
 
 
-      .wallet-modal-title {
+      .wallet-modal-title{
 
-        font-size:20px;
-
-        font-weight:800;
+        font-size:21px;
+        font-weight:900;
 
         margin-bottom:18px;
 
       }
 
 
-      .wallet-modal-input {
+      .wallet-label{
+
+        display:block;
+
+        font-size:12px;
+
+        color:#94a3b8;
+
+        font-weight:700;
+
+        margin-bottom:7px;
+
+      }
+
+
+      .wallet-input,
+      .wallet-select{
 
         width:100%;
 
         box-sizing:border-box;
 
-        background:
-          rgba(255,255,255,.07);
+        padding:14px;
+
+        border-radius:14px;
 
         border:
           1px solid
-          rgba(255,255,255,.12);
+          #334155;
+
+        background:
+          #0b1220;
 
         color:white;
 
-        border-radius:13px;
-
-        padding:14px;
-
-        font-size:17px;
-
         outline:none;
 
-        margin-bottom:10px;
+        font-size:15px;
+
+        margin-bottom:13px;
 
       }
 
 
-      .wallet-modal-hint {
+      .wallet-select option{
+
+        background:#0b1220;
+        color:white;
+
+      }
+
+
+      .wallet-input:focus,
+      .wallet-select:focus{
+
+        border-color:#60a5fa;
+
+        box-shadow:
+          0 0 0 3px
+          rgba(96,165,250,.10);
+
+      }
+
+
+      .wallet-address-box{
+
+        padding:13px;
+
+        border-radius:14px;
+
+        background:
+          rgba(37,99,235,.10);
+
+        border:
+          1px solid
+          rgba(96,165,250,.18);
+
+        margin-bottom:12px;
+
+      }
+
+
+      .wallet-address{
+
+        word-break:break-all;
 
         font-size:12px;
 
-        opacity:.55;
+        line-height:1.5;
 
-        margin-bottom:18px;
+        margin-top:7px;
+
+        color:#e2e8f0;
 
       }
 
 
-      .wallet-modal-buttons {
+      .wallet-copy{
+
+        width:100%;
+
+        padding:10px;
+
+        border-radius:11px;
+
+        background:#1e293b;
+
+        margin-top:10px;
+
+        font-weight:700;
+
+        font-size:12px;
+
+      }
+
+
+      .wallet-warning{
+
+        padding:12px;
+
+        border-radius:13px;
+
+        background:
+          rgba(245,158,11,.08);
+
+        border:
+          1px solid
+          rgba(245,158,11,.18);
+
+        color:#fcd34d;
+
+        font-size:11px;
+
+        line-height:1.5;
+
+        margin-bottom:14px;
+
+      }
+
+
+      .wallet-hint{
+
+        font-size:11px;
+
+        color:#94a3b8;
+
+        line-height:1.5;
+
+        margin:
+          -4px 0 13px;
+
+      }
+
+
+      .wallet-available{
+
+        padding:11px 13px;
+
+        background:
+          rgba(34,197,94,.08);
+
+        border:
+          1px solid
+          rgba(34,197,94,.16);
+
+        border-radius:13px;
+
+        margin-bottom:14px;
+
+        font-size:12px;
+
+      }
+
+
+      .wallet-buttons{
 
         display:flex;
 
         gap:10px;
 
+        margin-top:5px;
+
       }
 
 
-      .wallet-modal-button {
+      .wallet-button{
 
         flex:1;
 
-        border:none;
+        padding:14px;
 
-        border-radius:13px;
+        border:0;
 
-        padding:13px;
+        border-radius:14px;
+
+        font-weight:800;
 
         font-size:14px;
-
-        font-weight:700;
-
-        cursor:pointer;
 
       }
 
 
-      .wallet-modal-cancel {
+      .wallet-cancel{
 
-        background:
-          rgba(255,255,255,.08);
-
+        background:#1e293b;
         color:white;
 
       }
 
 
-      .wallet-modal-confirm {
+      .wallet-confirm{
 
         background:
           linear-gradient(
             135deg,
-            #6c5ce7,
-            #8e7dff
+            #2563eb,
+            #4f46e5
           );
 
         color:white;
@@ -774,23 +1149,74 @@
 
     `;
 
-    document.head.appendChild(style);
+
+    document.head.appendChild(
+      style
+    );
 
   }
 
 
-  /* =========================
-     SHOW MODAL
-     ========================= */
+  /* =========================================================
+     COPY ADDRESS
+  ========================================================= */
 
-  function showAmountModal(
-    mode
-  ) {
+  window.copyWalletAddress =
+    async function () {
 
-    createModalStyle();
+      const element =
+        document.getElementById(
+          "walletDepositAddress"
+        );
 
-    const isDeposit =
-      mode === "deposit";
+      if (!element)
+        return;
+
+
+      try {
+
+        await navigator.clipboard.writeText(
+          element.innerText
+        );
+
+        const button =
+          document.getElementById(
+            "walletCopyButton"
+          );
+
+        if(button){
+
+          button.innerText =
+            walletText("copied");
+
+          setTimeout(function(){
+
+            button.innerText =
+              walletText("copy");
+
+          },1500);
+
+        }
+
+      } catch(error) {
+
+        alert(
+          element.innerText
+        );
+
+      }
+
+    };
+
+
+  /* =========================================================
+     SHOW DEPOSIT
+  ========================================================= */
+
+  function showDepositModal() {
+
+    createStyles();
+
 
     const overlay =
       document.createElement("div");
@@ -798,32 +1224,87 @@
     overlay.className =
       "wallet-modal-overlay";
 
+
     overlay.innerHTML = `
 
-      <div
-        class="wallet-modal"
-      >
+      <div class="wallet-modal">
 
-        <div
-          class="wallet-modal-title"
-        >
-          ${
-            isDeposit
-              ? "💵 " +
-                walletText(
-                  "depositTitle"
-                )
-              : "💸 " +
-                walletText(
-                  "withdrawTitle"
-                )
-          }
+        <div class="wallet-modal-title">
+          ${walletText("depositTitle")}
         </div>
 
 
+        <label class="wallet-label">
+          ${walletText("network")}
+        </label>
+
+
+        <select
+          id="walletDepositNetwork"
+          class="wallet-select"
+        >
+
+          <option value="">
+            ${walletText("selectNetwork")}
+          </option>
+
+          <option value="TRC20">
+            TRC20 • TRON
+          </option>
+
+          <option value="BEP20">
+            BEP20 • BNB Smart Chain
+          </option>
+
+          <option value="ERC20">
+            ERC20 • Ethereum
+          </option>
+
+        </select>
+
+
+        <div
+          id="walletDepositAddressBox"
+          style="display:none;"
+        >
+
+          <div class="wallet-address-box">
+
+            <div class="wallet-label">
+              ${walletText("address")}
+            </div>
+
+            <div
+              id="walletDepositAddress"
+              class="wallet-address"
+            ></div>
+
+            <button
+              id="walletCopyButton"
+              class="wallet-copy"
+              type="button"
+              onclick="copyWalletAddress()"
+            >
+              ${walletText("copy")}
+            </button>
+
+          </div>
+
+
+          <div class="wallet-warning">
+            ${walletText("warning")}
+          </div>
+
+        </div>
+
+
+        <label class="wallet-label">
+          ${walletText("amount")}
+        </label>
+
         <input
-          id="walletAmountInput"
-          class="wallet-modal-input"
+          id="walletDepositAmount"
+          class="wallet-input"
           type="number"
           inputmode="decimal"
           min="50"
@@ -832,52 +1313,35 @@
         />
 
 
-        <div
-          class="wallet-modal-hint"
-        >
-          ${
-            isDeposit
-              ? walletText(
-                  "minimumDeposit"
-                )
-              : walletText(
-                  "minimumWithdraw"
-                )
-          }
+        <label class="wallet-label">
+          ${walletText("transactionHash")}
+        </label>
 
-          ${
-            !isDeposit
-              ? "<br>Balance: $" +
-                formatMoney(
-                  walletData.balance
-                )
-              : ""
-          }
+        <input
+          id="walletDepositHash"
+          class="wallet-input"
+          type="text"
+          placeholder="0x... / transaction hash"
+        />
 
+
+        <div class="wallet-hint">
+          ${walletText("transactionHashHint")}
         </div>
 
 
-        <div
-          class="wallet-modal-buttons"
-        >
+        <div class="wallet-buttons">
 
           <button
-            class="
-              wallet-modal-button
-              wallet-modal-cancel
-            "
-            id="walletCancelButton"
+            id="walletDepositCancel"
+            class="wallet-button wallet-cancel"
           >
             ${walletText("cancel")}
           </button>
 
-
           <button
-            class="
-              wallet-modal-button
-              wallet-modal-confirm
-            "
-            id="walletConfirmButton"
+            id="walletDepositConfirm"
+            class="wallet-button wallet-confirm"
           >
             ${walletText("confirm")}
           </button>
@@ -894,20 +1358,48 @@
     );
 
 
-    const input =
+    const networkSelect =
       document.getElementById(
-        "walletAmountInput"
+        "walletDepositNetwork"
       );
 
-    const cancel =
+    const addressBox =
       document.getElementById(
-        "walletCancelButton"
+        "walletDepositAddressBox"
       );
 
-    const confirm =
+    const address =
       document.getElementById(
-        "walletConfirmButton"
+        "walletDepositAddress"
       );
+
+
+    networkSelect.onchange =
+      function () {
+
+        const network =
+          USDT_NETWORKS[
+            this.value
+          ];
+
+
+        if(!network){
+
+          addressBox.style.display =
+            "none";
+
+          return;
+
+        }
+
+
+        address.innerText =
+          network.address;
+
+        addressBox.style.display =
+          "block";
+
+      };
 
 
     function close() {
@@ -917,16 +1409,18 @@
     }
 
 
-    cancel.onclick =
+    document.getElementById(
+      "walletDepositCancel"
+    ).onclick =
       close;
 
 
     overlay.onclick =
-      function (event) {
+      function(event){
 
-        if (
+        if(
           event.target === overlay
-        ) {
+        ){
 
           close();
 
@@ -935,23 +1429,32 @@
       };
 
 
-    confirm.onclick =
-      function () {
+    document.getElementById(
+      "walletDepositConfirm"
+    ).onclick =
+      async function () {
+
+        const network =
+          networkSelect.value;
 
         const amount =
           Number(
-            input.value
+            document.getElementById(
+              "walletDepositAmount"
+            ).value
           );
 
+        const txHash =
+          document.getElementById(
+            "walletDepositHash"
+          ).value.trim();
 
-        if (
-          !Number.isFinite(amount) ||
-          amount <= 0
-        ) {
+
+        if(!network){
 
           alert(
             walletText(
-              "invalidAmount"
+              "selectNetwork"
             )
           );
 
@@ -960,20 +1463,15 @@
         }
 
 
-        if (
-          amount < 50
-        ) {
+        if(
+          !Number.isFinite(amount) ||
+          amount < MIN_AMOUNT
+        ){
 
           alert(
-
-            isDeposit
-              ? walletText(
-                  "minimumDeposit"
-                )
-              : walletText(
-                  "minimumWithdraw"
-                )
-
+            walletText(
+              "minimumDeposit"
+            )
           );
 
           return;
@@ -981,11 +1479,346 @@
         }
 
 
-        if (
-          !isDeposit &&
-          amount >
-            walletData.balance
-        ) {
+        if(!txHash){
+
+          alert(
+            walletText(
+              "invalidHash"
+            )
+          );
+
+          return;
+
+        }
+
+
+        const authId =
+          getAuthId();
+
+        if(!authId){
+
+          alert(
+            "Authentication required."
+          );
+
+          return;
+
+        }
+
+
+        this.disabled = true;
+
+
+        const { error } =
+          await supabaseClient
+            .from("wallet_transactions")
+            .insert({
+
+              auth_id:
+                authId,
+
+              type:
+                "Deposit",
+
+              amount:
+                amount,
+
+              status:
+                "Pending",
+
+              network:
+                network,
+
+              wallet_address:
+                USDT_NETWORKS[
+                  network
+                ].address,
+
+              tx_hash:
+                txHash
+
+            });
+
+
+        this.disabled = false;
+
+
+        if(error){
+
+          console.error(
+            "DEPOSIT REQUEST ERROR:",
+            error
+          );
+
+          alert(
+            error.message ||
+            "Deposit request failed."
+          );
+
+          return;
+
+        }
+
+
+        await loadTransactions();
+
+        renderHistory();
+
+        close();
+
+
+        alert(
+          walletText(
+            "depositCreated"
+          )
+        );
+
+      };
+
+  }
+
+
+  /* =========================================================
+     SHOW WITHDRAW
+  ========================================================= */
+
+  function showWithdrawModal() {
+
+    createStyles();
+
+
+    const available =
+      getAvailableBalance();
+
+
+    if(available < MIN_AMOUNT){
+
+      alert(
+        walletText(
+          "insufficient"
+        )
+      );
+
+      return;
+
+    }
+
+
+    const overlay =
+      document.createElement("div");
+
+    overlay.className =
+      "wallet-modal-overlay";
+
+
+    overlay.innerHTML = `
+
+      <div class="wallet-modal">
+
+        <div class="wallet-modal-title">
+          ${walletText("withdrawTitle")}
+        </div>
+
+
+        <div class="wallet-available">
+          ${walletText("available")}:
+          <b>$${formatMoney(available)}</b>
+        </div>
+
+
+        <label class="wallet-label">
+          ${walletText("network")}
+        </label>
+
+
+        <select
+          id="walletWithdrawNetwork"
+          class="wallet-select"
+        >
+
+          <option value="">
+            ${walletText("selectNetwork")}
+          </option>
+
+          <option value="TRC20">
+            TRC20 • TRON
+          </option>
+
+          <option value="BEP20">
+            BEP20 • BNB Smart Chain
+          </option>
+
+          <option value="ERC20">
+            ERC20 • Ethereum
+          </option>
+
+        </select>
+
+
+        <label class="wallet-label">
+          ${walletText("address")}
+        </label>
+
+
+        <input
+          id="walletWithdrawAddress"
+          class="wallet-input"
+          type="text"
+          placeholder="USDT wallet address"
+        />
+
+
+        <div class="wallet-hint">
+          ${walletText("withdrawInstruction")}
+        </div>
+
+
+        <label class="wallet-label">
+          ${walletText("amount")}
+        </label>
+
+
+        <input
+          id="walletWithdrawAmount"
+          class="wallet-input"
+          type="number"
+          inputmode="decimal"
+          min="50"
+          step="0.01"
+          placeholder="50"
+        />
+
+
+        <div class="wallet-hint">
+          ${walletText("minimumWithdraw")}
+        </div>
+
+
+        <div class="wallet-buttons">
+
+          <button
+            id="walletWithdrawCancel"
+            class="wallet-button wallet-cancel"
+          >
+            ${walletText("cancel")}
+          </button>
+
+          <button
+            id="walletWithdrawConfirm"
+            class="wallet-button wallet-confirm"
+          >
+            ${walletText("confirm")}
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    document.body.appendChild(
+      overlay
+    );
+
+
+    function close(){
+
+      overlay.remove();
+
+    }
+
+
+    document.getElementById(
+      "walletWithdrawCancel"
+    ).onclick =
+      close;
+
+
+    overlay.onclick =
+      function(event){
+
+        if(
+          event.target === overlay
+        ){
+
+          close();
+
+        }
+
+      };
+
+
+    document.getElementById(
+      "walletWithdrawConfirm"
+    ).onclick =
+      async function(){
+
+        const network =
+          document.getElementById(
+            "walletWithdrawNetwork"
+          ).value;
+
+        const address =
+          document.getElementById(
+            "walletWithdrawAddress"
+          ).value.trim();
+
+        const amount =
+          Number(
+            document.getElementById(
+              "walletWithdrawAmount"
+            ).value
+          );
+
+
+        if(!network){
+
+          alert(
+            walletText(
+              "selectNetwork"
+            )
+          );
+
+          return;
+
+        }
+
+
+        if(!address){
+
+          alert(
+            walletText(
+              "invalidAddress"
+            )
+          );
+
+          return;
+
+        }
+
+
+        if(
+          !Number.isFinite(amount) ||
+          amount < MIN_AMOUNT
+        ){
+
+          alert(
+            walletText(
+              "minimumWithdraw"
+            )
+          );
+
+          return;
+
+        }
+
+
+        const currentAvailable =
+          getAvailableBalance();
+
+
+        if(amount > currentAvailable){
 
           alert(
             walletText(
@@ -998,109 +1831,125 @@
         }
 
 
-        if (isDeposit) {
+        const authId =
+          getAuthId();
 
-          walletData.balance +=
-            amount;
-
-          addTransaction(
-            "Deposit",
-            amount,
-            "Completed"
-          );
-
-          saveWallet();
-
-          renderWallet();
+        if(!authId){
 
           alert(
-            walletText(
-              "depositSuccess"
-            )
+            "Authentication required."
           );
 
-        } else {
-
-          walletData.balance -=
-            amount;
-
-          addTransaction(
-            "Withdraw",
-            amount,
-            "Pending"
-          );
-
-          saveWallet();
-
-          renderWallet();
-
-          alert(
-            walletText(
-              "withdrawSuccess"
-            )
-          );
+          return;
 
         }
 
 
+        this.disabled = true;
+
+
+        const { error } =
+          await supabaseClient
+            .from("wallet_transactions")
+            .insert({
+
+              auth_id:
+                authId,
+
+              type:
+                "Withdraw",
+
+              amount:
+                amount,
+
+              status:
+                "Pending",
+
+              network:
+                network,
+
+              wallet_address:
+                address
+
+            });
+
+
+        this.disabled = false;
+
+
+        if(error){
+
+          console.error(
+            "WITHDRAW REQUEST ERROR:",
+            error
+          );
+
+          alert(
+            error.message ||
+            "Withdrawal request failed."
+          );
+
+          return;
+
+        }
+
+
+        await loadTransactions();
+
+        renderHistory();
+
+
         close();
 
+
+        alert(
+          walletText(
+            "withdrawCreated"
+          )
+        );
+
       };
-
-
-    setTimeout(
-      function () {
-
-        input.focus();
-
-      },
-      100
-    );
 
   }
 
 
-  /* =========================
-     GLOBAL BUTTON FUNCTIONS
-     ========================= */
+  /* =========================================================
+     GLOBAL BUTTONS
+  ========================================================= */
 
   window.deposit =
-    function () {
+    function(){
 
-      if (!walletInitialized) {
+      if(!walletInitialized){
 
         initWallet();
 
       }
 
-      showAmountModal(
-        "deposit"
-      );
+      showDepositModal();
 
     };
 
 
   window.withdraw =
-    function () {
+    function(){
 
-      if (!walletInitialized) {
+      if(!walletInitialized){
 
         initWallet();
 
       }
 
-      showAmountModal(
-        "withdraw"
-      );
+      showWithdrawModal();
 
     };
 
 
-  /* =========================
-     RENDER WALLET
-     ========================= */
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
-  function renderWallet() {
+  function renderWallet(){
 
     createHistoryBox();
 
@@ -1111,52 +1960,61 @@
   }
 
 
-  /* =========================
-     INIT WALLET
-     ========================= */
+  /* =========================================================
+     INIT
+  ========================================================= */
 
-  function initWallet() {
+  async function initWallet(){
 
-    if (
-      typeof currentUser ===
-      "undefined" ||
+    if(
+      typeof currentUser === "undefined" ||
       !currentUser ||
       !currentUser.auth_id
-    ) {
+    ){
 
       return false;
 
     }
 
 
-    loadWallet();
+    const walletReady =
+      await ensureWallet();
+
+
+    if(!walletReady)
+      return false;
+
+
+    await loadTransactions();
+
 
     renderWallet();
 
+
     walletInitialized = true;
 
+
     console.log(
-      "TEST WALLET READY:",
-      getWalletKey()
+      "REAL USDT WALLET READY"
     );
+
 
     return true;
 
   }
 
 
-  /* =========================
+  /* =========================================================
      WAIT FOR LOGIN
-     ========================= */
+  ========================================================= */
 
   const walletTimer =
     setInterval(
+      async function(){
 
-      function () {
-
-        if (
-          initWallet()
-        ) {
+        if(
+          await initWallet()
+        ){
 
           clearInterval(
             walletTimer
@@ -1165,24 +2023,19 @@
         }
 
       },
-
-      500
-
+      800
     );
 
 
   setTimeout(
-
-    function () {
+    function(){
 
       clearInterval(
         walletTimer
       );
 
     },
-
     30000
-
   );
 
 
