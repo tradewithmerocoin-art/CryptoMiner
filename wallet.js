@@ -1,18 +1,23 @@
 /* =========================================================
    CRYSTAL PLATFORM - REAL USDT WALLET
-   Networks:
-   TRC20
-   BEP20
-   ERC20
+   =========================================================
 
-   Minimum Deposit: $50
-   Minimum Withdraw: $50
+   Networks:
+   - TRC20
+   - BEP20
+   - ERC20
+
+   Minimum:
+   - Deposit: $50
+   - Withdraw: $50
 
    IMPORTANT:
+   - Deposit creates Pending transaction.
    - Deposit does NOT automatically increase balance.
+   - Withdraw creates Pending transaction.
    - Withdraw does NOT automatically send crypto.
-   - Both create Pending transactions in Supabase.
    - Balance is changed only after manual verification.
+
 ========================================================= */
 
 (function () {
@@ -24,22 +29,19 @@
     TRC20: {
       name: "TRC20",
       chain: "TRON",
-      address:
-        "TC3M9Eq18snE7HRnayyyyfYJ5nLcCx7ceQ"
+      address: "TC3M9Eq18snE7HRnayyyyfYJ5nLcCx7ceQ"
     },
 
     BEP20: {
       name: "BEP20",
       chain: "BNB Smart Chain",
-      address:
-        "0x506996BE51a2B1d0e61390221366320151bF80b5"
+      address: "0x506996BE51a2B1d0e61390221366320151bF80b5"
     },
 
     ERC20: {
       name: "ERC20",
       chain: "Ethereum",
-      address:
-        "0x506996BE51a2B1d0e61390221366320151bF80b5"
+      address: "0x506996BE51a2B1d0e61390221366320151bF80b5"
     }
 
   };
@@ -62,9 +64,7 @@
         typeof currentLanguage !== "undefined" &&
         currentLanguage
       ) {
-
         return currentLanguage;
-
       }
 
     } catch (e) {}
@@ -82,8 +82,7 @@
 
       tk: {
 
-        history:
-          "💳 Töleg taryhy",
+        history: "💳 Töleg taryhy",
 
         noTransactions:
           "Häzirlikçe hereket ýok",
@@ -104,10 +103,10 @@
           "USDT salgysy",
 
         transactionHash:
-          "Transaction Hash",
+          "Transaction Hash / TxID",
 
         transactionHashHint:
-          "Töleg edeniňizden soň transaction hash-i giriziň.",
+          "Tölegi geçireniňizden soň Transaction Hash / TxID giriziň.",
 
         selectNetwork:
           "Tor saýlaň",
@@ -137,7 +136,7 @@
           "Balans ýeterlik däl.",
 
         pendingWithdraw:
-          "Garaşylýan Withdraw bar. Balansyňyzdan artyk çykaryp bilmersiňiz.",
+          "Garaşylýan Withdraw bar.",
 
         depositCreated:
           "Deposit haýyşy döredildi. Töleg barlanandan soň balansyňyz artdyrylar.",
@@ -149,13 +148,13 @@
           "USDT wallet salgysyny giriziň.",
 
         invalidHash:
-          "Transaction Hash giriziň.",
+          "Transaction Hash / TxID giriziň.",
 
         depositInstruction:
           "Aşakdaky salgy diňe saýlanan tor üçin USDT kabul edýär.",
 
         withdrawInstruction:
-          "USDT haýsy salgyňyza iberilmelidigini giriziň.",
+          "USDT haýsy wallet salgyňyza iberilmelidigini giriziň.",
 
         completed:
           "Completed",
@@ -176,9 +175,16 @@
           "Elýeterli balans",
 
         warning:
-          "⚠️ Diňe saýlanan tor arkaly USDT iberiň. Nädogry tor ulanylsa, pul ýitip biler."
+          "⚠️ Diňe saýlanan tor arkaly USDT iberiň. Nädogry tor ulanylsa, pul ýitip biler.",
+
+        authError:
+          "Login maglumatyny alyp bolmady.",
+
+        walletError:
+          "Wallet maglumatyny alyp bolmady."
 
       },
+
 
       ru: {
 
@@ -204,10 +210,10 @@
           "USDT адрес",
 
         transactionHash:
-          "Transaction Hash",
+          "Transaction Hash / TxID",
 
         transactionHashHint:
-          "После оплаты введите transaction hash.",
+          "После оплаты введите Transaction Hash / TxID.",
 
         selectNetwork:
           "Выберите сеть",
@@ -237,7 +243,7 @@
           "Недостаточно средств.",
 
         pendingWithdraw:
-          "Есть ожидающий Withdraw. Нельзя вывести больше доступного баланса.",
+          "Есть ожидающий Withdraw.",
 
         depositCreated:
           "Запрос на Deposit создан. Баланс будет увеличен после проверки платежа.",
@@ -249,7 +255,7 @@
           "Введите USDT адрес.",
 
         invalidHash:
-          "Введите Transaction Hash.",
+          "Введите Transaction Hash / TxID.",
 
         depositInstruction:
           "Этот адрес принимает USDT только через выбранную сеть.",
@@ -276,9 +282,16 @@
           "Доступный баланс",
 
         warning:
-          "⚠️ Отправляйте USDT только через выбранную сеть. Неправильная сеть может привести к потере средств."
+          "⚠️ Отправляйте USDT только через выбранную сеть. Неправильная сеть может привести к потере средств.",
+
+        authError:
+          "Не удалось получить данные входа.",
+
+        walletError:
+          "Не удалось получить данные кошелька."
 
       },
+
 
       en: {
 
@@ -304,10 +317,10 @@
           "USDT Address",
 
         transactionHash:
-          "Transaction Hash",
+          "Transaction Hash / TxID",
 
         transactionHashHint:
-          "Enter the transaction hash after making the payment.",
+          "Enter the Transaction Hash / TxID after making the payment.",
 
         selectNetwork:
           "Select network",
@@ -337,7 +350,7 @@
           "Insufficient balance.",
 
         pendingWithdraw:
-          "You already have a pending withdrawal. You cannot request more than your available balance.",
+          "You already have a pending withdrawal.",
 
         depositCreated:
           "Deposit request created. Your balance will increase after payment verification.",
@@ -349,7 +362,7 @@
           "Enter a USDT wallet address.",
 
         invalidHash:
-          "Enter the transaction hash.",
+          "Enter the Transaction Hash / TxID.",
 
         depositInstruction:
           "This address accepts USDT only through the selected network.",
@@ -376,7 +389,13 @@
           "Available balance",
 
         warning:
-          "⚠️ Send USDT only through the selected network. Using the wrong network may result in loss of funds."
+          "⚠️ Send USDT only through the selected network. Using the wrong network may result in loss of funds.",
+
+        authError:
+          "Could not get authentication data.",
+
+        walletError:
+          "Could not load wallet data."
 
       }
 
@@ -393,24 +412,47 @@
 
 
   /* =========================================================
-     CURRENT USER
+     SUPABASE AUTH USER
   ========================================================= */
 
-  function getAuthId() {
+  async function getAuthId() {
 
     try {
 
-      if (
-        typeof currentUser !== "undefined" &&
-        currentUser &&
-        currentUser.auth_id
-      ) {
+      const {
+        data,
+        error
+      } = await supabaseClient.auth.getUser();
 
-        return currentUser.auth_id;
+      if (error) {
+
+        console.error(
+          "AUTH USER ERROR:",
+          error
+        );
+
+        return null;
 
       }
 
-    } catch (e) {}
+      if (
+        data &&
+        data.user &&
+        data.user.id
+      ) {
+
+        return data.user.id;
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "AUTH USER EXCEPTION:",
+        error
+      );
+
+    }
 
     return null;
 
@@ -418,7 +460,7 @@
 
 
   /* =========================================================
-     FORMAT
+     FORMAT MONEY
   ========================================================= */
 
   function formatMoney(amount) {
@@ -430,19 +472,29 @@
 
 
   /* =========================================================
-     WALLET ROW
+     ENSURE WALLET
   ========================================================= */
 
   async function ensureWallet() {
 
     const authId =
-      getAuthId();
+      await getAuthId();
 
-    if (!authId)
+    if (!authId) {
+
+      console.error(
+        "No authenticated user."
+      );
+
       return false;
 
+    }
 
-    const { data, error } =
+
+    const {
+      data,
+      error
+    } =
       await supabaseClient
         .from("wallets")
         .select("*")
@@ -468,14 +520,19 @@
     if (data) {
 
       walletBalance =
-        Number(data.balance || 0);
+        Number(
+          data.balance || 0
+        );
 
       return true;
 
     }
 
 
-    const { data:newWallet, error:createError } =
+    const {
+      data: newWallet,
+      error: createError
+    } =
       await supabaseClient
         .from("wallets")
         .insert({
@@ -523,13 +580,16 @@
   async function loadTransactions() {
 
     const authId =
-      getAuthId();
+      await getAuthId();
 
     if (!authId)
-      return;
+      return false;
 
 
-    const { data, error } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient
         .from("wallet_transactions")
         .select("*")
@@ -540,7 +600,7 @@
         .order(
           "created_at",
           {
-            ascending:false
+            ascending: false
           }
         )
         .limit(50);
@@ -553,7 +613,7 @@
         error
       );
 
-      return;
+      return false;
 
     }
 
@@ -561,16 +621,19 @@
     walletTransactions =
       data || [];
 
+    return true;
+
   }
 
 
   /* =========================================================
-     PENDING WITHDRAW TOTAL
+     PENDING WITHDRAW
   ========================================================= */
 
   function getPendingWithdrawTotal() {
 
     return walletTransactions
+
       .filter(function (tx) {
 
         return (
@@ -579,10 +642,16 @@
         );
 
       })
-      .reduce(function (total, tx) {
+
+      .reduce(function (
+        total,
+        tx
+      ) {
 
         return total +
-          Number(tx.amount || 0);
+          Number(
+            tx.amount || 0
+          );
 
       }, 0);
 
@@ -614,6 +683,7 @@
     if (!element)
       return;
 
+
     element.innerText =
       formatMoney(
         walletBalance
@@ -641,12 +711,17 @@
       document.getElementById(
         "walletHistory"
       )
-    )
+    ) {
+
       return;
+
+    }
 
 
     const box =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     box.id =
       "walletHistory";
@@ -659,7 +734,10 @@
 
       <div
         class="section-title"
-        style="font-size:20px;margin-bottom:12px;"
+        style="
+          font-size:20px;
+          margin-bottom:12px;
+        "
       >
         ${walletText("history")}
       </div>
@@ -717,15 +795,18 @@
 
     container.innerHTML =
       walletTransactions
+
         .map(function (tx) {
 
           const isDeposit =
             tx.type === "Deposit";
 
+
           const sign =
             isDeposit
               ? "+"
               : "-";
+
 
           const amountClass =
             isDeposit
@@ -782,13 +863,17 @@
                       font-size:14px;
                     "
                   >
+
                     ${
                       isDeposit
                         ? "💵"
                         : "💸"
                     }
+
                     ${tx.type}${network}
+
                   </div>
+
 
                   <div
                     style="
@@ -799,6 +884,7 @@
                   >
                     ${date}
                   </div>
+
 
                   <div
                     class="${statusClass}"
@@ -821,7 +907,9 @@
                     white-space:nowrap;
                   "
                 >
+
                   ${sign}$${formatMoney(tx.amount)}
+
                 </div>
 
               </div>
@@ -831,13 +919,14 @@
           `;
 
         })
+
         .join("");
 
   }
 
 
   /* =========================================================
-     STYLES
+     WALLET STYLES
   ========================================================= */
 
   function createStyles() {
@@ -846,12 +935,18 @@
       document.getElementById(
         "realWalletStyle"
       )
-    )
+    ) {
+
       return;
+
+    }
 
 
     const style =
-      document.createElement("style");
+      document.createElement(
+        "style"
+      );
+
 
     style.id =
       "realWalletStyle";
@@ -862,6 +957,7 @@
       .wallet-modal-overlay{
 
         position:fixed;
+
         inset:0;
 
         background:
@@ -873,6 +969,7 @@
         display:flex;
 
         align-items:center;
+
         justify-content:center;
 
         padding:18px;
@@ -885,6 +982,7 @@
       .wallet-modal{
 
         width:100%;
+
         max-width:410px;
 
         max-height:
@@ -917,6 +1015,7 @@
       .wallet-modal-title{
 
         font-size:21px;
+
         font-weight:900;
 
         margin-bottom:18px;
@@ -971,6 +1070,7 @@
       .wallet-select option{
 
         background:#0b1220;
+
         color:white;
 
       }
@@ -1027,9 +1127,13 @@
 
         padding:10px;
 
+        border:0;
+
         border-radius:11px;
 
         background:#1e293b;
+
+        color:white;
 
         margin-top:10px;
 
@@ -1129,6 +1233,7 @@
       .wallet-cancel{
 
         background:#1e293b;
+
         color:white;
 
       }
@@ -1179,26 +1284,32 @@
           element.innerText
         );
 
+
         const button =
           document.getElementById(
             "walletCopyButton"
           );
 
-        if(button){
+
+        if (button) {
 
           button.innerText =
             walletText("copied");
 
-          setTimeout(function(){
 
-            button.innerText =
-              walletText("copy");
+          setTimeout(
+            function () {
 
-          },1500);
+              button.innerText =
+                walletText("copy");
+
+            },
+            1500
+          );
 
         }
 
-      } catch(error) {
+      } catch (error) {
 
         alert(
           element.innerText
@@ -1210,7 +1321,7 @@
 
 
   /* =========================================================
-     SHOW DEPOSIT
+     DEPOSIT MODAL
   ========================================================= */
 
   function showDepositModal() {
@@ -1219,7 +1330,10 @@
 
 
     const overlay =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     overlay.className =
       "wallet-modal-overlay";
@@ -1274,10 +1388,12 @@
               ${walletText("address")}
             </div>
 
+
             <div
               id="walletDepositAddress"
               class="wallet-address"
             ></div>
+
 
             <button
               id="walletCopyButton"
@@ -1302,6 +1418,7 @@
           ${walletText("amount")}
         </label>
 
+
         <input
           id="walletDepositAmount"
           class="wallet-input"
@@ -1317,11 +1434,13 @@
           ${walletText("transactionHash")}
         </label>
 
+
         <input
           id="walletDepositHash"
           class="wallet-input"
           type="text"
-          placeholder="0x... / transaction hash"
+          placeholder="TxID / Transaction Hash"
+          autocomplete="off"
         />
 
 
@@ -1335,13 +1454,16 @@
           <button
             id="walletDepositCancel"
             class="wallet-button wallet-cancel"
+            type="button"
           >
             ${walletText("cancel")}
           </button>
 
+
           <button
             id="walletDepositConfirm"
             class="wallet-button wallet-confirm"
+            type="button"
           >
             ${walletText("confirm")}
           </button>
@@ -1363,10 +1485,12 @@
         "walletDepositNetwork"
       );
 
+
     const addressBox =
       document.getElementById(
         "walletDepositAddressBox"
       );
+
 
     const address =
       document.getElementById(
@@ -1383,7 +1507,7 @@
           ];
 
 
-        if(!network){
+        if (!network) {
 
           addressBox.style.display =
             "none";
@@ -1395,6 +1519,7 @@
 
         address.innerText =
           network.address;
+
 
         addressBox.style.display =
           "block";
@@ -1416,11 +1541,11 @@
 
 
     overlay.onclick =
-      function(event){
+      function (event) {
 
-        if(
+        if (
           event.target === overlay
-        ){
+        ) {
 
           close();
 
@@ -1434,8 +1559,13 @@
     ).onclick =
       async function () {
 
+        const button =
+          this;
+
+
         const network =
           networkSelect.value;
+
 
         const amount =
           Number(
@@ -1444,13 +1574,14 @@
             ).value
           );
 
+
         const txHash =
           document.getElementById(
             "walletDepositHash"
           ).value.trim();
 
 
-        if(!network){
+        if (!network) {
 
           alert(
             walletText(
@@ -1463,10 +1594,10 @@
         }
 
 
-        if(
+        if (
           !Number.isFinite(amount) ||
           amount < MIN_AMOUNT
-        ){
+        ) {
 
           alert(
             walletText(
@@ -1479,7 +1610,7 @@
         }
 
 
-        if(!txHash){
+        if (!txHash) {
 
           alert(
             walletText(
@@ -1493,12 +1624,15 @@
 
 
         const authId =
-          getAuthId();
+          await getAuthId();
 
-        if(!authId){
+
+        if (!authId) {
 
           alert(
-            "Authentication required."
+            walletText(
+              "authError"
+            )
           );
 
           return;
@@ -1506,12 +1640,16 @@
         }
 
 
-        this.disabled = true;
+        button.disabled = true;
 
 
-        const { error } =
+        const {
+          error
+        } =
           await supabaseClient
-            .from("wallet_transactions")
+            .from(
+              "wallet_transactions"
+            )
             .insert({
 
               auth_id:
@@ -1540,15 +1678,16 @@
             });
 
 
-        this.disabled = false;
+        button.disabled = false;
 
 
-        if(error){
+        if (error) {
 
           console.error(
             "DEPOSIT REQUEST ERROR:",
             error
           );
+
 
           alert(
             error.message ||
@@ -1579,7 +1718,7 @@
 
 
   /* =========================================================
-     SHOW WITHDRAW
+     WITHDRAW MODAL
   ========================================================= */
 
   function showWithdrawModal() {
@@ -1591,7 +1730,9 @@
       getAvailableBalance();
 
 
-    if(available < MIN_AMOUNT){
+    if (
+      available < MIN_AMOUNT
+    ) {
 
       alert(
         walletText(
@@ -1605,7 +1746,10 @@
 
 
     const overlay =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     overlay.className =
       "wallet-modal-overlay";
@@ -1621,8 +1765,13 @@
 
 
         <div class="wallet-available">
+
           ${walletText("available")}:
-          <b>$${formatMoney(available)}</b>
+
+          <b>
+            $${formatMoney(available)}
+          </b>
+
         </div>
 
 
@@ -1665,6 +1814,7 @@
           class="wallet-input"
           type="text"
           placeholder="USDT wallet address"
+          autocomplete="off"
         />
 
 
@@ -1699,13 +1849,16 @@
           <button
             id="walletWithdrawCancel"
             class="wallet-button wallet-cancel"
+            type="button"
           >
             ${walletText("cancel")}
           </button>
 
+
           <button
             id="walletWithdrawConfirm"
             class="wallet-button wallet-confirm"
+            type="button"
           >
             ${walletText("confirm")}
           </button>
@@ -1722,7 +1875,7 @@
     );
 
 
-    function close(){
+    function close() {
 
       overlay.remove();
 
@@ -1736,11 +1889,11 @@
 
 
     overlay.onclick =
-      function(event){
+      function (event) {
 
-        if(
+        if (
           event.target === overlay
-        ){
+        ) {
 
           close();
 
@@ -1752,17 +1905,23 @@
     document.getElementById(
       "walletWithdrawConfirm"
     ).onclick =
-      async function(){
+      async function () {
+
+        const button =
+          this;
+
 
         const network =
           document.getElementById(
             "walletWithdrawNetwork"
           ).value;
 
+
         const address =
           document.getElementById(
             "walletWithdrawAddress"
           ).value.trim();
+
 
         const amount =
           Number(
@@ -1772,7 +1931,7 @@
           );
 
 
-        if(!network){
+        if (!network) {
 
           alert(
             walletText(
@@ -1785,7 +1944,7 @@
         }
 
 
-        if(!address){
+        if (!address) {
 
           alert(
             walletText(
@@ -1798,10 +1957,10 @@
         }
 
 
-        if(
+        if (
           !Number.isFinite(amount) ||
           amount < MIN_AMOUNT
-        ){
+        ) {
 
           alert(
             walletText(
@@ -1818,7 +1977,9 @@
           getAvailableBalance();
 
 
-        if(amount > currentAvailable){
+        if (
+          amount > currentAvailable
+        ) {
 
           alert(
             walletText(
@@ -1832,12 +1993,15 @@
 
 
         const authId =
-          getAuthId();
+          await getAuthId();
 
-        if(!authId){
+
+        if (!authId) {
 
           alert(
-            "Authentication required."
+            walletText(
+              "authError"
+            )
           );
 
           return;
@@ -1845,12 +2009,16 @@
         }
 
 
-        this.disabled = true;
+        button.disabled = true;
 
 
-        const { error } =
+        const {
+          error
+        } =
           await supabaseClient
-            .from("wallet_transactions")
+            .from(
+              "wallet_transactions"
+            )
             .insert({
 
               auth_id:
@@ -1874,15 +2042,16 @@
             });
 
 
-        this.disabled = false;
+        button.disabled = false;
 
 
-        if(error){
+        if (error) {
 
           console.error(
             "WITHDRAW REQUEST ERROR:",
             error
           );
+
 
           alert(
             error.message ||
@@ -1897,7 +2066,6 @@
         await loadTransactions();
 
         renderHistory();
-
 
         close();
 
@@ -1918,13 +2086,14 @@
   ========================================================= */
 
   window.deposit =
-    function(){
+    async function () {
 
-      if(!walletInitialized){
+      if (!walletInitialized) {
 
-        initWallet();
+        await initWallet();
 
       }
+
 
       showDepositModal();
 
@@ -1932,13 +2101,14 @@
 
 
   window.withdraw =
-    function(){
+    async function () {
 
-      if(!walletInitialized){
+      if (!walletInitialized) {
 
-        initWallet();
+        await initWallet();
 
       }
+
 
       showWithdrawModal();
 
@@ -1949,7 +2119,7 @@
      RENDER
   ========================================================= */
 
-  function renderWallet(){
+  function renderWallet() {
 
     createHistoryBox();
 
@@ -1964,13 +2134,20 @@
      INIT
   ========================================================= */
 
-  async function initWallet(){
+  async function initWallet() {
 
-    if(
-      typeof currentUser === "undefined" ||
-      !currentUser ||
-      !currentUser.auth_id
-    ){
+    if (walletInitialized) {
+
+      return true;
+
+    }
+
+
+    const authId =
+      await getAuthId();
+
+
+    if (!authId) {
 
       return false;
 
@@ -1981,8 +2158,11 @@
       await ensureWallet();
 
 
-    if(!walletReady)
+    if (!walletReady) {
+
       return false;
+
+    }
 
 
     await loadTransactions();
@@ -2010,11 +2190,13 @@
 
   const walletTimer =
     setInterval(
-      async function(){
+      async function () {
 
-        if(
-          await initWallet()
-        ){
+        const ready =
+          await initWallet();
+
+
+        if (ready) {
 
           clearInterval(
             walletTimer
@@ -2028,7 +2210,7 @@
 
 
   setTimeout(
-    function(){
+    function () {
 
       clearInterval(
         walletTimer
