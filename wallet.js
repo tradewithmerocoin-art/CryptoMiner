@@ -1,16 +1,9 @@
 /* =========================================================
    CRYSTAL PLATFORM - SIMPLE USDT WALLET
 
-   BALANCE:
-   - Comes ONLY from public.wallets.balance
-
-   HISTORY:
-   - Comes ONLY from public.wallet_transactions
-
    IMPORTANT:
    - Deposit does NOT automatically increase balance.
    - Withdraw does NOT automatically decrease balance.
-   - Transaction status does NOT change balance.
 ========================================================= */
 
 (function () {
@@ -358,16 +351,14 @@
 
 
   /* =========================================================
-     LOAD BALANCE FROM wallets
+     LOAD BALANCE FROM balances
      
      IMPORTANT:
      Exact table name:
-     wallets
+     balances
 
-     Exact column:
+     Exact columns:
      auth_id
-
-     Exact balance column:
      balance
   ========================================================= */
 
@@ -392,7 +383,7 @@
       error
     } =
       await supabaseClient
-        .from("wallets")
+        .from("balances")
         .select("balance")
         .eq("auth_id", authId)
         .maybeSingle();
@@ -401,7 +392,7 @@
     if (error) {
 
       console.error(
-        "WALLETS BALANCE LOAD ERROR:",
+        "BALANCES BALANCE LOAD ERROR:",
         error
       );
 
@@ -413,7 +404,7 @@
     if (!data) {
 
       console.warn(
-        "No wallet found for auth_id:",
+        "No balance found for auth_id:",
         authId
       );
 
@@ -425,7 +416,7 @@
 
 
     /*
-     * BALANCE COMES ONLY FROM wallets.balance
+     * BALANCE COMES ONLY FROM balances.balance
      */
 
     walletBalance =
@@ -435,7 +426,7 @@
 
 
     console.log(
-      "BALANCE FROM wallets.balance:",
+      "BALANCE FROM balances.balance:",
       walletBalance
     );
 
@@ -522,7 +513,7 @@
      AVAILABLE BALANCE
 
      IMPORTANT:
-     This comes directly from wallets.balance.
+     This comes directly from balances.balance.
 
      Pending Withdraw is NOT subtracted.
   ========================================================= */
@@ -1923,7 +1914,7 @@
 
         /*
          * Available balance comes ONLY
-         * from wallets.balance.
+         * from balances.balance.
          */
 
         const currentAvailable =
@@ -2031,7 +2022,7 @@
 
         /*
          * Add only to current UI history.
-         * wallets.balance is NOT changed.
+         * balances.balance is NOT changed.
          */
 
         walletTransactions = [
@@ -2089,7 +2080,7 @@
      REFRESH WALLET
      
      Always reads:
-     wallets.balance
+     balances.balance
      wallet_transactions
   ========================================================= */
 
