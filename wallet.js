@@ -32,11 +32,8 @@
 
   };
 
-
   let walletInitialized = false;
-
   let walletBalance = 0;
-
   let walletTransactions = [];
 
 
@@ -58,7 +55,6 @@
     } catch (e) {}
 
     return "tk";
-
   }
 
 
@@ -71,48 +67,26 @@
       tk: {
 
         history: "💳 Töleg taryhy",
+        noTransactions: "Häzirlikçe hereket ýok",
 
-        noTransactions:
-          "Häzirlikçe hereket ýok",
+        depositTitle: "💵 USDT Deposit",
+        withdrawTitle: "💸 USDT Withdraw",
 
-        depositTitle:
-          "💵 USDT Deposit",
+        amount: "Mukdar",
+        network: "Tor",
+        address: "USDT salgysy",
+        selectNetwork: "Tor saýlaň",
 
-        withdrawTitle:
-          "💸 USDT Withdraw",
+        cancel: "Ýatyr",
+        confirm: "Tassykla",
 
-        amount:
-          "Mukdar",
+        copy: "Göçür",
+        copied: "Göçürildi ✓",
 
-        network:
-          "Tor",
+        minimumDeposit: "Iň az Deposit: $50",
+        minimumWithdraw: "Iň az Withdraw: $50",
 
-        address:
-          "USDT salgysy",
-
-        selectNetwork:
-          "Tor saýlaň",
-
-        cancel:
-          "Ýatyr",
-
-        confirm:
-          "Tassykla",
-
-        copy:
-          "Göçür",
-
-        copied:
-          "Göçürildi ✓",
-
-        minimumDeposit:
-          "Iň az Deposit: $50",
-
-        minimumWithdraw:
-          "Iň az Withdraw: $50",
-
-        insufficient:
-          "Balans ýeterlik däl.",
+        insufficient: "Balans ýeterlik däl.",
 
         depositCreated:
           "Deposit haýyşy döredildi. Töleg barlanandan soň balansyňyz artdyrylar.",
@@ -123,8 +97,7 @@
         invalidAddress:
           "USDT wallet salgysyny giriziň.",
 
-        available:
-          "Elýeterli balans",
+        available: "Elýeterli balans",
 
         warning:
           "⚠️ Diňe saýlanan tor arkaly USDT iberiň. Nädogry tor ulanylsa, pul ýitip biler.",
@@ -137,53 +110,29 @@
 
       },
 
-
       ru: {
 
-        history:
-          "💳 История операций",
+        history: "💳 История операций",
+        noTransactions: "Операций пока нет",
 
-        noTransactions:
-          "Операций пока нет",
+        depositTitle: "💵 USDT Deposit",
+        withdrawTitle: "💸 USDT Withdraw",
 
-        depositTitle:
-          "💵 USDT Deposit",
+        amount: "Сумма",
+        network: "Сеть",
+        address: "USDT адрес",
+        selectNetwork: "Выберите сеть",
 
-        withdrawTitle:
-          "💸 USDT Withdraw",
+        cancel: "Отмена",
+        confirm: "Подтвердить",
 
-        amount:
-          "Сумма",
+        copy: "Копировать",
+        copied: "Скопировано ✓",
 
-        network:
-          "Сеть",
+        minimumDeposit: "Минимальный Deposit: $50",
+        minimumWithdraw: "Минимальный Withdraw: $50",
 
-        address:
-          "USDT адрес",
-
-        selectNetwork:
-          "Выберите сеть",
-
-        cancel:
-          "Отмена",
-
-        confirm:
-          "Подтвердить",
-
-        copy:
-          "Копировать",
-
-        copied:
-          "Скопировано ✓",
-
-        minimumDeposit:
-          "Минимальный Deposit: $50",
-
-        minimumWithdraw:
-          "Минимальный Withdraw: $50",
-
-        insufficient:
-          "Недостаточно средств.",
+        insufficient: "Недостаточно средств.",
 
         depositCreated:
           "Запрос на Deposit создан. Баланс будет увеличен после проверки платежа.",
@@ -194,8 +143,7 @@
         invalidAddress:
           "Введите USDT адрес.",
 
-        available:
-          "Доступный баланс",
+        available: "Доступный баланс",
 
         warning:
           "⚠️ Отправляйте USDT только через выбранную сеть. Неправильная сеть может привести к потере средств.",
@@ -208,53 +156,29 @@
 
       },
 
-
       en: {
 
-        history:
-          "💳 Transaction History",
+        history: "💳 Transaction History",
+        noTransactions: "No transactions yet",
 
-        noTransactions:
-          "No transactions yet",
+        depositTitle: "💵 USDT Deposit",
+        withdrawTitle: "💸 USDT Withdraw",
 
-        depositTitle:
-          "💵 USDT Deposit",
+        amount: "Amount",
+        network: "Network",
+        address: "USDT Address",
+        selectNetwork: "Select network",
 
-        withdrawTitle:
-          "💸 USDT Withdraw",
+        cancel: "Cancel",
+        confirm: "Confirm",
 
-        amount:
-          "Amount",
+        copy: "Copy",
+        copied: "Copied ✓",
 
-        network:
-          "Network",
+        minimumDeposit: "Minimum Deposit: $50",
+        minimumWithdraw: "Minimum Withdraw: $50",
 
-        address:
-          "USDT Address",
-
-        selectNetwork:
-          "Select network",
-
-        cancel:
-          "Cancel",
-
-        confirm:
-          "Confirm",
-
-        copy:
-          "Copy",
-
-        copied:
-          "Copied ✓",
-
-        minimumDeposit:
-          "Minimum Deposit: $50",
-
-        minimumWithdraw:
-          "Minimum Withdraw: $50",
-
-        insufficient:
-          "Insufficient balance.",
+        insufficient: "Insufficient balance.",
 
         depositCreated:
           "Deposit request created. Your balance will increase after payment verification.",
@@ -265,8 +189,7 @@
         invalidAddress:
           "Enter a USDT wallet address.",
 
-        available:
-          "Available balance",
+        available: "Available balance",
 
         warning:
           "⚠️ Send USDT only through the selected network. Using the wrong network may result in loss of funds.",
@@ -300,8 +223,7 @@
       const {
         data,
         error
-      } =
-        await supabaseClient.auth.getUser();
+      } = await supabaseClient.auth.getUser();
 
       if (error) {
 
@@ -311,7 +233,6 @@
         );
 
         return null;
-
       }
 
       if (
@@ -321,7 +242,6 @@
       ) {
 
         return data.user.id;
-
       }
 
     } catch (error) {
@@ -351,15 +271,12 @@
 
 
   /* =========================================================
-     LOAD BALANCE FROM balances
+     LOAD BALANCE
      
      IMPORTANT:
-     Exact table name:
-     balances
+     Balance comes ONLY from:
 
-     Exact columns:
-     auth_id
-     balance
+     public.users.balance
   ========================================================= */
 
   async function loadWalletBalance() {
@@ -374,7 +291,6 @@
       );
 
       return false;
-
     }
 
 
@@ -383,7 +299,7 @@
       error
     } =
       await supabaseClient
-        .from("balances")
+        .from("users")
         .select("balance")
         .eq("auth_id", authId)
         .maybeSingle();
@@ -392,32 +308,26 @@
     if (error) {
 
       console.error(
-        "BALANCES BALANCE LOAD ERROR:",
+        "USERS BALANCE LOAD ERROR:",
         error
       );
 
       return false;
-
     }
 
 
     if (!data) {
 
       console.warn(
-        "No balance found for auth_id:",
+        "No users balance found for auth_id:",
         authId
       );
 
       walletBalance = 0;
 
       return true;
-
     }
 
-
-    /*
-     * BALANCE COMES ONLY FROM balances.balance
-     */
 
     walletBalance =
       Number(
@@ -426,7 +336,7 @@
 
 
     console.log(
-      "BALANCE FROM balances.balance:",
+      "BALANCE FROM users.balance:",
       walletBalance
     );
 
@@ -437,7 +347,9 @@
 
 
   /* =========================================================
-     LOAD HISTORY FROM Supabase ONLY
+     LOAD HISTORY
+     
+     ONLY FROM wallet_transactions
   ========================================================= */
 
   async function loadTransactions() {
@@ -446,9 +358,7 @@
       await getAuthId();
 
     if (!authId) {
-
       return false;
-
     }
 
 
@@ -484,7 +394,6 @@
       walletTransactions = [];
 
       return false;
-
     }
 
 
@@ -498,12 +407,6 @@
     );
 
 
-    console.log(
-      "HISTORY COUNT:",
-      walletTransactions.length
-    );
-
-
     return true;
 
   }
@@ -511,20 +414,13 @@
 
   /* =========================================================
      AVAILABLE BALANCE
-
-     IMPORTANT:
-     This comes directly from balances.balance.
-
-     Pending Withdraw is NOT subtracted.
   ========================================================= */
 
   function getAvailableBalance() {
 
     return Math.max(
       0,
-      Number(
-        walletBalance || 0
-      )
+      Number(walletBalance || 0)
     );
 
   }
@@ -537,9 +433,7 @@
   function renderBalance() {
 
     const element =
-      document.getElementById(
-        "balance"
-      );
+      document.getElementById("balance");
 
 
     if (!element) {
@@ -548,9 +442,7 @@
 
 
     element.innerText =
-      formatMoney(
-        walletBalance
-      );
+      formatMoney(walletBalance);
 
   }
 
@@ -562,9 +454,7 @@
   function createHistoryBox() {
 
     const walletSection =
-      document.getElementById(
-        "wallet"
-      );
+      document.getElementById("wallet");
 
 
     if (!walletSection) {
@@ -574,14 +464,11 @@
       );
 
       return;
-
     }
 
 
     let box =
-      document.getElementById(
-        "walletHistory"
-      );
+      document.getElementById("walletHistory");
 
 
     if (box) {
@@ -590,9 +477,7 @@
 
 
     box =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
 
     box.id =
@@ -603,20 +488,11 @@
       "card wallet-history-card";
 
 
-    box.style.display =
-      "block";
-
-    box.style.width =
-      "100%";
-
-    box.style.marginTop =
-      "18px";
-
-    box.style.visibility =
-      "visible";
-
-    box.style.opacity =
-      "1";
+    box.style.display = "block";
+    box.style.width = "100%";
+    box.style.marginTop = "18px";
+    box.style.visibility = "visible";
+    box.style.opacity = "1";
 
 
     box.innerHTML = `
@@ -631,22 +507,16 @@
         ${walletText("history")}
       </div>
 
-      <div
-        id="walletTransactions"
-      ></div>
+      <div id="walletTransactions"></div>
 
     `;
 
 
     const cards =
-      walletSection.querySelectorAll(
-        ".card"
-      );
+      walletSection.querySelectorAll(".card");
 
 
-    if (
-      cards.length > 0
-    ) {
+    if (cards.length > 0) {
 
       cards[0].insertAdjacentElement(
         "afterend",
@@ -655,9 +525,7 @@
 
     } else {
 
-      walletSection.appendChild(
-        box
-      );
+      walletSection.appendChild(box);
 
     }
 
@@ -686,13 +554,10 @@
       );
 
       return;
-
     }
 
 
-    if (
-      !walletTransactions.length
-    ) {
+    if (!walletTransactions.length) {
 
       container.innerHTML = `
 
@@ -704,173 +569,150 @@
             font-size:13px;
           "
         >
-          ${walletText(
-            "noTransactions"
-          )}
+          ${walletText("noTransactions")}
         </div>
 
       `;
 
       return;
-
     }
 
 
     container.innerHTML =
       walletTransactions
-        .map(
-          function (tx) {
+        .map(function (tx) {
 
-            const isDeposit =
-              tx.type === "Deposit";
-
-
-            const sign =
-              isDeposit
-                ? "+"
-                : "-";
+          const isDeposit =
+            tx.type === "Deposit";
 
 
-            const amountClass =
-              isDeposit
-                ? "wallet-positive"
-                : "wallet-negative";
+          const sign =
+            isDeposit ? "+" : "-";
 
 
-            let statusClass =
-              "wallet-pending";
+          const amountClass =
+            isDeposit
+              ? "wallet-positive"
+              : "wallet-negative";
 
 
-            if (
-              tx.status ===
-              "Completed"
-            ) {
-
-              statusClass =
-                "wallet-completed";
-
-            }
+          let statusClass =
+            "wallet-pending";
 
 
-            if (
-              tx.status ===
-              "Rejected"
-            ) {
-
-              statusClass =
-                "wallet-rejected";
-
-            }
+          if (tx.status === "Completed") {
+            statusClass =
+              "wallet-completed";
+          }
 
 
-            const network =
-              tx.network
-                ? " • " +
-                  tx.network
-                : "";
+          if (tx.status === "Rejected") {
+            statusClass =
+              "wallet-rejected";
+          }
 
 
-            let date = "";
+          const network =
+            tx.network
+              ? " • " + tx.network
+              : "";
 
 
-            if (
-              tx.created_at
-            ) {
-
-              date =
-                new Date(
-                  tx.created_at
-                ).toLocaleString();
-
-            }
+          let date = "";
 
 
-            return `
+          if (tx.created_at) {
+
+            date =
+              new Date(
+                tx.created_at
+              ).toLocaleString();
+
+          }
+
+
+          return `
+
+            <div
+              style="
+                padding:14px 0;
+                border-bottom:
+                  1px solid
+                  rgba(255,255,255,.08);
+              "
+            >
 
               <div
                 style="
-                  padding:14px 0;
-                  border-bottom:
-                    1px solid
-                    rgba(255,255,255,.08);
+                  display:flex;
+                  justify-content:space-between;
+                  align-items:flex-start;
+                  gap:12px;
                 "
               >
 
-                <div
-                  style="
-                    display:flex;
-                    justify-content:space-between;
-                    align-items:flex-start;
-                    gap:12px;
-                  "
-                >
+                <div>
 
-                  <div>
+                  <div
+                    style="
+                      font-weight:800;
+                      font-size:14px;
+                    "
+                  >
+                    ${
+                      isDeposit
+                        ? "💵"
+                        : "💸"
+                    }
 
-                    <div
-                      style="
-                        font-weight:800;
-                        font-size:14px;
-                      "
-                    >
-
-                      ${
-                        isDeposit
-                          ? "💵"
-                          : "💸"
-                      }
-
-                      ${tx.type}${network}
-
-                    </div>
-
-
-                    <div
-                      style="
-                        font-size:11px;
-                        opacity:.5;
-                        margin-top:5px;
-                      "
-                    >
-                      ${date}
-                    </div>
-
-
-                    <div
-                      class="${statusClass}"
-                      style="
-                        font-size:11px;
-                        font-weight:800;
-                        margin-top:6px;
-                      "
-                    >
-                      ${tx.status || ""}
-                    </div>
+                    ${tx.type}${network}
 
                   </div>
 
 
                   <div
-                    class="${amountClass}"
                     style="
-                      font-size:15px;
-                      font-weight:900;
-                      white-space:nowrap;
+                      font-size:11px;
+                      opacity:.5;
+                      margin-top:5px;
                     "
                   >
-                    ${sign}$${formatMoney(
-                      tx.amount
-                    )}
+                    ${date}
+                  </div>
+
+
+                  <div
+                    class="${statusClass}"
+                    style="
+                      font-size:11px;
+                      font-weight:800;
+                      margin-top:6px;
+                    "
+                  >
+                    ${tx.status || ""}
                   </div>
 
                 </div>
 
+
+                <div
+                  class="${amountClass}"
+                  style="
+                    font-size:15px;
+                    font-weight:900;
+                    white-space:nowrap;
+                  "
+                >
+                  ${sign}$${formatMoney(tx.amount)}
+                </div>
+
               </div>
 
-            `;
+            </div>
 
-          }
-        )
+          `;
+
+        })
         .join("");
 
   }
@@ -887,16 +729,12 @@
         "realWalletStyle"
       )
     ) {
-
       return;
-
     }
 
 
     const style =
-      document.createElement(
-        "style"
-      );
+      document.createElement("style");
 
 
     style.id =
@@ -906,312 +744,159 @@
     style.textContent = `
 
       .wallet-modal-overlay {
-
         position:fixed;
         inset:0;
-
-        background:
-          rgba(0,0,0,.78);
-
-        backdrop-filter:
-          blur(10px);
-
+        background:rgba(0,0,0,.78);
+        backdrop-filter:blur(10px);
         display:flex;
-
         align-items:center;
         justify-content:center;
-
         padding:18px;
-
         z-index:999999;
-
       }
-
 
       .wallet-modal {
-
         width:100%;
         max-width:410px;
-
-        max-height:
-          calc(100vh - 36px);
-
+        max-height:calc(100vh - 36px);
         overflow-y:auto;
-
-        background:
-          linear-gradient(
-            145deg,
-            #151925,
-            #090c14
-          );
-
-        border:
-          1px solid
-          rgba(255,255,255,.12);
-
+        background:linear-gradient(145deg,#151925,#090c14);
+        border:1px solid rgba(255,255,255,.12);
         border-radius:24px;
-
         padding:21px;
-
-        box-shadow:
-          0 25px 80px
-          rgba(0,0,0,.65);
-
+        box-shadow:0 25px 80px rgba(0,0,0,.65);
       }
-
 
       .wallet-modal-title {
-
         font-size:21px;
         font-weight:900;
-
         margin-bottom:18px;
-
       }
-
 
       .wallet-label {
-
         display:block;
-
         font-size:12px;
-
         color:#94a3b8;
-
         font-weight:700;
-
         margin-bottom:7px;
-
       }
-
 
       .wallet-input,
       .wallet-select {
-
         width:100%;
-
         box-sizing:border-box;
-
         padding:14px;
-
         border-radius:14px;
-
-        border:
-          1px solid
-          #334155;
-
-        background:
-          #0b1220;
-
-        color:white;
-
-        outline:none;
-
-        font-size:15px;
-
-        margin-bottom:13px;
-
-      }
-
-
-      .wallet-select option {
-
+        border:1px solid #334155;
         background:#0b1220;
         color:white;
-
+        outline:none;
+        font-size:15px;
+        margin-bottom:13px;
       }
 
+      .wallet-select option {
+        background:#0b1220;
+        color:white;
+      }
 
       .wallet-address-box {
-
         padding:13px;
-
         border-radius:14px;
-
-        background:
-          rgba(37,99,235,.10);
-
-        border:
-          1px solid
-          rgba(96,165,250,.18);
-
+        background:rgba(37,99,235,.10);
+        border:1px solid rgba(96,165,250,.18);
         margin-bottom:12px;
-
       }
-
 
       .wallet-address {
-
         word-break:break-all;
-
         font-size:12px;
-
         line-height:1.5;
-
         margin-top:7px;
-
         color:#e2e8f0;
-
       }
-
 
       .wallet-copy {
-
         width:100%;
-
         padding:10px;
-
         border:0;
-
         border-radius:11px;
-
         background:#1e293b;
-
         color:white;
-
         margin-top:10px;
-
         font-weight:700;
-
         font-size:12px;
-
       }
-
 
       .wallet-warning {
-
         padding:12px;
-
         border-radius:13px;
-
-        background:
-          rgba(245,158,11,.08);
-
-        border:
-          1px solid
-          rgba(245,158,11,.18);
-
+        background:rgba(245,158,11,.08);
+        border:1px solid rgba(245,158,11,.18);
         color:#fcd34d;
-
         font-size:11px;
-
         line-height:1.5;
-
         margin-bottom:14px;
-
       }
-
 
       .wallet-available {
-
         padding:11px 13px;
-
-        background:
-          rgba(34,197,94,.08);
-
-        border:
-          1px solid
-          rgba(34,197,94,.16);
-
+        background:rgba(34,197,94,.08);
+        border:1px solid rgba(34,197,94,.16);
         border-radius:13px;
-
         margin-bottom:14px;
-
         font-size:12px;
-
       }
-
 
       .wallet-buttons {
-
         display:flex;
-
         gap:10px;
-
         margin-top:5px;
-
       }
-
 
       .wallet-button {
-
         flex:1;
-
         padding:14px;
-
         border:0;
-
         border-radius:14px;
-
         font-weight:800;
-
         font-size:14px;
-
       }
-
 
       .wallet-cancel {
-
         background:#1e293b;
         color:white;
-
       }
-
 
       .wallet-confirm {
-
-        background:
-          linear-gradient(
-            135deg,
-            #2563eb,
-            #4f46e5
-          );
-
+        background:linear-gradient(135deg,#2563eb,#4f46e5);
         color:white;
-
       }
-
 
       .wallet-positive {
-
         color:#4ade80;
-
       }
-
 
       .wallet-negative {
-
         color:#f87171;
-
       }
-
 
       .wallet-pending {
-
         color:#fbbf24;
-
       }
-
 
       .wallet-completed {
-
         color:#4ade80;
-
       }
 
-
       .wallet-rejected {
-
         color:#f87171;
-
       }
 
     `;
 
 
-    document.head.appendChild(
-      style
-    );
+    document.head.appendChild(style);
 
   }
 
@@ -1253,15 +938,12 @@
             walletText("copied");
 
 
-          setTimeout(
-            function () {
+          setTimeout(function () {
 
-              button.innerText =
-                walletText("copy");
+            button.innerText =
+              walletText("copy");
 
-            },
-            1500
-          );
+          }, 1500);
 
         }
 
@@ -1286,9 +968,7 @@
 
 
     const overlay =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
 
     overlay.className =
@@ -1303,11 +983,9 @@
           ${walletText("depositTitle")}
         </div>
 
-
         <label class="wallet-label">
           ${walletText("network")}
         </label>
-
 
         <select
           id="walletDepositNetwork"
@@ -1344,12 +1022,10 @@
               ${walletText("address")}
             </div>
 
-
             <div
               id="walletDepositAddress"
               class="wallet-address"
             ></div>
-
 
             <button
               id="walletCopyButton"
@@ -1360,7 +1036,6 @@
             </button>
 
           </div>
-
 
           <div class="wallet-warning">
             ${walletText("warning")}
@@ -1411,9 +1086,7 @@
     `;
 
 
-    document.body.appendChild(
-      overlay
-    );
+    document.body.appendChild(overlay);
 
 
     const networkSelect =
@@ -1438,9 +1111,7 @@
       function () {
 
         const network =
-          USDT_NETWORKS[
-            this.value
-          ];
+          USDT_NETWORKS[this.value];
 
 
         if (!network) {
@@ -1449,7 +1120,6 @@
             "none";
 
           return;
-
         }
 
 
@@ -1470,9 +1140,7 @@
 
 
     function close() {
-
       overlay.remove();
-
     }
 
 
@@ -1485,12 +1153,8 @@
     overlay.onclick =
       function (event) {
 
-        if (
-          event.target === overlay
-        ) {
-
+        if (event.target === overlay) {
           close();
-
         }
 
       };
@@ -1520,13 +1184,10 @@
         if (!network) {
 
           alert(
-            walletText(
-              "selectNetwork"
-            )
+            walletText("selectNetwork")
           );
 
           return;
-
         }
 
 
@@ -1536,13 +1197,10 @@
         ) {
 
           alert(
-            walletText(
-              "minimumDeposit"
-            )
+            walletText("minimumDeposit")
           );
 
           return;
-
         }
 
 
@@ -1553,13 +1211,10 @@
         if (!authId) {
 
           alert(
-            walletText(
-              "authError"
-            )
+            walletText("authError")
           );
 
           return;
-
         }
 
 
@@ -1569,25 +1224,14 @@
 
         const transaction = {
 
-          auth_id:
-            authId,
-
-          type:
-            "Deposit",
-
-          amount:
-            amount,
-
-          status:
-            "Pending",
-
-          network:
-            network,
+          auth_id: authId,
+          type: "Deposit",
+          amount: amount,
+          status: "Pending",
+          network: network,
 
           wallet_address:
-            USDT_NETWORKS[
-              network
-            ].address
+            USDT_NETWORKS[network].address
 
         };
 
@@ -1597,12 +1241,8 @@
           error
         } =
           await supabaseClient
-            .from(
-              "wallet_transactions"
-            )
-            .insert(
-              transaction
-            )
+            .from("wallet_transactions")
+            .insert(transaction)
             .select(
               "id, auth_id, type, amount, status, network, wallet_address, created_at"
             )
@@ -1627,14 +1267,8 @@
           );
 
           return;
-
         }
 
-
-        /*
-         * Add only to current UI history.
-         * Balance is NOT changed.
-         */
 
         walletTransactions = [
           data,
@@ -1653,9 +1287,7 @@
 
 
         alert(
-          walletText(
-            "depositCreated"
-          )
+          walletText("depositCreated")
         );
 
       };
@@ -1676,26 +1308,18 @@
       getAvailableBalance();
 
 
-    if (
-      available <
-      MIN_AMOUNT
-    ) {
+    if (available < MIN_AMOUNT) {
 
       alert(
-        walletText(
-          "insufficient"
-        )
+        walletText("insufficient")
       );
 
       return;
-
     }
 
 
     const overlay =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
 
     overlay.className =
@@ -1716,9 +1340,7 @@
           ${walletText("available")}:
 
           <b>
-            $${formatMoney(
-              available
-            )}
+            $${formatMoney(available)}
           </b>
 
         </div>
@@ -1809,15 +1431,11 @@
     `;
 
 
-    document.body.appendChild(
-      overlay
-    );
+    document.body.appendChild(overlay);
 
 
     function close() {
-
       overlay.remove();
-
     }
 
 
@@ -1830,12 +1448,8 @@
     overlay.onclick =
       function (event) {
 
-        if (
-          event.target === overlay
-        ) {
-
+        if (event.target === overlay) {
           close();
-
         }
 
       };
@@ -1873,26 +1487,20 @@
         if (!network) {
 
           alert(
-            walletText(
-              "selectNetwork"
-            )
+            walletText("selectNetwork")
           );
 
           return;
-
         }
 
 
         if (!address) {
 
           alert(
-            walletText(
-              "invalidAddress"
-            )
+            walletText("invalidAddress")
           );
 
           return;
-
         }
 
 
@@ -1902,38 +1510,24 @@
         ) {
 
           alert(
-            walletText(
-              "minimumWithdraw"
-            )
+            walletText("minimumWithdraw")
           );
 
           return;
-
         }
 
-
-        /*
-         * Available balance comes ONLY
-         * from balances.balance.
-         */
 
         const currentAvailable =
           getAvailableBalance();
 
 
-        if (
-          amount >
-          currentAvailable
-        ) {
+        if (amount > currentAvailable) {
 
           alert(
-            walletText(
-              "insufficient"
-            )
+            walletText("insufficient")
           );
 
           return;
-
         }
 
 
@@ -1944,13 +1538,10 @@
         if (!authId) {
 
           alert(
-            walletText(
-              "authError"
-            )
+            walletText("authError")
           );
 
           return;
-
         }
 
 
@@ -1960,23 +1551,12 @@
 
         const transaction = {
 
-          auth_id:
-            authId,
-
-          type:
-            "Withdraw",
-
-          amount:
-            amount,
-
-          status:
-            "Pending",
-
-          network:
-            network,
-
-          wallet_address:
-            address
+          auth_id: authId,
+          type: "Withdraw",
+          amount: amount,
+          status: "Pending",
+          network: network,
+          wallet_address: address
 
         };
 
@@ -1986,12 +1566,8 @@
           error
         } =
           await supabaseClient
-            .from(
-              "wallet_transactions"
-            )
-            .insert(
-              transaction
-            )
+            .from("wallet_transactions")
+            .insert(transaction)
             .select(
               "id, auth_id, type, amount, status, network, wallet_address, created_at"
             )
@@ -2016,14 +1592,8 @@
           );
 
           return;
-
         }
 
-
-        /*
-         * Add only to current UI history.
-         * balances.balance is NOT changed.
-         */
 
         walletTransactions = [
           data,
@@ -2042,9 +1612,7 @@
 
 
         alert(
-          walletText(
-            "withdrawCreated"
-          )
+          walletText("withdrawCreated")
         );
 
       };
@@ -2078,10 +1646,6 @@
 
   /* =========================================================
      REFRESH WALLET
-     
-     Always reads:
-     balances.balance
-     wallet_transactions
   ========================================================= */
 
   async function refreshWallet() {
@@ -2114,7 +1678,6 @@
 
 
     renderWallet();
-
 
     return true;
 
