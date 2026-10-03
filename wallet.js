@@ -720,11 +720,10 @@
 
   function getAvailableBalance() {
 
-    return Math.max(
-      0,
-      walletBalance -
-      getPendingWithdrawTotal()
-    );
+  return Math.max(
+    0,
+    Number(walletBalance || 0)
+  );
 
   }
 
