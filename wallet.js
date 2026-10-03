@@ -525,75 +525,57 @@
 
   async function ensureWallet() {
 
-    const authId =
-      await getAuthId();
+  const authId = await getAuthId();
 
-    if (!authId) {
-      return false;
-    }
+  if (!authId) {
+    console.error("AUTH ID NOT FOUND");
+    return false;
+  }
 
-    const {
-      data,
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("wallets")
+    .select("balance")
+    .eq("auth_id", authId)
+    .maybeSingle();
+
+  if (error) {
+
+    console.error(
+      "WALLETS BALANCE LOAD ERROR:",
       error
-    } =
-      await supabaseClient
-        .from("wallets")
-        .select("balance")
-        .eq("auth_id", authId)
-        .maybeSingle();
+    );
 
-    if (error) {
+    return false;
+  }
 
-      console.error(
-        "WALLET LOAD ERROR:",
-        error
-      );
+  if (!data) {
 
-      return false;
+    console.log(
+      "No wallet found for this auth_id:",
+      authId
+    );
 
-    }
-
-    if (data) {
-
-      walletBalance =
-        Number(data.balance || 0);
-
-      return true;
-
-    }
-
-    const {
-      data: newWallet,
-      error: createError
-    } =
-      await supabaseClient
-        .from("wallets")
-        .insert({
-          auth_id: authId,
-          balance: 0,
-          currency: "USD"
-        })
-        .select("balance")
-        .single();
-
-    if (createError) {
-
-      console.error(
-        "WALLET CREATE ERROR:",
-        createError
-      );
-
-      return false;
-
-    }
-
-    walletBalance =
-      Number(
-        newWallet.balance || 0
-      );
+    walletBalance = 0;
 
     return true;
+  }
 
+  /*
+   * IMPORTANT:
+   * Balance comes ONLY from public.wallets.balance
+   */
+  walletBalance =
+    Number(data.balance || 0);
+
+  console.log(
+    "BALANCE FROM wallets:",
+    walletBalance
+  );
+
+  return true;
   }
 
 
@@ -753,22 +735,17 @@
 
   function renderBalance() {
 
-    const element =
-      document.getElementById(
-        "balance"
-      );
+  const element =
+    document.getElementById("balance");
 
-    if (!element) {
-      return;
-    }
-
-    element.innerText =
-      formatMoney(
-        walletBalance
-      );
-
+  if (!element) {
+    return;
   }
 
+  element.innerText =
+    Number(walletBalance || 0).toFixed(2);
+
+  }
 
   /* =========================================================
      HISTORY BOX
