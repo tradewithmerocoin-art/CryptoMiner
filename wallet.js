@@ -11,7 +11,6 @@
    - Deposit does NOT automatically increase balance.
    - Withdraw does NOT automatically decrease balance.
    - Transaction status does NOT change balance.
-   - Owner manually manages balance in wallets table.
 ========================================================= */
 
 (function () {
