@@ -1,17 +1,17 @@
 /* =========================================================
    CRYSTAL PLATFORM - SIMPLE USDT WALLET
-   SUPABASE + LOCALSTORAGE HISTORY FALLBACK
 
-   Deposit:
-   Network -> Address -> Amount -> Confirm -> Pending
+   BALANCE:
+   - Comes ONLY from public.wallets.balance
 
-   Withdraw:
-   Network -> Address -> Amount -> Confirm -> Pending
+   HISTORY:
+   - Comes ONLY from public.wallet_transactions
 
    IMPORTANT:
    - Deposit does NOT automatically increase balance.
-   - Withdraw does NOT automatically send money.
-   - Owner manually verifies and processes transactions.
+   - Withdraw does NOT automatically decrease balance.
+   - Transaction status does NOT change balance.
+   - Owner manually manages balance in wallets table.
 ========================================================= */
 
 (function () {
@@ -46,8 +46,6 @@
   let walletBalance = 0;
 
   let walletTransactions = [];
-
-  let historyUsingLocalStorage = false;
 
 
   /* =========================================================
@@ -121,9 +119,6 @@
         minimumWithdraw:
           "Iň az Withdraw: $50",
 
-        invalidAmount:
-          "Dogry mukdar giriziň.",
-
         insufficient:
           "Balans ýeterlik däl.",
 
@@ -135,21 +130,6 @@
 
         invalidAddress:
           "USDT wallet salgysyny giriziň.",
-
-        completed:
-          "Completed",
-
-        pending:
-          "Pending",
-
-        rejected:
-          "Rejected",
-
-        deposit:
-          "Deposit",
-
-        withdraw:
-          "Withdraw",
 
         available:
           "Elýeterli balans",
@@ -210,9 +190,6 @@
         minimumWithdraw:
           "Минимальный Withdraw: $50",
 
-        invalidAmount:
-          "Введите правильную сумму.",
-
         insufficient:
           "Недостаточно средств.",
 
@@ -224,21 +201,6 @@
 
         invalidAddress:
           "Введите USDT адрес.",
-
-        completed:
-          "Completed",
-
-        pending:
-          "Pending",
-
-        rejected:
-          "Rejected",
-
-        deposit:
-          "Deposit",
-
-        withdraw:
-          "Withdraw",
 
         available:
           "Доступный баланс",
@@ -299,9 +261,6 @@
         minimumWithdraw:
           "Minimum Withdraw: $50",
 
-        invalidAmount:
-          "Enter a valid amount.",
-
         insufficient:
           "Insufficient balance.",
 
@@ -313,21 +272,6 @@
 
         invalidAddress:
           "Enter a USDT wallet address.",
-
-        completed:
-          "Completed",
-
-        pending:
-          "Pending",
-
-        rejected:
-          "Rejected",
-
-        deposit:
-          "Deposit",
-
-        withdraw:
-          "Withdraw",
 
         available:
           "Available balance",
@@ -403,111 +347,6 @@
 
 
   /* =========================================================
-     LOCAL STORAGE KEY
-  ========================================================= */
-
-  function getLocalHistoryKey(authId) {
-
-    if (!authId) {
-      return null;
-    }
-
-    return "crypto_wallet_history_" + authId;
-
-  }
-
-
-  /* =========================================================
-     LOCAL STORAGE SAVE
-  ========================================================= */
-
-  function saveLocalHistory() {
-
-    try {
-
-      const authId =
-        walletTransactions.length
-          ? walletTransactions[0].auth_id
-          : null;
-
-      if (!authId) {
-        return;
-      }
-
-      const key =
-        getLocalHistoryKey(authId);
-
-      if (!key) {
-        return;
-      }
-
-      localStorage.setItem(
-        key,
-        JSON.stringify(
-          walletTransactions
-        )
-      );
-
-    } catch (error) {
-
-      console.error(
-        "LOCAL HISTORY SAVE ERROR:",
-        error
-      );
-
-    }
-
-  }
-
-
-  /* =========================================================
-     LOCAL STORAGE LOAD
-  ========================================================= */
-
-  async function loadLocalHistory(authId) {
-
-    try {
-
-      const key =
-        getLocalHistoryKey(authId);
-
-      if (!key) {
-        return [];
-      }
-
-      const saved =
-        localStorage.getItem(key);
-
-      if (!saved) {
-        return [];
-      }
-
-      const parsed =
-        JSON.parse(saved);
-
-      if (
-        Array.isArray(parsed)
-      ) {
-
-        return parsed;
-
-      }
-
-    } catch (error) {
-
-      console.error(
-        "LOCAL HISTORY LOAD ERROR:",
-        error
-      );
-
-    }
-
-    return [];
-
-  }
-
-
-  /* =========================================================
      MONEY
   ========================================================= */
 
@@ -520,67 +359,95 @@
 
 
   /* =========================================================
-     WALLET
+     LOAD BALANCE FROM wallets
+     
+     IMPORTANT:
+     Exact table name:
+     wallets
+
+     Exact column:
+     auth_id
+
+     Exact balance column:
+     balance
   ========================================================= */
 
-  async function ensureWallet() {
+  async function loadWalletBalance() {
 
-  const authId = await getAuthId();
+    const authId =
+      await getAuthId();
 
-  if (!authId) {
-    console.error("AUTH ID NOT FOUND");
-    return false;
-  }
+    if (!authId) {
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("wallets")
-    .select("balance")
-    .eq("auth_id", authId)
-    .maybeSingle();
+      console.error(
+        "AUTH ID NOT FOUND"
+      );
 
-  if (error) {
+      return false;
 
-    console.error(
-      "WALLETS BALANCE LOAD ERROR:",
+    }
+
+
+    const {
+      data,
       error
-    );
+    } =
+      await supabaseClient
+        .from("wallets")
+        .select("balance")
+        .eq("auth_id", authId)
+        .maybeSingle();
 
-    return false;
-  }
 
-  if (!data) {
+    if (error) {
+
+      console.error(
+        "WALLETS BALANCE LOAD ERROR:",
+        error
+      );
+
+      return false;
+
+    }
+
+
+    if (!data) {
+
+      console.warn(
+        "No wallet found for auth_id:",
+        authId
+      );
+
+      walletBalance = 0;
+
+      return true;
+
+    }
+
+
+    /*
+     * BALANCE COMES ONLY FROM wallets.balance
+     */
+
+    walletBalance =
+      Number(
+        data.balance || 0
+      );
+
 
     console.log(
-      "No wallet found for this auth_id:",
-      authId
+      "BALANCE FROM wallets.balance:",
+      walletBalance
     );
 
-    walletBalance = 0;
 
     return true;
-  }
 
-  /*
-   * IMPORTANT:
-   * Balance comes ONLY from public.wallets.balance
-   */
-  walletBalance =
-    Number(data.balance || 0);
-
-  console.log(
-    "BALANCE FROM wallets:",
-    walletBalance
-  );
-
-  return true;
   }
 
 
   /* =========================================================
-     LOAD SUPABASE TRANSACTIONS
+     LOAD HISTORY FROM Supabase ONLY
   ========================================================= */
 
   async function loadTransactions() {
@@ -604,7 +471,10 @@
         .select(
           "id, auth_id, type, amount, status, network, wallet_address, created_at"
         )
-        .eq("auth_id", authId)
+        .eq(
+          "auth_id",
+          authId
+        )
         .order(
           "created_at",
           {
@@ -621,50 +491,15 @@
         error
       );
 
+      walletTransactions = [];
 
-      console.log(
-        "Using LOCAL STORAGE history..."
-      );
-
-
-      const localHistory =
-        await loadLocalHistory(
-          authId
-        );
-
-
-      walletTransactions =
-        localHistory;
-
-      historyUsingLocalStorage =
-        true;
-
-
-      return true;
+      return false;
 
     }
 
 
     walletTransactions =
       data || [];
-
-
-    historyUsingLocalStorage =
-      false;
-
-
-    /*
-     * Supabase works.
-     * Save a copy locally as backup.
-     */
-
-    if (
-      walletTransactions.length
-    ) {
-
-      saveLocalHistory();
-
-    }
 
 
     console.log(
@@ -685,66 +520,50 @@
 
 
   /* =========================================================
-     PENDING WITHDRAW
+     AVAILABLE BALANCE
+
+     IMPORTANT:
+     This comes directly from wallets.balance.
+
+     Pending Withdraw is NOT subtracted.
   ========================================================= */
-
-  function getPendingWithdrawTotal() {
-
-    return walletTransactions
-
-      .filter(function (tx) {
-
-        return (
-          tx.type === "Withdraw" &&
-          tx.status === "Pending"
-        );
-
-      })
-
-      .reduce(
-        function (total, tx) {
-
-          return (
-            total +
-            Number(
-              tx.amount || 0
-            )
-          );
-
-        },
-        0
-      );
-
-  }
-
 
   function getAvailableBalance() {
 
-  return Math.max(
-    0,
-    Number(walletBalance || 0)
-  );
+    return Math.max(
+      0,
+      Number(
+        walletBalance || 0
+      )
+    );
 
   }
 
 
   /* =========================================================
-     BALANCE
+     BALANCE RENDER
   ========================================================= */
 
   function renderBalance() {
 
-  const element =
-    document.getElementById("balance");
+    const element =
+      document.getElementById(
+        "balance"
+      );
 
-  if (!element) {
-    return;
+
+    if (!element) {
+      return;
+    }
+
+
+    element.innerText =
+      formatMoney(
+        walletBalance
+      );
+
   }
 
-  element.innerText =
-    Number(walletBalance || 0).toFixed(2);
-
-  }
 
   /* =========================================================
      HISTORY BOX
@@ -776,9 +595,7 @@
 
 
     if (box) {
-
       return;
-
     }
 
 
@@ -825,25 +642,11 @@
       </div>
 
       <div
-        id="walletHistoryMode"
-        style="
-          font-size:11px;
-          opacity:.45;
-          margin-bottom:10px;
-        "
-      ></div>
-
-      <div
         id="walletTransactions"
       ></div>
 
     `;
 
-
-    /*
-     * Same placement as the old
-     * working TEST WALLET.
-     */
 
     const cards =
       walletSection.querySelectorAll(
@@ -893,22 +696,6 @@
       );
 
       return;
-
-    }
-
-
-    const modeElement =
-      document.getElementById(
-        "walletHistoryMode"
-      );
-
-
-    if (modeElement) {
-
-      modeElement.innerText =
-        historyUsingLocalStorage
-          ? "LOCAL HISTORY"
-          : "SUPABASE HISTORY";
 
     }
 
@@ -1005,13 +792,6 @@
                   tx.created_at
                 ).toLocaleString();
 
-            } else if (
-              tx.date
-            ) {
-
-              date =
-                tx.date;
-
             }
 
 
@@ -1074,7 +854,7 @@
                         margin-top:6px;
                       "
                     >
-                      ${tx.status}
+                      ${tx.status || ""}
                     </div>
 
                   </div>
@@ -1530,16 +1310,12 @@
       <div class="wallet-modal">
 
         <div class="wallet-modal-title">
-          ${walletText(
-            "depositTitle"
-          )}
+          ${walletText("depositTitle")}
         </div>
 
 
         <label class="wallet-label">
-          ${walletText(
-            "network"
-          )}
+          ${walletText("network")}
         </label>
 
 
@@ -1549,9 +1325,7 @@
         >
 
           <option value="">
-            ${walletText(
-              "selectNetwork"
-            )}
+            ${walletText("selectNetwork")}
           </option>
 
           <option value="TRC20">
@@ -1577,9 +1351,7 @@
           <div class="wallet-address-box">
 
             <div class="wallet-label">
-              ${walletText(
-                "address"
-              )}
+              ${walletText("address")}
             </div>
 
 
@@ -1594,27 +1366,21 @@
               class="wallet-copy"
               type="button"
             >
-              ${walletText(
-                "copy"
-              )}
+              ${walletText("copy")}
             </button>
 
           </div>
 
 
           <div class="wallet-warning">
-            ${walletText(
-              "warning"
-            )}
+            ${walletText("warning")}
           </div>
 
         </div>
 
 
         <label class="wallet-label">
-          ${walletText(
-            "amount"
-          )}
+          ${walletText("amount")}
         </label>
 
 
@@ -1636,9 +1402,7 @@
             class="wallet-button wallet-cancel"
             type="button"
           >
-            ${walletText(
-              "cancel"
-            )}
+            ${walletText("cancel")}
           </button>
 
 
@@ -1647,9 +1411,7 @@
             class="wallet-button wallet-confirm"
             type="button"
           >
-            ${walletText(
-              "confirm"
-            )}
+            ${walletText("confirm")}
           </button>
 
         </div>
@@ -1880,22 +1642,14 @@
 
 
         /*
-         * Add the newly created transaction
-         * to local backup immediately.
+         * Add only to current UI history.
+         * Balance is NOT changed.
          */
 
-        walletTransactions =
-          [
-            data,
-            ...walletTransactions
-          ];
-
-
-        historyUsingLocalStorage =
-          false;
-
-
-        saveLocalHistory();
+        walletTransactions = [
+          data,
+          ...walletTransactions
+        ];
 
 
         renderHistory();
@@ -1963,17 +1717,13 @@
       <div class="wallet-modal">
 
         <div class="wallet-modal-title">
-          ${walletText(
-            "withdrawTitle"
-          )}
+          ${walletText("withdrawTitle")}
         </div>
 
 
         <div class="wallet-available">
 
-          ${walletText(
-            "available"
-          )}:
+          ${walletText("available")}:
 
           <b>
             $${formatMoney(
@@ -1985,9 +1735,7 @@
 
 
         <label class="wallet-label">
-          ${walletText(
-            "network"
-          )}
+          ${walletText("network")}
         </label>
 
 
@@ -1997,9 +1745,7 @@
         >
 
           <option value="">
-            ${walletText(
-              "selectNetwork"
-            )}
+            ${walletText("selectNetwork")}
           </option>
 
           <option value="TRC20">
@@ -2018,9 +1764,7 @@
 
 
         <label class="wallet-label">
-          ${walletText(
-            "address"
-          )}
+          ${walletText("address")}
         </label>
 
 
@@ -2034,9 +1778,7 @@
 
 
         <label class="wallet-label">
-          ${walletText(
-            "amount"
-          )}
+          ${walletText("amount")}
         </label>
 
 
@@ -2058,9 +1800,7 @@
             class="wallet-button wallet-cancel"
             type="button"
           >
-            ${walletText(
-              "cancel"
-            )}
+            ${walletText("cancel")}
           </button>
 
 
@@ -2069,9 +1809,7 @@
             class="wallet-button wallet-confirm"
             type="button"
           >
-            ${walletText(
-              "confirm"
-            )}
+            ${walletText("confirm")}
           </button>
 
         </div>
@@ -2184,6 +1922,11 @@
         }
 
 
+        /*
+         * Available balance comes ONLY
+         * from wallets.balance.
+         */
+
         const currentAvailable =
           getAvailableBalance();
 
@@ -2287,18 +2030,15 @@
         }
 
 
-        walletTransactions =
-          [
-            data,
-            ...walletTransactions
-          ];
+        /*
+         * Add only to current UI history.
+         * wallets.balance is NOT changed.
+         */
 
-
-        historyUsingLocalStorage =
-          false;
-
-
-        saveLocalHistory();
+        walletTransactions = [
+          data,
+          ...walletTransactions
+        ];
 
 
         renderHistory();
@@ -2329,13 +2069,7 @@
   window.deposit =
     async function () {
 
-      if (
-        !walletInitialized
-      ) {
-
-        await initWallet();
-
-      }
+      await refreshWallet();
 
       showDepositModal();
 
@@ -2345,17 +2079,56 @@
   window.withdraw =
     async function () {
 
-      if (
-        !walletInitialized
-      ) {
-
-        await initWallet();
-
-      }
+      await refreshWallet();
 
       showWithdrawModal();
 
     };
+
+
+  /* =========================================================
+     REFRESH WALLET
+     
+     Always reads:
+     wallets.balance
+     wallet_transactions
+  ========================================================= */
+
+  async function refreshWallet() {
+
+    const authId =
+      await getAuthId();
+
+
+    if (!authId) {
+      return false;
+    }
+
+
+    const balanceReady =
+      await loadWalletBalance();
+
+
+    if (!balanceReady) {
+      return false;
+    }
+
+
+    const transactionsReady =
+      await loadTransactions();
+
+
+    if (!transactionsReady) {
+      return false;
+    }
+
+
+    renderWallet();
+
+
+    return true;
+
+  }
 
 
   /* =========================================================
@@ -2379,49 +2152,22 @@
 
   async function initWallet() {
 
-    if (
-      walletInitialized
-    ) {
+    if (walletInitialized) {
+
+      await refreshWallet();
 
       return true;
 
     }
 
 
-    const authId =
-      await getAuthId();
+    const ready =
+      await refreshWallet();
 
 
-    if (!authId) {
-
+    if (!ready) {
       return false;
-
     }
-
-
-    const walletReady =
-      await ensureWallet();
-
-
-    if (!walletReady) {
-
-      return false;
-
-    }
-
-
-    const transactionsReady =
-      await loadTransactions();
-
-
-    if (!transactionsReady) {
-
-      return false;
-
-    }
-
-
-    renderWallet();
 
 
     walletInitialized =
@@ -2430,6 +2176,12 @@
 
     console.log(
       "SIMPLE USDT WALLET READY"
+    );
+
+
+    console.log(
+      "BALANCE:",
+      walletBalance
     );
 
 
@@ -2482,7 +2234,32 @@
 
 
   /* =========================================================
-     REFRESH
+     REFRESH WHEN APP BECOMES VISIBLE
+  ========================================================= */
+
+  document.addEventListener(
+    "visibilitychange",
+    async function () {
+
+      if (
+        document.visibilityState ===
+        "visible"
+      ) {
+
+        if (walletInitialized) {
+
+          await refreshWallet();
+
+        }
+
+      }
+
+    }
+  );
+
+
+  /* =========================================================
+     DOM READY
   ========================================================= */
 
   document.addEventListener(
@@ -2492,19 +2269,7 @@
       setTimeout(
         async function () {
 
-          if (
-            !walletInitialized
-          ) {
-
-            await initWallet();
-
-          } else {
-
-            await loadTransactions();
-
-            renderWallet();
-
-          }
+          await initWallet();
 
         },
         1200
